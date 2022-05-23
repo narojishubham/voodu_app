@@ -34,6 +34,7 @@
           "unnamedComponents": "arrow-function"
         }
       ],
+      "arrow-body-style": "off",
       "max-lines": ["error", { "max": 500 }],
       "import/no-extraneous-dependencies": [
         "error",
