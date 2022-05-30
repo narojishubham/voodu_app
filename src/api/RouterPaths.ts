@@ -3,7 +3,7 @@
  * @readonly
  * @enum {string}
  */
-export enum RoutePaths {
+export enum RouterPaths {
     // Dashboard routes
     root = "/",
     profile = "profile/",
