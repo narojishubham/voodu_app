@@ -1,5 +1,11 @@
-const app = () => {
-    return <div className="App"></div>;
+import AppRoutes from "./Components/Routes";
+
+const App = () => {
+    return (
+        <div className="App">
+            <AppRoutes />
+        </div>
+    );
 };
 
-export default app;
+export default App;
