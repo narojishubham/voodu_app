@@ -1,8 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
-import loginAction from "../Actions/auth/Login.action";
-import { LoginServiceResType } from "../../shared/models/Auth";
+import loginAction from "../Actions/auth/login.action";
 
-type initialStateType = { loading: boolean; userData: LoginServiceResType | null };
+type initialStateType = { loading: boolean; userData: any | null };
 const initialState: initialStateType = { loading: false, userData: null };
 
 const authSlice = createSlice({

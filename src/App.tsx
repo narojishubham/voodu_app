@@ -1,4 +1,5 @@
 import AppRoutes from "./Components/Routes";
+import "./styles/App.less";
 
 const App = () => {
     return (
