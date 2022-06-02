@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import server from "../../../../api";
 import { axiosResHandle, axiosErrHandle } from "../../../../api/axiosHandle";
 
-export interface LoginParamsTypes {
+export interface LoginParamsType {
     email: string;
     password: string;
 }
@@ -38,16 +38,13 @@ export type LoginResTypes = {
     };
     token: string;
 };
-const loginService = ({ email, password }: LoginParamsTypes) => {
-    return server.post<LoginResTypes>("/session/login", {
-        email,
-        password,
-    });
+const loginService = (data: LoginParamsType) => {
+    return server.post<LoginResTypes>("/session/login", data);
 };
-const loginAction = createAsyncThunk("auth/login", async (props: LoginParamsTypes, { rejectWithValue }) => {
+const loginAction = createAsyncThunk("auth/login", async (params: LoginParamsType, { rejectWithValue }) => {
     try {
-        const data = await loginService(props);
-        return axiosResHandle(data);
+        const res = await loginService(params);
+        return axiosResHandle(res);
     } catch (err) {
         return rejectWithValue(axiosErrHandle(err));
     }

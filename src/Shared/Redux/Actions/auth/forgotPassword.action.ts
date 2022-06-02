@@ -1,23 +1,24 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import server from "../../../../api";
-import { axiosErrHandle } from "../../../../api/axiosHandle";
+import { axiosErrHandle, axiosResHandle } from "../../../../api/axiosHandle";
 
-interface IforgotPassword {
+type ForgotPasswordParamsType = {
     email: string;
-}
-const forgotPasswordService = ({ email }: IforgotPassword) => {
-    return server.post("/session/forgot_password", {
-        email,
-    });
+};
+const forgotPasswordService = (data: ForgotPasswordParamsType) => {
+    return server.post<void>("/session/forgot_password", data);
 };
 
-const forgotPasswordAction = createAsyncThunk("forgot/password", async (props: IforgotPassword, thunkAPI) => {
-    try {
-        console.log("in forgotPasswordAction, ", { props });
-        return await forgotPasswordService(props);
-    } catch (err) {
-        return thunkAPI.rejectWithValue(axiosErrHandle(err));
+const forgotPasswordAction = createAsyncThunk(
+    "auth/forgot-password",
+    async (params: ForgotPasswordParamsType, thunkAPI) => {
+        try {
+            const res = await forgotPasswordService(params);
+            return axiosResHandle(res);
+        } catch (err) {
+            return thunkAPI.rejectWithValue(axiosErrHandle(err));
+        }
     }
-});
+);
 
 export default forgotPasswordAction;

@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 
-const axiosResHandle = <T>(res: AxiosResponse<T>) => res.data;
+const axiosResHandle = <T>(res: AxiosResponse<T>) => (res.data ? res.data : null);
 const axiosResErr = <T>(res: AxiosError<T>) => res.message;
 const axiosResErrNoRes = <T>(res: AxiosError<T>) => res.message;
 const errUnknown = (res: unknown) => `Unknown Error: ${res}`;

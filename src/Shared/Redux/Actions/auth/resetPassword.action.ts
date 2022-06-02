@@ -1,30 +1,29 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-// import { setMessage } from "../../../features/messageSlice/messageSlice";
 import server from "../../../../api";
-import { axiosResHandle, axiosErrHandle } from "../../../../api/axiosHandle";
+import { axiosErrHandle, axiosResHandle } from "../../../../api/axiosHandle";
 
-interface IresetPassword {
-    token?: string;
-    password?: string;
-    confirmPassword?: string;
-}
-
-const resetPasswordService = ({ token, password, confirmPassword }: IresetPassword) => {
-    return server.post("/session/reset_password", {
-        token,
-        password,
-        confirmPassword,
-    });
+type ResetPasswordParamsType = {
+    token: string;
+    password: string;
+    confirmPassword: string;
 };
 
-const resetPasswordAction = createAsyncThunk("reset/password", async (props: IresetPassword, thunkAPI) => {
-    try {
-        return await resetPasswordService(props);
-    } catch (error: any) {
-        const message =
-            (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
-        // thunkAPI.dispatch(setMessage(message));
-        return thunkAPI.rejectWithValue(error.response.data);
+const resetPasswordService = (data: ResetPasswordParamsType) => {
+    return server.post("/session/reset_password", data);
+};
+
+const resetPasswordAction = createAsyncThunk(
+    "auth/reset-password",
+    async (params: ResetPasswordParamsType, { rejectWithValue }) => {
+        try {
+            const res = await resetPasswordService(params);
+            return axiosResHandle(res);
+        } catch (err) {
+            // const message =
+            //     (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+            // thunkAPI.dispatch(setMessage(message));
+            return rejectWithValue(axiosErrHandle(err));
+        }
     }
-});
+);
 export default resetPasswordAction;
