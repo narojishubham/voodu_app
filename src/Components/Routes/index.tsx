@@ -2,15 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { RouterPaths } from "../../api/RouterPaths";
 import AppPagesRoutes from "./AppPagesRoutes";
 import AuthPagesRoutes from "./AuthPagesRoutes";
-import { Button } from "antd";
-
-const Test = () => {
-    return (
-        <div>
-            <Button type="primary">Primary Button</Button>
-        </div>
-    );
-};
+import LoginPage from "../../Pages/Login";
 
 const AppRoutes = () => {
     return (
@@ -22,7 +14,6 @@ const AppRoutes = () => {
                         {/* <Route path={RouterPaths.profile} element={<ProfilePage />} />
                         <Route path={RouterPaths.overview} element={<OverviewPage />} /> */}
                         <Route path={RouterPaths.videoLibrary}>
-                            <Route index element={<Test />} />
                             {/* <Route index element={<VideoLibrary />} /> */}
                             {/* <Route path={RouterPaths.addPage} element={<UploadVideo />} />
                             <Route path={RouterPaths.p_videoId}>
@@ -44,8 +35,7 @@ const AppRoutes = () => {
                     </Route>
 
                     <Route element={<AuthPagesRoutes />}>
-                        <Route path={RouterPaths.login} element={<Test />} />
-                        {/* <Route path={RouterPaths.login} element={<LoginPage />} /> */}
+                        <Route path={RouterPaths.login} element={<LoginPage />} />
                         {/* <Route path={RouterPaths.signup} element={<SignUpPage />} />
                         <Route path={RouterPaths.forgotPassword} element={<ForgotPasswordPage />} />
                         <Route path={RouterPaths.newPassword} element={<NewPasswordPage />} /> */}
