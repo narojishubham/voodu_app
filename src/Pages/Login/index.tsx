@@ -1,7 +1,7 @@
 import classes from "./styles.module.css";
 
 const LoginPage = () => {
-    return <div className={classes.login}>login</div>;
+    return <div className={classes.test}>login</div>;
 };
 
 export default LoginPage;
