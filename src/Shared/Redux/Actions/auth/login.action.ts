@@ -39,7 +39,7 @@ export type LoginResTypes = {
     token: string;
 };
 const loginService = (data: LoginParamsType) => {
-    return server.post<LoginResTypes>("/session/login", data);
+    return (server.post<LoginResTypes>("/session/login", data))
 };
 const loginAction = createAsyncThunk("auth/login", async (params: LoginParamsType, { rejectWithValue }) => {
     try {
@@ -48,5 +48,12 @@ const loginAction = createAsyncThunk("auth/login", async (params: LoginParamsTyp
     } catch (err) {
         return rejectWithValue(axiosErrHandle(err));
     }
+    //   try {
+    //     const res = await loginService(params);
+    //         return(console.log('axiosResHandle: ',axiosResHandle(res)))
+    // } catch (err) {
+    //     console.log('axiosErrHandle: ',axiosErrHandle(err))
+    //     return rejectWithValue(axiosErrHandle(err))
+    // }
 });
 export default loginAction;
