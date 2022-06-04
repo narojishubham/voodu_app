@@ -3,6 +3,8 @@ import { RouterPaths } from "../../api/RouterPaths";
 import AppPagesRoutes from "./AppPagesRoutes";
 import AuthPagesRoutes from "./AuthPagesRoutes";
 import LoginPage from "../../Pages/Login";
+import SignUpPage from "../../Pages/Signup";
+import OverviewPage from "../../Pages/Overview";
 
 const AppRoutes = () => {
     return (
@@ -11,8 +13,8 @@ const AppRoutes = () => {
                 <Route path={RouterPaths.root}>
                     <Route element={<AppPagesRoutes />}>
                         <Route index element={<Navigate to={RouterPaths.videoLibrary} replace />} />
-                        {/* <Route path={RouterPaths.profile} element={<ProfilePage />} />
-                        <Route path={RouterPaths.overview} element={<OverviewPage />} /> */}
+                        {/* <Route path={RouterPaths.profile} element={<ProfilePage />} />*/}
+                        <Route path={RouterPaths.overview} element={<OverviewPage />} />
                         <Route path={RouterPaths.videoLibrary}>
                             {/* <Route index element={<VideoLibrary />} /> */}
                             {/* <Route path={RouterPaths.addPage} element={<UploadVideo />} />
@@ -36,8 +38,8 @@ const AppRoutes = () => {
 
                     <Route element={<AuthPagesRoutes />}>
                         <Route path={RouterPaths.login} element={<LoginPage />} />
-                        {/* <Route path={RouterPaths.signup} element={<SignUpPage />} />
-                        <Route path={RouterPaths.forgotPassword} element={<ForgotPasswordPage />} />
+                        <Route path={RouterPaths.signup} element={<SignUpPage />} />
+                        {/*  <Route path={RouterPaths.forgotPassword} element={<ForgotPasswordPage />} />
                         <Route path={RouterPaths.newPassword} element={<NewPasswordPage />} /> */}
                     </Route>
                 </Route>
