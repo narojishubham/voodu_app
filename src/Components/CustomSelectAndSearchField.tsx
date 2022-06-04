@@ -1,8 +1,10 @@
 import { Select } from "antd";
 import React, { useEffect, useState } from "react";
+import { GetCategoriesResponseType } from "../Shared/Redux/Actions/brand/category/getCategory.action";
+import { useAppDispatch } from "../Shared/Redux/store";
 
 interface ISearchProps {
-    getDataService: any;
+    getDataService: GetCategoriesResponseType[];
     responseMapper?: (e: any) => any;
     onChange?: (e: any) => void;
     allowClear?: boolean;
@@ -10,6 +12,7 @@ interface ISearchProps {
 }
 
 function CustomSelectAndSearchField(props: ISearchProps) {
+    const dispatch = useAppDispatch();
     const [loading, setLoading] = useState(false);
     const {
         getDataService,
@@ -21,26 +24,27 @@ function CustomSelectAndSearchField(props: ISearchProps) {
 
     const [data, setData] = useState([]);
 
-    const getData = async () => {
-        setLoading(true);
-        try {
-            const res = await getDataService().then(responseMapper);
-            setData(res);
-            setLoading(false);
-        } catch (error) {
-            console.error("CustomSearch Error", error);
-            setLoading(false);
-        }
-    };
+    // const getData = async () => {
+    //     setLoading(true);
+    //     try {
+    //         const res = await dispatch(getDataService()).then(responseMapper);
+    //         console.log("CustomSearch component res", res);
+    //         setData(res);
+    //         setLoading(false);
+    //     } catch (error) {
+    //         console.error("CustomSearch Error", error);
+    //         setLoading(false);
+    //     }
+    // };
     const onChangeHandler = (e: any) => {
         onChange && onChange(e);
     };
 
     const onSearch = () => {};
 
-    useEffect(() => {
-        getData();
-    }, []);
+    // useEffect(() => {
+    //     getData();
+    // }, []);
 
     return (
         <Select
@@ -55,7 +59,7 @@ function CustomSelectAndSearchField(props: ISearchProps) {
             //   display: cats.length === 0 ? "none" : "",
             // }}
         >
-            {data.map((item: any) => (
+            {getDataService?.map((item: any) => (
                 <Select.Option key={item.id} value={item.id}>
                     {item.name}
                 </Select.Option>
