@@ -15,16 +15,17 @@ import {
 } from "../../Shared/Redux/Actions/auth/signup.action";
 import SuccessMessage from "../../Components/SuccessMessage";
 import Button from "../../Components/Partials/Button";
+import { useAppDispatch } from "../../Shared/Redux/store";
 
 export default function SignUpPage(): JSX.Element {
     const { Step } = Steps;
     const [success, setSuccess] = useState(false);
     const [currentStep, setCurrentStep] = useState(1);
-    const [finalData, setFinalData] = useState({});
+    // const [finalData, setFinalData] = useState({});
     const [BrandDetailCardForm] = Form.useForm();
     const [UserDetailCardForm] = Form.useForm();
     const [PricingPlanPageForm] = Form.useForm();
-    const [brandName, setBrandName] = useState();
+    const [businessName, setBusinessName] = useState();
     const steps = {
         1: {
             title: "Step 1",
@@ -45,7 +46,7 @@ export default function SignUpPage(): JSX.Element {
             form: PricingPlanPageForm,
         },
     };
-
+    const dispatch = useAppDispatch();
     const NextButton = () => {
         const isLastStep = Object.keys(steps).length === currentStep;
         const onNextClick = async () => {
@@ -65,13 +66,14 @@ export default function SignUpPage(): JSX.Element {
             if (currentStep === 1) {
                 try {
                     const fields = await get(steps, `${currentStep}.form`).validateFields();
-                    setBrandName(fields.businessName);
-                    setFinalData((s) => ({ ...s, ...fields }));
+                    setBusinessName(fields.businessName);
                     console.log("final data", fields);
-                    await signUpStepValidationStepOneAction({
-                        ...fields,
-                        step: toString(currentStep),
-                    });
+                    dispatch(
+                        await signUpStepValidationStepOneAction({
+                            ...fields,
+                            step: toString(currentStep),
+                        })
+                    );
                     !isLastStep && setCurrentStep(currentStep + 1);
                 } catch (error) {
                     console.log("Validtion Error", error);
@@ -80,13 +82,14 @@ export default function SignUpPage(): JSX.Element {
             if (currentStep === 2) {
                 try {
                     const fields = await get(steps, `${currentStep}.form`).validateFields();
-                    setFinalData((s) => ({ ...s, ...fields }));
                     console.log("final User data", fields);
-                    await signUpStepValidationStepTwoAction({
-                        ...fields,
-                        brandName,
-                        step: toString(currentStep),
-                    });
+                    dispatch(
+                        await signUpStepValidationStepTwoAction({
+                            ...fields,
+                            businessName,
+                            step: toString(currentStep),
+                        })
+                    );
                     !isLastStep && setCurrentStep(currentStep + 1);
                 } catch (error) {
                     console.log("Validtion Error", error);
@@ -95,13 +98,15 @@ export default function SignUpPage(): JSX.Element {
             if (currentStep === 3) {
                 try {
                     const fields = await get(steps, `${currentStep}.form`).validateFields();
-                    setFinalData((s) => ({ ...s, ...fields }));
-                    console.log(" Payment Card data", fields.brandCategory);
-                    await signUpStepValidationStepThreeAction({
-                        ...fields,
-                        brandName,
-                        step: toString(currentStep),
-                    });
+                    // console.log(" Payment Card data", fields.brandCategory);
+                    dispatch(
+                        await signUpStepValidationStepThreeAction({
+                            ...fields,
+                            businessName,
+                            step: toString(currentStep),
+                        })
+                    );
+                    setSuccess(true);
                     !isLastStep && setCurrentStep(currentStep + 1);
                 } catch (error) {
                     console.log("Validtion Error", error);
