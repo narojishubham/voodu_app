@@ -18,8 +18,8 @@ const emailValidatorService = async (email: string) => {
             email,
         });
         return axiosResHandle(response);
-    } catch (err) {
-        return axiosErrHandle(err);
+    } catch (err:any) {
+        return (err.response.data);
     }
 };
 
