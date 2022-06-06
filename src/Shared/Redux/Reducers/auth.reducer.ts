@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import loginAction from "../Actions/auth/login.action";
+import loginWithTokenAction from "../Actions/auth/loginWithToken.action";
 import { logoutAction } from "../Actions/auth/logout.action";
 
 type initialStateType = { loading: boolean; userData: any | null };
@@ -10,7 +11,7 @@ const authSlice = createSlice({
     initialState,
     reducers: {
         logoutAction: (state) => {
-            localStorage.removeItem("token");
+            localStorage.removeItem("theboom_token");
             state.userData = null;
         }
     },
@@ -23,6 +24,11 @@ const authSlice = createSlice({
                 };
             })
             .addCase(loginAction.fulfilled, (state, { payload }) => {
+                if (payload && payload.token && payload.data && payload.data.accountId) {
+                    // const uniqueKey = `token_${payload?.data.accountId}`
+                    const uniqueKey = `theboom_token`
+                    localStorage.setItem(uniqueKey, payload?.token)
+                }
                 return {
                     loading: false,
                     userData: payload,
@@ -33,7 +39,31 @@ const authSlice = createSlice({
                     loading: false,
                     userData: null,
                 };
+            })
+            .addCase(loginWithTokenAction.pending, (state) => {
+                return {
+                    ...state,
+                    loading: true,
+                };
+            })
+            .addCase(loginWithTokenAction.fulfilled, (state, { payload }) => {
+                if (payload && payload.token && payload.data && payload.data.accountId) {
+                    // const uniqueKey = `token_${payload?.data.accountId}`
+                    const uniqueKey = `theboom_token`
+                    localStorage.setItem(uniqueKey, payload?.token)
+                }
+                return {
+                    loading: false,
+                    userData: payload,
+                };
+            })
+            .addCase(loginWithTokenAction.rejected, () => {
+                return {
+                    loading: false,
+                    userData: null,
+                };
             });
+
     },
 });
 
