@@ -4,7 +4,7 @@ import { GetCategoriesResponseType } from "../Shared/Redux/Actions/brand/categor
 import { useAppDispatch } from "../Shared/Redux/store";
 
 interface ISearchProps {
-    getDataService: GetCategoriesResponseType[];
+    getData: any;
     responseMapper?: (e: any) => any;
     onChange?: (e: any) => void;
     allowClear?: boolean;
@@ -15,7 +15,7 @@ function CustomSelectAndSearchField(props: ISearchProps) {
     const dispatch = useAppDispatch();
     const [loading, setLoading] = useState(false);
     const {
-        getDataService,
+        getData,
         responseMapper = (e: any) => e.data,
         allowClear = true,
         onChange = () => {},
@@ -42,24 +42,25 @@ function CustomSelectAndSearchField(props: ISearchProps) {
 
     const onSearch = () => {};
 
-    // useEffect(() => {
-    //     getData();
-    // }, []);
+    useEffect(() => {
+        //     getData();
+        console.log({ getData: getData });
+    }, []);
 
     return (
         <Select
             loading={loading}
             showSearch
-            placeholder={"Category"}
+            // placeholder={"Category"}
             allowClear={allowClear}
             onSearch={onSearch}
             labelInValue={labelInValue}
             onChange={onChangeHandler}
-            // dropdownStyle={{
-            //   display: cats.length === 0 ? "none" : "",
-            // }}
+            dropdownStyle={{
+                display: getData.length === 0 ? "none" : "",
+            }}
         >
-            {getDataService?.map((item: any) => (
+            {getData?.map((item: any) => (
                 <Select.Option key={item.id} value={item.id}>
                     {item.name}
                 </Select.Option>
