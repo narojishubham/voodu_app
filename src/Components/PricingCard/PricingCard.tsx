@@ -1,7 +1,7 @@
 // import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Card } from "antd";
-import "./pricingPage.css";
+import "./pricingCard.css";
 
 interface IFeature {
     feature: string;
@@ -21,7 +21,10 @@ interface IPricingProps {
 function PricingCard({ PricingDetails }: IPricingProps) {
     return (
         <>
-            <Card className={`pricingPageCard ${PricingDetails.DefaultSelectedPlan ? "Selected" : "disableCard"}`}>
+            <Card
+                className={`pricingPageCard ${PricingDetails.DefaultSelectedPlan ? "Selected" : "disableCard"}`}
+                style={{ margin: "0 1rem" }}
+            >
                 <h2 className="pricingHeaderText">{PricingDetails.PricingHeader}</h2>
                 <div className="pricingHeaderTextSubtext">{PricingDetails.PricinHeadeDesction}</div>
                 <h2 className="pricingCategory">{PricingDetails.PricingType}</h2>
