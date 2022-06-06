@@ -8,11 +8,11 @@ const server = axios.create({
     timeout: 30000,
 });
 
-/*axiosRequest.interceptors.request.use(function (config: any) {
-  const token = document.cookie.split('=')[1];
-  config.headers.Authorization = token ? `Bearer ${token}` : '';
+server.interceptors.request.use(function (config: any) {
+  const token = localStorage.getItem("theboom_token")
+  if(token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
-*/
+
 
 export default server;
