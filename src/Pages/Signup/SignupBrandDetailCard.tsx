@@ -7,7 +7,10 @@ import { useAppDispatch } from "../../Shared/Redux/store";
 import brandDataValidationService from "../../Shared/Redux/Actions/brand/brandDataValidation.service";
 import CustomSelectAndSearchField from "../../Components/CustomSelectAndSearchField";
 import addCategoriesAction from "../../Shared/Redux/Actions/brand/category/addCategory.action";
-import getCategoriesAction from "../../Shared/Redux/Actions/brand/category/getCategory.action";
+import getCategoriesAction, {
+    GetCategoriesResponseType,
+} from "../../Shared/Redux/Actions/brand/category/getCategory.action";
+import _ from "lodash";
 
 function BrandDetailcard({ form }: any) {
     const { Text } = Typography;
@@ -34,38 +37,40 @@ function BrandDetailcard({ form }: any) {
 
         setWeblinkErr(form.getFieldsError().some(({ errors }: any) => errors.length));
     };
-    // const checkBrandName = (brandName: string): any => {
-    //     if (brandName !== "") {
-    //         dispatch(brandDataValidationService.brandNameValidatorService ({ businessName: brandName }))
-    //             .unwrap()
-    //             .then((response: any) => {
-    //                 setBrandLoading(false);
-    //             })
-    //             .catch((error: any) => {
-    //                 console.log({ error });
-    //                 setBrandLoading(false);
-    //                 notification["error"]({
-    //                     message: error.message,
-    //                     description:
-    //                         "The Brand Name entered has already been used. Please select a different Brand Name",
-    //                 });
-    //             });
-    //     }
-    // };
+    const checkBrandName = (brandName: string) => {
+        if (brandName !== "") {
+            // dispatch(brandDataValidationService.brandNameValidatorService ({ businessName: brandName }))
+            brandDataValidationService
+                .brandNameValidatorService(brandName)
+                // .unwrap()
+                .then((response: any) => {
+                    setBrandLoading(false);
+                })
+                .catch((error: any) => {
+                    console.log({ error });
+                    setBrandLoading(false);
+                    notification["error"]({
+                        message: error.message,
+                        description:
+                            "The Brand Name entered has already been used. Please select a different Brand Name",
+                    });
+                });
+        }
+    };
 
-    // const delayedQueryBrandName = useCallback(
-    //     _.debounce((q: string) => checkBrandName(q), 300),
-    //     []
-    // );
+    const delayedQueryBrandName = useCallback(
+        _.debounce((q: string) => checkBrandName(q), 300),
+        []
+    );
     const clearMsg = () => {
         // dispatch(clearMessage());
     };
-    const [data, setData] = useState<any | []>([]);
+    const [data, setData] = useState<GetCategoriesResponseType[] | any>([]);
     const categories = () => {
         dispatch(getCategoriesAction())
             .unwrap()
             .then((response) => {
-                console.log("getCategoriesAction resp", data);
+                // console.log("getCategoriesAction resp", data);
                 setData(response);
             })
             .catch((error) => {
@@ -75,7 +80,7 @@ function BrandDetailcard({ form }: any) {
     };
     useEffect(() => {
         categories();
-    });
+    }, []);
 
     return (
         <>
@@ -137,7 +142,7 @@ function BrandDetailcard({ form }: any) {
                             onChange={(e) => {
                                 setBrandLoading(true);
                                 setBrandName(e.target.value);
-                                // delayedQueryBrandName(e.target.value);
+                                delayedQueryBrandName(e.target.value);
                                 clearMsg();
                             }}
                         />
@@ -193,12 +198,11 @@ function BrandDetailcard({ form }: any) {
                         validateTrigger={["onChange"]}
                         hasFeedback
                     >
-                        <CustomSelectAndSearchField getDataService={data} />
+                        <CustomSelectAndSearchField getData={data} />
                     </Form.Item>
                 </Form>
             </Card>
         </>
     );
 }
-
 export default BrandDetailcard;
