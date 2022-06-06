@@ -47,7 +47,7 @@ const OverviewPage = () => {
                 // console.log("notification error");
             });
     };
-    const [averageWatchTime, setAverageWatchTime] = useState();
+    const [averageWatchTime, setAverageWatchTime] = useState("");
     const [completionRatio, setCompletionRatio] = useState("");
     const [clickThrough, setClickThrough] = useState("");
     const [activeTime, setActiveTime] = useState("");
