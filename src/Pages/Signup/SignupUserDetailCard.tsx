@@ -4,6 +4,12 @@ import React, { useCallback, useEffect, useState } from "react";
 import CustomSelectAndSearchField from "../../Components/CustomSelectAndSearchField";
 import getCategoriesAction from "../../Shared/Redux/Actions/brand/category/getCategory.action";
 import { useAppDispatch } from "../../Shared/Redux/store";
+import getDesignationsAction, {
+    GetDesignationResponseType,
+} from "../../Shared/Redux/Actions/brand/designation/getDesignation.action";
+import brandDataValidationService from "../../Shared/Redux/Actions/brand/brandDataValidation.service";
+import _ from "lodash";
+import { SmileOutlined } from "@ant-design/icons";
 
 function SignupUserDetailCard({ form }: any) {
     const [firstName, setFirstName] = useState("");
@@ -57,55 +63,67 @@ function SignupUserDetailCard({ form }: any) {
             setConfirmPassErr(form.getFieldsError()[6].errors.length > 0 ? true : false);
         }
     };
-    // const delayedQueryEmail = useCallback(
-    //     _.debounce((q) => checkEmail(q), 300),
-    //     []
-    // );
+    const delayedQueryEmail = useCallback(
+        _.debounce((q) => checkEmail(q), 300),
+        []
+    );
 
     const clearMsg = () => {
         // dispatch(clearMessage());
     };
-    // const checkEmail = (emailId: string) => {
-    //     if (emailId !== "") {
-    //         dispatch(emailValidator({ email: emailId }))
-    //             .unwrap()
-    //             .then((response: any) => {
-    //                 console.log(response);
-    //                 setEmailLoading(false);
-    //             })
-    //             .catch((error: any) => {
-    //                 console.log({ error });
-    //                 setEmailLoading(false);
-    //                 notification["error"]({
-    //                     message: error.message,
-    //                     description: "The Email Id entered has already been used. Please select a different Email Id",
-    //                 });
-    //             });
-    //     }
-    // };
-    // const checkPhone = (phone: string) => {
-    //     if (phone) {
-    //         dispatch(phoneValidator({ phone }))
-    //             .unwrap()
-    //             .then((response: any) => {
-    //                 //console.log(response);
-    //                 setPhoneLoading(false);
-    //             })
-    //             .catch((error: any) => {
-    //                 //console.log({ error });
-    //                 setPhoneLoading(false);
-    //                 notification["error"]({
-    //                     message: error.message,
-    //                     description:
-    //                         "The Phone Number entered has already been used. Please select a different Phone Number",
-    //                 });
-    //             });
-    //     }
-    // };
-    //   const delayedQueryPhone = useCallback(
-    //     _.debounce((q: string) => checkPhone(q), 300),
-    //     []
-    //   );
+    const checkEmail = (emailId: string) => {
+        if (emailId !== "") {
+            brandDataValidationService
+                .emailValidatorService(emailId)
+                .then((response: any) => {
+                    setEmailLoading(false);
+                    console.log("response 12", response);
+                    if (response.message === "Email already exists")
+                        notification["error"]({
+                            message: response.message,
+                            description:
+                                "The Email Id entered has already been used. Please select a different Email Id",
+                        });
+                })
+                .catch((error: any) => {
+                    console.log("error 12", error.message);
+                    setEmailLoading(false);
+                    if (error.message === "Email already exists")
+                        // notification["error"]({
+                        //     message: error.message,
+                        //     description:
+                        //         "The Email Id entered has already been used. Please select a different Email Id",
+                        // });
+                        notification.open({
+                            message: "Notification Title",
+                            description:
+                                "This is the content of the notification. This is the content of the notification. This is the content of the notification.",
+                            icon: <SmileOutlined style={{ color: "#108ee9" }} />,
+                        });
+                });
+        }
+    };
+    const checkPhone = (phone: string) => {
+        if (phone) {
+            brandDataValidationService
+                .phoneValidatorService(phone)
+                .then((response: any) => {
+                    setPhoneLoading(false);
+                })
+                .catch((error: any) => {
+                    setPhoneLoading(false);
+                    notification["error"]({
+                        message: error.message,
+                        description:
+                            "The Phone Number entered has already been used. Please select a different Phone Number",
+                    });
+                });
+        }
+    };
+    const delayedQueryPhone = useCallback(
+        _.debounce((q: string) => checkPhone(q), 300),
+        []
+    );
     // const loadDesignation = async () => {
     //    getDesignationsAction()
     //         .then(({ data: designations }: any) => {
@@ -116,6 +134,21 @@ function SignupUserDetailCard({ form }: any) {
     //         })
     //         .catch((error: any) => {});
     // };
+    const [data, setData] = useState<GetDesignationResponseType[] | any>([]);
+    const designations = () => {
+        dispatch(getDesignationsAction())
+            .unwrap()
+            .then((response) => {
+                setData(response);
+            })
+            .catch((error) => {
+                setLoading(false);
+                console.log("getCategoriesAction error", error);
+            });
+    };
+    useEffect(() => {
+        designations();
+    }, []);
 
     // useEffect(() => {
     //     loadDesignation();
@@ -223,7 +256,7 @@ function SignupUserDetailCard({ form }: any) {
                         validateTrigger={["onChange"]}
                         hasFeedback
                     >
-                        <CustomSelectAndSearchField getDataService={getCategoriesAction} />
+                        <CustomSelectAndSearchField getData={data} />
                     </Form.Item>
                     <Form.Item
                         label={
@@ -270,7 +303,7 @@ function SignupUserDetailCard({ form }: any) {
                             onChange={(e) => {
                                 setEmailLoading(true);
                                 setEmailId(e.target.value);
-                                // delayedQueryEmail(e.target.value);
+                                delayedQueryEmail(e.target.value);
                                 // console.log("test email value", emailId);
                                 clearMsg();
                             }}
@@ -333,9 +366,11 @@ function SignupUserDetailCard({ form }: any) {
                                 placeholder={phone ? "" : "Phone Number"}
                                 defaultCountry={"IN"}
                                 //value={phone}
+                                // delayedQueryPhone(value)
                                 onChange={(value: any) => {
                                     console.log({ value });
-                                    clearMsg();
+                                    // clearMsg();
+                                    delayedQueryPhone(value);
                                 }}
                             />
                         </Row>
@@ -378,7 +413,7 @@ function SignupUserDetailCard({ form }: any) {
                                 CONFIRM PASSWORD
                             </Text>
                         }
-                        // name="confirm"
+                        name="confirm"
                         dependencies={["password"]}
                         rules={[
                             {
