@@ -1,9 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { LoginResTypes } from "../../Models/Auth/login.types";
 import loginAction from "../Actions/auth/login.action";
 import loginWithTokenAction from "../Actions/auth/loginWithToken.action";
 import { logoutAction } from "../Actions/auth/logout.action";
 
-type initialStateType = { loading: boolean; userData: any | null };
+type initialStateType = { loading: boolean; userData: LoginResTypes | null };
 const initialState: initialStateType = { loading: false, userData: null };
 
 const authSlice = createSlice({
