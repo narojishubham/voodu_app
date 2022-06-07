@@ -1,17 +1,16 @@
 import { Card, Col, notification, Row, Spin } from "antd";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "./overview.css";
-// import "../../components/GlobalStyle.css";
 import { SmileOutlined } from "@ant-design/icons";
 import { get } from "lodash";
 import DataViewCard from "../../Components/Analytic/DataViewCard";
 import DataTable from "../../Components/Analytic/DataTable";
 import analyticService from "../../Shared/Redux/Actions/analytics/analyticService.service";
 import { getNotificationService } from "../../Shared/Redux/Actions/brand/notification.service";
-import getProfileDataAction from "../../Shared/Redux/Actions/profile/getProfile.action";
 import DataGraph from "../../Components/Analytic/DataGraph";
-import { useDispatch } from "react-redux";
-import { useAppDispatch } from "../../Shared/Redux/store";
+import { RootState, useAppDispatch } from "../../Shared/Redux/store";
+import getProfileDataAction from "../../Shared/Redux/Actions/profile/getProfile.action";
+import { useSelector } from "react-redux";
 
 const OverviewPage = () => {
     const dispatch = useAppDispatch();
@@ -47,28 +46,32 @@ const OverviewPage = () => {
                 // console.log("notification error");
             });
     };
-    const [averageWatchTime, setAverageWatchTime] = useState("");
-    const [completionRatio, setCompletionRatio] = useState("");
-    const [clickThrough, setClickThrough] = useState("");
-    const [activeTime, setActiveTime] = useState("");
-    const [numberOfViews, setNumberOfViews] = useState("");
-    const [watchTime, setWatchTime] = useState("");
-    const [viewCta, setViewCta] = useState("");
-    const [numberOfViewers, setNumberOfViewers] = useState("");
+    const [averageWatchTime, setAverageWatchTime] = useState(0);
+    const [completionRatio, setCompletionRatio] = useState(0);
+    const [clickThrough, setClickThrough] = useState(0);
+    const [activeTime, setActiveTime] = useState(0);
+    const [numberOfViews, setNumberOfViews] = useState(0);
+    const [watchTime, setWatchTime] = useState(0);
+    const [viewCta, setViewCta] = useState(0);
+    const [numberOfViewers, setNumberOfViewers] = useState(0);
     const [loading, setLoading] = useState(false);
 
-    const overViewSmallCardData = (id: any) => {
+    let accountId = useSelector((state: RootState) => state.auth.userData?.data.accountId);
+    // console.log("userData accountId data accountId", accountId);
+
+    const overViewSmallCardData = async (accountId: number = -1) => {
         setLoading(true);
-        analyticService.GetBrandData(id).then((resp: any) => {
+        await analyticService.GetBrandData(accountId).then((resp: any) => {
+            // console.log("resp .... ... drand dtata", resp.average_watch_time);
+            setAverageWatchTime(resp.average_watch_time);
+            setCompletionRatio(resp.completion_rate);
+            setActiveTime(resp.total_active_views);
+            setClickThrough(resp.conversion_rate);
+            setNumberOfViews(resp.total_views);
+            setWatchTime(resp.total_watch_time);
+            setViewCta(resp.total_conversions);
+            setNumberOfViewers(resp.total_unique_views);
             setLoading(false);
-            setAverageWatchTime(resp.data.average_watch_time);
-            setCompletionRatio(resp.data.completion_rate);
-            setActiveTime(resp.data.total_active_views);
-            setClickThrough(resp.data.conversion_rate);
-            setNumberOfViews(resp.data.total_views);
-            setWatchTime(resp.data.total_watch_time);
-            setViewCta(resp.data.total_conversions);
-            setNumberOfViewers(resp.data.total_unique_views);
         });
     };
     const average_watch_time = averageWatchTime;
@@ -88,38 +91,26 @@ const OverviewPage = () => {
 
     useEffect(() => {
         setLoading(true);
-        dispatch(getProfileDataAction())
-            .then((res: any) => {
-                loadNotification();
-                console.log("res . . . . .  .", res);
-                const id = get(res, "data.account.id");
-                overViewSmallCardData(get(res, "data.account.id"));
-                // topFiveVideoData(get(res, "data.account.id"));
-
-                analyticService.GetTopHashtags(id).then((res: any) => {
-                    console.log("0000 0 00 setGetTopHashtagsData 00 0 0 0", res);
-                    setGetTopHashtagsData(
-                        Object.keys(get(res, "total_views")).map((key: any) => ({
-                            label: key,
-                            value: get(res, "total_views")[key],
-                        }))
-                    );
-                });
-
-                analyticService.GetVidedoData(id).then((res: any) => {
-                    setGetTopVideossData(
-                        Object.keys(get(res, "total_views")).map((key: any) => ({
-                            label: key,
-                            value: get(res, "total_views")[key],
-                        }))
-                    );
-                });
-                // setLoading(true);
-            })
-            .catch((err: any) => {
-                console.log(err);
-            });
+        overViewSmallCardData(accountId);
+        analyticService.GetTopHashtags(accountId).then((res) => {
+            // console.log("0000 0 00 setGetTopHashtagsData 00 0 0 0", res);
+            setGetTopHashtagsData(
+                Object.keys(get(res, "total_views")).map((key: any) => ({
+                    label: key,
+                    value: get(res, "total_views")[key],
+                }))
+            );
+        });
+        analyticService.GetVidedoData(accountId).then((res: any) => {
+            setGetTopVideossData(
+                Object.keys(get(res, "total_views")).map((key: any) => ({
+                    label: key,
+                    value: get(res, "total_views")[key],
+                }))
+            );
+        });
     }, []);
+
     return (
         <>
             {loading ? (
@@ -241,10 +232,7 @@ const OverviewPage = () => {
                         <Col span={23}>
                             <Row justify="center" style={{ marginTop: "3rem" }}>
                                 <Col span={12} style={{ paddingRight: "1.1rem" }}>
-                                    {/* <DataTable data={getTopHashtagsData} /> */}
                                     <DataTable data={getTopVideosData} Header={"Top Five Most Viewed Videos"} />
-
-                                    {/* <VideoDataTable data={getTopVideosData} /> */}
                                 </Col>
                                 <Col span={12} style={{ paddingLeft: "1.1rem" }} className="parentClassForDataTable">
                                     <DataTable data={getTopHashtagsData} Header={"Top Five Hashtags"} />
