@@ -18,12 +18,5 @@ const loginWithTokenAction = createAsyncThunk("auth/loginWithToken", async (_, {
     } catch (err) {
         return rejectWithValue(axiosErrHandle(err));
     }
-    //   try {
-    //     const res = await loginService(params);
-    //         return(console.log('axiosResHandle: ',axiosResHandle(res)))
-    // } catch (err) {
-    //     console.log('axiosErrHandle: ',axiosErrHandle(err))
-    //     return rejectWithValue(axiosErrHandle(err))
-    // }
 });
 export default loginWithTokenAction;
