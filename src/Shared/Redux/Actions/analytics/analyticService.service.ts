@@ -1,7 +1,7 @@
 import server from "../../../../api";
 import { axiosErrHandle, axiosResHandle } from "../../../../api/axiosHandle";
 
-const GetBrandData = async (id: any) => {
+const GetBrandData = async (id: number = -1) => {
     try {
         const response = await server.get(`analytics/brand/${id}`);
         return axiosResHandle(response);
@@ -10,7 +10,8 @@ const GetBrandData = async (id: any) => {
     }
 };
 
-const GetVidedoData = async (id: number) => {
+
+const GetVidedoData = async (id: number = -1) => {
     try {
         const response = await server.get(`analytics/top-videos/${id}`);
         return axiosResHandle(response);
@@ -19,7 +20,7 @@ const GetVidedoData = async (id: number) => {
     }
 };
 
-const GetTopHashtags = async (id: number) => {
+const GetTopHashtags = async (id: number = -1) => {
     try {
         const response = await server.get(`analytics/top-hashtags/${id}`);
         return axiosResHandle(response);
@@ -28,9 +29,19 @@ const GetTopHashtags = async (id: number) => {
     }
 };
 
+const GetGraphData = async(id:number = -1, ) =>{
+    try{
+        const response =await server.get(`analytics/graph?brand_id=${id}&days=${7}`);
+        return axiosResHandle(response)
+    }catch (err){
+        return axiosErrHandle(err)
+    }
+}
+
 const analyticService = {
     GetBrandData,
     GetVidedoData,
     GetTopHashtags,
+    GetGraphData
 };
 export default analyticService;
