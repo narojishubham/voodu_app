@@ -22,7 +22,7 @@ function CustomSelectAndSearchField(props: ISearchProps) {
         labelInValue = false,
     } = props;
 
-    const [data, setData] = useState([]);
+    const [selectedData, setSelectedData] = useState("");
 
     // const getData = async () => {
     //     setLoading(true);
@@ -38,6 +38,7 @@ function CustomSelectAndSearchField(props: ISearchProps) {
     // };
     const onChangeHandler = (e: any) => {
         onChange && onChange(e);
+        setSelectedData(e);
     };
 
     const onSearch = () => {};
@@ -49,6 +50,7 @@ function CustomSelectAndSearchField(props: ISearchProps) {
 
     return (
         <Select
+            value={selectedData}
             loading={loading}
             showSearch
             // placeholder={"Category"}
