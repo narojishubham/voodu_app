@@ -4,17 +4,15 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../Shared/Redux/store";
 import Logo_dark from "../../Assets/Logo/boom-logo.png";
 import { RouterPaths } from "../../api/RouterPaths";
-import loginAction from "../../Shared/Redux/Actions/auth/login.action";
+import loginAction, { LoginParamsType } from "../../Shared/Redux/Actions/auth/login.action";
 
 const LoginPage = () => {
     const [loading, setLoading] = useState(false);
-    //   const { isLoggedIn } = useSelector((state: ) => state.auth)
-    //   const { message } = useSelector((state: ) => state.message)
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const { Text } = Typography;
 
-    const onFinish = ({ email, password }: any) => {
+    const onFinish = ({ email, password }: LoginParamsType) => {
         setLoading(true);
         console.log(email, password);
         dispatch(loginAction({ email, password }))
