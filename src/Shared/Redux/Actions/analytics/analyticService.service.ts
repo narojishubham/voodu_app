@@ -29,9 +29,9 @@ const GetTopHashtags = async (id: number = -1) => {
     }
 };
 
-const GetGraphData = async(id:number = -1, ) =>{
+const GetGraphData = async(id:number, numberOfDays:number) =>{
     try{
-        const response =await server.get(`analytics/graph?brand_id=${id}&days=${7}`);
+        const response =await server.get(`analytics/graph?brand_id=${id}&days=${numberOfDays}`);
         return axiosResHandle(response)
     }catch (err){
         return axiosErrHandle(err)
