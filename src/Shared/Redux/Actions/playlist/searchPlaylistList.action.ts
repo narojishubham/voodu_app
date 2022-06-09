@@ -1,7 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import server from "../../../../api";
 import { axiosErrHandle, axiosResHandle } from "../../../../api/axiosHandle";
-import {  SearchParams } from "../../../../Interface/plalistInterface";
+export interface SearchParams {
+    searchQuery?:string,
+page?:number 
+}
 
 const searchPlaylistListService = async({searchQuery, page = 1}:SearchParams) => {
   
