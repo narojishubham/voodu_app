@@ -1,22 +1,10 @@
-import {PlaylistLayoutType} from "../enums/playlist";
+import { PlaylistLayoutType } from "../playlist"
+
 
 export const playlistLayoutsEmbedCode:((integrationId: string, integrationType: PlaylistLayoutType) => string) =
     (integrationId) => {
 
-  // const type = (integrationType: PlaylistLayoutType) => {
-  //   switch (integrationType){
-  //     case PlaylistLayoutType.carousel:
-  //       return 0;
-  //     case PlaylistLayoutType.grid:
-  //       return 1;
-  //     case PlaylistLayoutType.story_block:
-  //       return 2;
-  //     case PlaylistLayoutType.floating_player:
-  //       return 3;
-  //     default:
-  //       return 0;
-  //   }
-  // }
+
 
   return `
     <link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css" />
