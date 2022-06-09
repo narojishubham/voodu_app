@@ -1,22 +1,14 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import server from "../../../../api";
 import { axiosErrHandle, axiosResHandle } from "../../../../api/axiosHandle";
-import { PlaylistListResType } from "../../../../Interface/plalistInterface";
+import { PlaylistListResType } from "../../../Models/Playlist/plalist.type";
 
-// const getPlaylistList = (page: number = 1) => {
-//     return axiosRequest
-//       .get(`/playlists?page=${page}`, {
-//         // headers: { Authorization: `Bearer ${token}` },
-//       })
-//       .then((response: AxiosResponse<PlaylistListResType>) => response.data);
-//   };
+
   const getPlaylistListService = async(page: number = 1)=>{
     const res = await server
     .get<PlaylistListResType>(`/playlists?page=${page}`, {
-        // headers: { Authorization: `Bearer ${token}` },
       })
-      console.log(" getPlaylistListService, ", {res});
-    
+      // console.log(" getPlaylistListService, ", {res});
       return axiosResHandle(res)
     }
 
