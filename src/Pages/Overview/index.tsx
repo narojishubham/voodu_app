@@ -9,7 +9,6 @@ import analyticService from "../../Shared/Redux/Actions/analytics/analyticServic
 import { getNotificationService } from "../../Shared/Redux/Actions/brand/notification.service";
 import DataGraph from "../../Components/Analytic/DataGraph";
 import { RootState, useAppDispatch } from "../../Shared/Redux/store";
-import getProfileDataAction from "../../Shared/Redux/Actions/profile/getProfile.action";
 import { useSelector } from "react-redux";
 
 const OverviewPage = () => {
@@ -59,10 +58,9 @@ const OverviewPage = () => {
     let accountId = useSelector((state: RootState) => state.auth.userData?.data.accountId);
     // console.log("userData accountId data accountId", accountId);
 
-    const overViewSmallCardData = async (accountId: number = -1) => {
+    const overViewSmallCardData = (accountId: number = -1) => {
         setLoading(true);
-        await analyticService.GetBrandData(accountId).then((resp: any) => {
-            // console.log("resp .... ... drand dtata", resp.average_watch_time);
+        analyticService.GetBrandData(accountId).then((resp: any) => {
             setAverageWatchTime(resp.average_watch_time);
             setCompletionRatio(resp.completion_rate);
             setActiveTime(resp.total_active_views);
@@ -91,6 +89,7 @@ const OverviewPage = () => {
 
     useEffect(() => {
         setLoading(true);
+
         overViewSmallCardData(accountId);
         analyticService.GetTopHashtags(accountId).then((res) => {
             // console.log("0000 0 00 setGetTopHashtagsData 00 0 0 0", res);
@@ -102,6 +101,7 @@ const OverviewPage = () => {
             );
         });
         analyticService.GetVidedoData(accountId).then((res: any) => {
+            console.log("test getvideo data ", res);
             setGetTopVideossData(
                 Object.keys(get(res, "total_views")).map((key: any) => ({
                     label: key,
