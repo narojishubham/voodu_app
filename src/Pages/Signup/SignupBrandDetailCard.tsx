@@ -19,10 +19,6 @@ function BrandDetailcard({ form }: any) {
     const [brandLoading, setBrandLoading] = useState(false);
     const [weblinkErr, setWeblinkErr] = useState(true);
     const [brandNameErr, setBrandNameErr] = useState(true);
-    //   const { message } = useSelector((state: RootStateOrAny) => state.message);
-    //   const { brandNameExist } = useSelector(
-    //     (state: RootStateOrAny) => state.check
-    //   );
     const dispatch = useAppDispatch();
     const navigate: NavigateFunction = useNavigate();
 
@@ -39,10 +35,8 @@ function BrandDetailcard({ form }: any) {
     };
     const checkBrandName = (brandName: string) => {
         if (brandName !== "") {
-            // dispatch(brandDataValidationService.brandNameValidatorService ({ businessName: brandName }))
             brandDataValidationService
                 .brandNameValidatorService(brandName)
-                // .unwrap()
                 .then((response: any) => {
                     setBrandLoading(false);
                 })
@@ -62,9 +56,6 @@ function BrandDetailcard({ form }: any) {
         _.debounce((q: string) => checkBrandName(q), 300),
         []
     );
-    const clearMsg = () => {
-        // dispatch(clearMessage());
-    };
     const [data, setData] = useState<GetCategoriesResponseType[] | any>([]);
     const categories = () => {
         dispatch(getCategoriesAction())
@@ -143,7 +134,6 @@ function BrandDetailcard({ form }: any) {
                                 setBrandLoading(true);
                                 setBrandName(e.target.value);
                                 delayedQueryBrandName(e.target.value);
-                                clearMsg();
                             }}
                         />
                     </Form.Item>

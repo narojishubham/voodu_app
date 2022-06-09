@@ -124,16 +124,6 @@ function SignupUserDetailCard({ form }: any) {
         _.debounce((q: string) => checkPhone(q), 300),
         []
     );
-    // const loadDesignation = async () => {
-    //    getDesignationsAction()
-    //         .then(({ data: designations }: any) => {
-    //             console.log("designations", designations);
-    //             setOptions(
-    //                 designations.filter(({ name }: any) => name).map(({ id, name }: any) => ({ key: id, value: name }))
-    //             );
-    //         })
-    //         .catch((error: any) => {});
-    // };
     const [data, setData] = useState<GetDesignationResponseType[] | any>([]);
     const designations = () => {
         dispatch(getDesignationsAction())
@@ -149,10 +139,6 @@ function SignupUserDetailCard({ form }: any) {
     useEffect(() => {
         designations();
     }, []);
-
-    // useEffect(() => {
-    //     loadDesignation();
-    // }, []);
 
     return (
         <>
