@@ -5,7 +5,7 @@ import { axiosErrHandle, axiosResHandle } from "../../../../api/axiosHandle";
 export const getTagsService = () => {
     return server.get("/tags");
 };
-const getTagsAction = createAsyncThunk("feed/tags/get", async (_, { rejectWithValue }) => {
+const getBrandTagsAction = createAsyncThunk("feed/tags/get", async (_, { rejectWithValue }) => {
     try {
         const res = await getTagsService();
         return axiosResHandle(res);
@@ -13,4 +13,4 @@ const getTagsAction = createAsyncThunk("feed/tags/get", async (_, { rejectWithVa
         return rejectWithValue(axiosErrHandle(err));
     }
 });
-export default getTagsAction;
+export default getBrandTagsAction;
