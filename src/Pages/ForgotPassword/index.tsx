@@ -22,19 +22,17 @@ export default function ForgotPasswordPage(): JSX.Element {
      * @param {string} email - Email id
      * @throws {string} - throws error when resetting password fails
      */
-    const onFinish = ({ email }: any) => {
+    const onFinish = async ({ email }: any) => {
         setLoading(true);
-        dispatch(forgotPasswordAction({ email }))
-            .unwrap()
-            .then(() => {
-                msg.success("Password reset request sent successfully, Please check your email verify", 5);
-                navigate("/new-password");
-                setLoading(false);
-            })
-            .catch((error) => {
-                msg.error(`error while submitting: ${error}`, 2);
-                setLoading(false);
-            });
+        const response = await dispatch(forgotPasswordAction({ email })).unwrap();
+        try {
+            msg.success("Password reset request sent successfully, Please check your email verify", 5);
+            navigate("/new-password");
+            setLoading(false);
+        } catch (error) {
+            msg.error(`error while submitting: ${error}`, 2);
+            setLoading(false);
+        }
     };
     return (
         <Row style={{ height: "100vh", backgroundColor: "#f5f5f5" }} align="middle" justify="center">

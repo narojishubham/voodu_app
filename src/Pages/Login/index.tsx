@@ -12,20 +12,22 @@ const LoginPage = () => {
     const navigate = useNavigate();
     const { Text } = Typography;
 
-    const onFinish = ({ email, password }: LoginParamsType) => {
+    const onFinish = async ({ email, password }: LoginParamsType) => {
         setLoading(true);
         console.log(email, password);
-        dispatch(loginAction({ email, password }))
-            .unwrap()
-            .then((response) => {
-                const { token }: any = response;
-                if (token) {
-                    localStorage.setItem("token", JSON.stringify(token));
-                }
-            })
-            .catch((error) => {
-                setLoading(false);
-            });
+        const response = await dispatch(loginAction({ email, password })).unwrap();
+        // .then((response) => {
+        try {
+            const { token }: any = response;
+            if (token) {
+                localStorage.setItem("token", JSON.stringify(token));
+            }
+            // })
+        } catch (error) {
+            // .catch((error) => {
+            setLoading(false);
+            // });
+        }
     };
     const onFinishFailed = (errorInfo: any) => {
         console.log("Failed:", errorInfo);

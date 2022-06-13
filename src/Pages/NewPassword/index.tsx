@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
 import { Form, Input, Row, Typography, Card, message as msg, Image, Button } from "antd";
 import { useNavigate } from "react-router-dom";
 import "./NewPasswordPage.css";

@@ -35,7 +35,7 @@ function ProfilePage() {
      * @function onSave
      * @throws When saving profile data fails
      */
-    const onSave = () => {
+    const onSave = async () => {
         setEditModeSaveLoader(true);
         const {
             firstName,
