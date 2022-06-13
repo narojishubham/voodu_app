@@ -2,28 +2,25 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AxiosResponse } from "axios";
 import server from "../../../../api";
 import { axiosErrHandle, axiosResHandle } from "../../../../api/axiosHandle";
-import { GetPlaylistTypes, PlaylistItemDeleteResType } from "../../../../Interface/plalistInterface";
+import { PlaylistItemResType } from "../../../Models/Playlist/playlist.type";
 
+interface GetPlaylistTypes{
+  id: number, page?: number
+}
+  export const getPlaylistItemService = (params:GetPlaylistTypes) => {
+    // console.log('1111  111 id id id id 111 ',id)
+    return(server.get<PlaylistItemResType>(`/playlists/${params.id}?page=${params.page}`))}
 
-  const getPlaylistItemService =async ({id, page = 1}:GetPlaylistTypes) => {
-    const res = await server
-    .get<PlaylistItemDeleteResType>(`/playlists/${id}?page=${page}`, {
-      // headers: { Authorization: `Bearer ${token}` },
-    })
-    console.log(" getPlaylistService, ", {res});
-    
-    return axiosResHandle(res)
-  }
-
-  const getPlaylistAction = createAsyncThunk('playlists/item', async (props: any, thunkAPI) => {
+  const getPlaylistItemAction = createAsyncThunk('playlists/item', async (params: GetPlaylistTypes, thunkAPI) => {
     try {
-      console.log("getPlaylistAction, ", {props});
-      return await getPlaylistItemService(props);
+      // console.log("getPlaylistAction, ", {props});
+      const resp = await getPlaylistItemService(params);
+      return axiosResHandle(resp);
     } catch (err) {
       return thunkAPI.rejectWithValue(axiosErrHandle(err));
     }
   });
-  export default getPlaylistAction
+  export default getPlaylistItemAction
 
 
   

@@ -1,22 +1,19 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import server from "../../../../api";
 import { axiosErrHandle, axiosResHandle } from "../../../../api/axiosHandle";
-import { GetPlaylist } from "../../../../Interface/plalistInterface";
+import { getPlaylist } from "../../../Models/Playlist/playlist.type";
 
-const getPlaylistService =async ({playlistId}:GetPlaylist) => {
+const getPlaylistService =async ({playlistId}:getPlaylist) => {
   const res = await server
   .get(`/playlists/${playlistId}`, {
-    // headers: { Authorization: `Bearer ${token}` },
   })
   console.log(" getPlaylistService, ", {res});
-  
   return axiosResHandle(res)
 }
-
-const getPlaylistAction = createAsyncThunk('playlists/item', async (props: any, thunkAPI) => {
+const getPlaylistAction = createAsyncThunk('playlists/item', async (props: getPlaylist, thunkAPI) => {
   try {
-    console.log("getPlaylistAction, ", {props});
-    return await getPlaylistService(props);
+    console.log("getPlaylistAction, ", { props});
+    return await getPlaylistService({playlistId:props.playlistId});
   } catch (err) {
     return thunkAPI.rejectWithValue(axiosErrHandle(err));
   }
