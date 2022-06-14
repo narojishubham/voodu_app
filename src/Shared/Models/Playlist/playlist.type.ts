@@ -70,7 +70,7 @@ export type PlaylistItemType = {
   id: number;
   accountId: number;
   state: string;
-  title: string;
+  title?: string;
   createdAt: string;
   updatedAt: string;
   integrationId: string;

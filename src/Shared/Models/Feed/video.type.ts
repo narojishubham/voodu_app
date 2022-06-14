@@ -11,14 +11,22 @@ export type CreateVideoProps = {
     orientation: string;
 };
 export type UpdateVideoService = {
-    id: number;
-    caption: string;
-    description: string;
-    ctaBtnUrl: string;
-    ctaBtnTitle: string;
-    posterId: number;
-    tags: string[];
-    playlistIds: string[];
+    // id: number;
+    // caption: string;
+    // description: string;
+    // ctaBtnUrl: string;
+    // ctaBtnTitle: string;
+    // posterId: number;
+    // tags: string[];
+    // playlistIds: string[];
+            videoId :number,
+                newCaption:string,
+                newDescription:string,
+                newCTABtnUrl:string,
+                newCTABtnTitle:string,
+                newPosterId:number,
+                tags:string[],
+                playlistIds:string[],
 };
 export type GetVideos = {
     currentPage: number;
