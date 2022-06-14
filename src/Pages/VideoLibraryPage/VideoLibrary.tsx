@@ -101,10 +101,10 @@ export default function VideoLibrary() {
                 // if (token) {
                 dispatch(getVideosAction({ currentPage, order: sortBy }))
                     .unwrap()
-                    .then((response: any) => {
-                        setUploadVideos(response.data);
-                        setCurrentPage(response.page);
-                        setGetVideosLength(response.total);
+                    .then((response) => {
+                        setUploadVideos(response?.data);
+                        if (response?.page) setCurrentPage(response?.page);
+                        if (response?.total) setGetVideosLength(response?.total);
                     });
                 // } else {
                 //     window.location.reload();
@@ -113,17 +113,14 @@ export default function VideoLibrary() {
         } else {
             // dispatch(
             searchVideosService({
-                query: onSearchStringChange,
+                q: onSearchStringChange,
                 currentPage: currentSearchPage,
                 order: sortBy,
-            })
-                // )
-                // .unwrap()
-                .then((response: any) => {
-                    setUploadVideos(response.data);
-                    setCurrentPage(response.page);
-                    setGetVideosLength(response.total);
-                });
+            }).then((response) => {
+                setUploadVideos(response?.data);
+                if (response?.page) setCurrentPage(response.page);
+                if (response?.total) setGetVideosLength(response.total);
+            });
         }
     }, [currentPage, currentSearchPage, isEditVideoDetailsVisible, onSearchStringChange, reload, sortBy]);
 
@@ -132,8 +129,8 @@ export default function VideoLibrary() {
      * @function querySearchVideos
      * @param {string} query
      */
-    const querySearchVideos = (query: string) => {
-        searchVideosService({ query, currentPage: currentSearchPage, order: sortBy }).then((response: any) => {
+    const querySearchVideos = (q: string) => {
+        searchVideosService({ q, currentPage: currentSearchPage, order: sortBy }).then((response: any) => {
             setUploadVideos(response.data);
             setCurrentPage(response.page);
             setGetVideosLength(response.total);
@@ -187,7 +184,7 @@ export default function VideoLibrary() {
             .unwrap()
             .then((res) => {
                 // setList(res);
-                console.log("resp getPlaylistListAction", res);
+                // console.log("resp getPlaylistListAction", res);
                 setLoading(false);
             })
             .catch(() => setLoading(false));

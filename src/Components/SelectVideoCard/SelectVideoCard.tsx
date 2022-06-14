@@ -6,7 +6,7 @@ import classes from "./cardStyles.module.css";
 import Landscape_dark from "../../Assets/Logo/Landscape_dark.png";
 // import Portrait_dark from "../../Assets/partials/Portrait_dark.png";
 // import ".";
-import { VideoEntityType } from "../../Shared/Models/Playlist/plalist.type";
+import { VideoEntityType } from "../../Shared/Models/Playlist/playlist.type";
 
 interface SelectVideoCardPropsTypes {
     cardData: VideoEntityType;

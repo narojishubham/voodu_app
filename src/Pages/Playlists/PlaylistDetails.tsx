@@ -25,7 +25,7 @@ import FeedCard from "../../Components/FeedCard/FeedCard";
 import EmbedCodeModal from "../../Shared/Models/EmbedCodeModal/EmbedCodeModal";
 import deletePlaylistItemAction from "../../Shared/Redux/Actions/playlist/deletePlaylistItem.action";
 import { useAppDispatch } from "../../Shared/Redux/store";
-import { IsearchVideoFromPlaylist, PlaylistItemType } from "../../Shared/Models/Playlist/plalist.type";
+import { IsearchVideoFromPlaylist, PlaylistItemType } from "../../Shared/Models/Playlist/playlist.type";
 import searchVideosFromPlaylistAction from "../../Shared/Redux/Actions/playlist/searchVideoFormPlaylist.service";
 import getPlaylistAction from "../../Shared/Redux/Actions/playlist/getPlaylist.action";
 import { unwrapResult } from "@reduxjs/toolkit";

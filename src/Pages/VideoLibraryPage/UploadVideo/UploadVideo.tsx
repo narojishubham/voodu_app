@@ -774,7 +774,7 @@ export default function UploadVideo() {
                 </Col>
             </Row>
             <>
-                {/* <VideoOverlayModal
+                <VideoOverlayModal
                     isVideoOverlaysVisible={isVideoOverlaysVisible}
                     setOverlaysOpt={setOverlaysOpt}
                     setIsVideoOverlaysVisible={setIsVideoOverlaysVisible}
@@ -801,7 +801,7 @@ export default function UploadVideo() {
                     setIsVideoOverlaysOptVisible={setIsVideoOverlaysOptVisible}
                     setOverlaysOpt={setOverlaysOpt}
                     setIsVideoOverlaysVisible={setIsVideoOverlaysVisible}
-                /> */}
+                />
 
                 <DialogBox
                     // @ts-ignore

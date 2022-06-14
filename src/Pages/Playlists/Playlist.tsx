@@ -87,7 +87,7 @@ const Playlist = () => {
         setLoading(true);
         searchPlaylistListService({ q })
             .then((res: any) => {
-                console.log(res);
+                // console.log(res);
                 setList(res);
                 setLoading(false);
             })
@@ -110,7 +110,7 @@ const Playlist = () => {
      */
     const searchFn = useCallback(
         _.debounce((e: any) => {
-            console.log("hello test", e);
+            // console.log("hello test", e);
             handleSearchPlaylist(e);
         }, 500),
         []
@@ -165,7 +165,6 @@ const Playlist = () => {
                     <Space size={10}>
                         <SearchBox
                             iconOnly
-                            // onInputChangeCallback={(val) => setOnSearchStringChange(val)}
                             onInputChangeCallback={searchFn}
                             onClickCallback={(val) => handleSearchPlaylist(val)}
                         />
