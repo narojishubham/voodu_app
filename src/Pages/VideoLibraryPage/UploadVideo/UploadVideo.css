@@ -1,0 +1,24 @@
+.site-layout .site-layout-background {
+  background: #fff;
+}
+
+.video-container1 {
+  position: relative;
+  /* height: 24vw; */
+  width: 25%;
+  margin: auto;
+  min-width: 17vw;
+  border-radius: 10px;
+  /*background-color: white;*/
+  /* overflow: scroll; */
+  scroll-snap-type: y mandatory;
+  scrollbar-width: none;
+}
+
+/* for chrome and opera */
+.video-container1::-webkit-scrollbar {
+  display: none;
+}
+.removeHeight {
+  height: unset !important;
+}
