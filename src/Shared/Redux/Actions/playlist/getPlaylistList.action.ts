@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import server from "../../../../api";
 import { axiosErrHandle, axiosResHandle } from "../../../../api/axiosHandle";
-import { PlaylistListResType } from "../../../Models/Playlist/plalist.type";
+import { PlaylistListResType } from "../../../Models/Playlist/playlist.type";
 
 
   const getPlaylistListService = async(page: number = 1)=>{

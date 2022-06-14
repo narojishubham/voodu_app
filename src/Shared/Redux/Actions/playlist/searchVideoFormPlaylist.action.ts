@@ -1,21 +1,13 @@
-// const searchVideosFromPlaylist = (playlistID: any, searchQuery: string) => {
-//     return axiosRequest
-//       .get(`/playlists/${playlistID}?q=${searchQuery}`, {
-//         // headers: { Authorization: `Bearer ${token}` },
-//       })
-//       .then((response: AxiosResponse<PlaylistItemResType>) => response.data);
-
 import { createAsyncThunk } from "@reduxjs/toolkit"
 import server from "../../../../api"
 import { axiosErrHandle, axiosResHandle } from "../../../../api/axiosHandle"
-import { PlaylistItemDeleteResType, SearchVideoFromPlaylist } from "../../../../Interface/plalistInterface"
+import { PlaylistItemResType } from "../../../Models/Playlist/playlist.type"
 
-const searchVideosFromPlaylistService = async ({searchQuery,playlistID}:SearchVideoFromPlaylist) =>{
-    const res = await server
-    .get<PlaylistItemDeleteResType>(`/playlists/${playlistID}?q=${searchQuery}`, {
-                // headers: { Authorization: `Bearer ${token}` },
-              })
-              return axiosResHandle(res)
+interface SearchVideoFromPlaylist {
+    playlistID: number, searchQuery: string
+} 
+export const searchVideosFromPlaylistService = async ({searchQuery,playlistID}:SearchVideoFromPlaylist ) =>{
+  return (server.get<PlaylistItemResType>(`/playlists/${playlistID}?q=${searchQuery}`))
 }
 const searchVideosFromPlaylistAction = createAsyncThunk('playlists/items',async(props:SearchVideoFromPlaylist, thunkAPI)=>{
     try{

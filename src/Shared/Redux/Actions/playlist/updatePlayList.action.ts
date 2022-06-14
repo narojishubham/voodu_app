@@ -1,29 +1,24 @@
 
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import server from "../../../../api";
-import { axiosErrHandle, axiosResHandle } from "../../../../api/axiosHandle";
-import { PlaylistListEachResType, UpdatePlaylistProps } from "../../../../Interface/plalistInterface";
-// const updatePlaylist = (
-//     id: string,
-//     data: any
-//   ): Promise<AxiosResponse<PlaylistListEachResType>> => {
-//     return axiosRequest.patch(`/playlists/${id}`, data, {
-//     //   headers: { Authorization: `Bearer ${token}` },
-//     });
-//   };
+import { axiosErrHandle } from "../../../../api/axiosHandle";
+import { PlaylistLayoutType, PlaylistOrientation } from "../../../Models/enums/playlist";
+import { PlaylistListEachResType, UpdatePlaylistProps, VideoEntityType } from "../../../Models/Playlist/playlist.type";
 
-const updatePlaylistService = async ({ id, accountId,state,title,createdAt,updatedAt,newVideoArray }: UpdatePlaylistProps) => {
-  const res = await server
-    .post<PlaylistListEachResType>(`/playlists/${id}`, {
-      id, accountId,state,title,createdAt,updatedAt,newVideoArray 
-    })
-    console.log("in updatePlaylistService, ", {res});
-    
-  return axiosResHandle(res)
+type updatePlaylistTypes = {
+  id: number,
+  title: string,
+  videos: VideoEntityType[],
+  integrationType: PlaylistLayoutType,
+  orientation: PlaylistOrientation,
+}
+
+const updatePlaylistService = (params: updatePlaylistTypes) => {
+  return (server.post<PlaylistListEachResType>(`/playlists/${params.id}`, params))
 };
-const updatePlaylistAction = createAsyncThunk('playlist/update', async (props: UpdatePlaylistProps, thunkAPI) => {
+const updatePlaylistAction = createAsyncThunk('playlist/update', async (props: updatePlaylistTypes, thunkAPI) => {
   try {
-    console.log("in updatePlaylistAction, ", {props});
+    console.log("in updatePlaylistAction, ", { props });
     return await updatePlaylistService(props);
   } catch (err) {
     return thunkAPI.rejectWithValue(axiosErrHandle(err));
