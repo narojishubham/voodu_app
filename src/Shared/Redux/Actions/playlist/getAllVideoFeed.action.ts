@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import server from "../../../../api";
 import { axiosErrHandle, axiosResHandle } from "../../../../api/axiosHandle";
+import { GetVideosResponse,  } from "../../../Models/Feed/video.type";
 
 type GetAllVideosFeed = {
     page?: number,
@@ -15,7 +16,9 @@ const getAllVideosFeedService = ({
     itemsPerPage,
     orientation,
 }: GetAllVideosFeed) => {
+    // return (server.get<GetVideosResponse1>("/videos", { params: { page, itemsPerPage, q, orientation }, }))
     return (server.get("/videos", { params: { page, itemsPerPage, q, orientation }, }))
+
 };
 const getAllVideosFeedAction = createAsyncThunk("auth/login", async (params: GetAllVideosFeed, { rejectWithValue }) => {
     try {

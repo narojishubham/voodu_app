@@ -1,15 +1,16 @@
 import server from "../../../../api";
 import { axiosErrHandle, axiosResHandle } from "../../../../api/axiosHandle";
+import { GetVideosResponse } from "../../../Models/Feed/video.type";
 
 interface searchVideosFromVideoLibrary {
-    query?: string, currentPage?: number, order?: string
+    q?: string, currentPage?: number, order?: string
 }
 
-export const searchVideosService = async ({query, currentPage =1,order}:searchVideosFromVideoLibrary) => {
+export const searchVideosService = async ({q, currentPage = 1, order}:searchVideosFromVideoLibrary) => {
     // try {
         // const response = await server.get(`/videos?q=${query}&page=${currentPage}&order=${order}`, {});
-        const response = await server.get("/videos", {
-            params:{query,currentPage,order}
+        const response = await server.get<GetVideosResponse>("/videos", {
+            params:{q,currentPage,order}
         });
         return axiosResHandle(response);
     // } catch (err) {
