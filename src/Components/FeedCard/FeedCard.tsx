@@ -37,7 +37,7 @@ const FeedCard = ({
             cover={
                 data.mode === 1 ? (
                     <ReactVideoPlayer
-                        url={data?.videoURL}
+                        url={data.videoURL}
                         // title={data.title}
                         // cta={data.ctaBtnTitle ? data.ctaBtnTitle : ""}
                         // ctaURL={data.ctaBtnUrl ? data.ctaBtnUrl : ""}
