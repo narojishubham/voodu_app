@@ -1,32 +1,31 @@
-// const searchVideosFromPlaylist = (playlistID: any, searchQuery: string) => {
-//     return axiosRequest
-//       .get(`/playlists/${playlistID}?q=${searchQuery}`, {
-//         // headers: { Authorization: `Bearer ${token}` },
-//       })
-//       .then((response: AxiosResponse<PlaylistItemResType>) => response.data);
-
-import { createAsyncThunk } from "@reduxjs/toolkit"
-import { PlaylistItemResType } from "../../../interface/playlistInterface"
-import server from "../../api"
-import { axiosResOutput, catchErrorHandle } from "../../api/axiosHandle"
-
-
-interface IsearchVideoFromPlaylist {
-    playlistID: any, searchQuery: string
-} 
-
-const searchVideosFromPlaylistService = async ({searchQuery,playlistID}:IsearchVideoFromPlaylist) =>{
-    const res = await server
-    .get<PlaylistItemResType>(`/playlists/${playlistID}?q=${searchQuery}`, {
-                // headers: { Authorization: `Bearer ${token}` },
-              })
-              return axiosResOutput(res)
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import server from "../../../../api";
+import { axiosErrHandle, axiosResHandle } from "../../../../api/axiosHandle";
+export interface SearchParams {
+  q?: string;
+  page?: number;
 }
-const searchVideosFromPlaylistAction = createAsyncThunk('playlists/items',async(props:IsearchVideoFromPlaylist, thunkAPI)=>{
-    try{
-        return await searchVideosFromPlaylistService(props)
-    }catch(err){
-        return thunkAPI.rejectWithValue(catchErrorHandle(err)); 
+
+export const searchPlaylistListService = async ({
+  q,
+  page = 1,
+}: SearchParams) => {
+  const res = await server.get("/playlists", {
+    params: { q, page },
+    // headers: { Authorization: `Bearer ${token}` },
+  });
+  return axiosResHandle(res);
+};
+
+const searchPlaylistListAction = createAsyncThunk(
+  "auth/login",
+  async (props: SearchParams, thunkAPI) => {
+    try {
+      console.log("in loginAction, ", { props });
+      return await searchPlaylistListService(props);
+    } catch (err) {
+      return thunkAPI.rejectWithValue(axiosErrHandle(err));
     }
-})
-export default searchVideosFromPlaylistAction
+  }
+);
+export default searchPlaylistListAction;

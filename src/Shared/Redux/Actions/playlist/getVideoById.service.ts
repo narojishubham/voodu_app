@@ -11,14 +11,14 @@ import { axiosResOutput, catchErrorHandle } from "../../api/axiosHandle";
     .get(`/videos/${id}`, {
       // headers: { Authorization: `Bearer ${token}` },
     })
-    console.log(" getVideoByIdService, ", {res});
+    // console.log(" getVideoByIdService, ", {res});
     
     return axiosResOutput(res)
   }
 
   const getVideoByIdAction = createAsyncThunk('playlists/item', async (props: any, thunkAPI) => {
     try {
-      console.log("getVideoByIdAction, ", {props});
+      // console.log("getVideoByIdAction, ", {props});
       return await getVideoByIdService(props);
     } catch (err) {
       return thunkAPI.rejectWithValue(catchErrorHandle(err));
