@@ -11,7 +11,9 @@ import ProfilePage from "../../Pages/ProfilePage";
 import Playlist from "../../Pages/Playlists/Playlist";
 import PlaylistDetails from "../../Pages/Playlists/PlaylistDetails";
 import CreatePlaylistPage from "../../Pages/Playlists/CreatePlaylist/CreatePlaylistPage";
-import VideoLibrary from "../../Pages/VideoLibrary/VideoLibrary";
+import VideoLibrary from "../../Pages/VideoLibraryPage/VideoLibrary";
+import UploadVideo from "../../Pages/VideoLibraryPage/UploadVideo/UploadVideo";
+import VideoDetailsViewEdit from "../../Pages/VideoLibraryPage/VideoDetailsViewEdit/VideoDetailsViewEdit";
 
 const AppRoutes = () => {
     return (
@@ -24,13 +26,13 @@ const AppRoutes = () => {
                         <Route path={RouterPaths.overview} element={<OverviewPage />} />
                         <Route path={RouterPaths.videoLibrary}>
                             <Route index element={<VideoLibrary />} />
-                            {/* <Route path={RouterPaths.addPage} element={<UploadVideo />} />
+                            <Route path={RouterPaths.addPage} element={<UploadVideo />} />
                             <Route path={RouterPaths.p_videoId}>
                                 <Route index element={<VideoDetailsViewEdit />} />
                                 <Route path={RouterPaths.editDetails} element={<VideoDetailsViewEdit />} />
-                            </Route> */}
+                            </Route>
                         </Route>
-                        {/* <Route path={RouterPaths.uploadVideo} element={<UploadVideo />} /> */}
+                        <Route path={RouterPaths.uploadVideo} element={<UploadVideo />} />
 
                         <Route path={RouterPaths.playlists}>
                             <Route index element={<Playlist />} />
