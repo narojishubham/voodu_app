@@ -15,7 +15,7 @@ const AppPagesRoutes = () => {
     const token = localStorage.getItem("theboom_token");
 
     useEffect(() => {
-        console.log({ loggedIn: userData });
+        // console.log({ loggedIn: userData });
         if (!userData) {
             if (token) {
                 dispatch(loginWithTokenAction()).unwrap();

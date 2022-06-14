@@ -11,7 +11,7 @@ const AuthPagesRoutes = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        console.log({ loggedIn: userData });
+        // console.log({ loggedIn: userData });
         if (userData) {
             console.log("logged is null");
             // navigate( location.pathname ||RouterPaths.root, { replace: true});
