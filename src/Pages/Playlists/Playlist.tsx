@@ -24,7 +24,7 @@ import _ from "lodash";
 import { RouterPaths } from "../../api/RouterPaths";
 import FeedCard from "../../Components/FeedCard/FeedCard";
 import SearchBox from "../../Components/Partials/SearchBox";
-import { deletePlaylistItemTypes, PlaylistListResType } from "../../Shared/Models/Playlist/plalist.type";
+import { deletePlaylistItemTypes, PlaylistListResType } from "../../Shared/Models/Playlist/playlist.type";
 import { playlistLayoutsEmbedCode } from "../../Shared/Models/enums/helpers/PlaylistLayoutsEmbedCode";
 import { PlaylistLayoutType } from "../../Shared/Models/enums/playlist";
 import { useAppDispatch } from "../../Shared/Redux/store";
