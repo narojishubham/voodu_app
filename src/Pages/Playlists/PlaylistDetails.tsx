@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import "./Playlists.css";
 import {
     Col,
@@ -25,19 +25,22 @@ import FeedCard from "../../Components/FeedCard/FeedCard";
 import EmbedCodeModal from "../../Shared/Models/EmbedCodeModal/EmbedCodeModal";
 import deletePlaylistItemAction from "../../Shared/Redux/Actions/playlist/deletePlaylistItem.action";
 import { useAppDispatch } from "../../Shared/Redux/store";
-import { IsearchVideoFromPlaylist, PlaylistItemType } from "../../Shared/Models/Playlist/playlist.type";
-import searchVideosFromPlaylistAction from "../../Shared/Redux/Actions/playlist/searchVideoFormPlaylist.service";
 import getPlaylistAction from "../../Shared/Redux/Actions/playlist/getPlaylist.action";
 import { unwrapResult } from "@reduxjs/toolkit";
-import { searchVideosFromPlaylistService } from "../../Shared/Redux/Actions/playlist/searchVideoFormPlaylist.action";
+import searchVideosFromPlaylistAction, {
+    searchVideosFromPlaylistDetailService,
+} from "../../Shared/Redux/Actions/playlist/searchVideoFormPlaylistDetail.action";
+import { PlaylistItemType } from "../../Shared/Models/Playlist/playlist.type";
+import _ from "lodash";
 
 const PlaylistDetails = () => {
     const navigate = useNavigate();
-    let { playlistId } = useParams();
+    const { playlistId } = useParams();
 
     const [viewEmbedModal, setViewEmbedModal] = useState(false);
 
     const [playlistData, setPlaylistData] = useState({} as PlaylistItemType);
+    // const [playlistData, setPlaylistData] = useState<any | []>([]);
     const [loading, setLoading] = useState(true);
     const dispatch = useAppDispatch();
     /**
@@ -47,6 +50,7 @@ const PlaylistDetails = () => {
      * @param {number} page
      * @throws When there is a error playlist data fetching
      */
+
     const handleGetData = (id: number) => {
         setLoading(true);
         console.log("idd dd d d d d d ", id);
@@ -79,23 +83,29 @@ const PlaylistDetails = () => {
      * @param {string} searchString
      * @throws When search request fails
      */
-    const handleSearchVideos = (searchQuery: string) => {
-        // console.log('playlistId', playlistId);
-        setLoading(true);
-        searchVideosFromPlaylistService({ playlistId, searchQuery });
-        // dispatch(searchVideosFromPlaylistAction({playlistId,searchQuery}))
-        // .unwrap()
-        //   .then((res) => {
-        //     console.log({ searchPlaylist: res });
-        //     // setPlaylistData(res.data);
-        //     setLoading(false);
-        // })
-        // .catch(() => setLoading(false));
-    };
 
+    const handleSearchVideos = (searchQuery: string) => {
+        setLoading(true);
+        let playlistID = playlistId ? parseInt(playlistId) : -1;
+        searchVideosFromPlaylistDetailService({ playlistID, searchQuery })
+            .then((res: any) => {
+                console.log({ searchPlaylist: res });
+                setPlaylistData(res.data);
+                setLoading(false);
+                console.log("searchVideosFromPlaylistDetailService");
+            })
+            .catch(() => setLoading(false));
+    };
+    const searchFn = useCallback(
+        _.debounce((e: any) => {
+            // console.log("hello test", e);
+            handleSearchVideos(e);
+        }, 500),
+        []
+    );
     useEffect(() => {
-        if (!onSearchStringChange) handleGetData(parseInt(playlistId));
-        handleSearchVideos(onSearchStringChange);
+        if (!onSearchStringChange && playlistId) handleGetData(parseInt(playlistId));
+        // handleSearchVideos(onSearchStringChange);
     }, [onSearchStringChange]);
 
     /**
@@ -104,9 +114,9 @@ const PlaylistDetails = () => {
      * @param {number} id - Playlist Id
      * @return {Promise}
      */
-    const handleDeletePlaylist = async (_id: number) => {
-        return await deletePlaylistItemAction(_id);
-    };
+    // const handleDeletePlaylist = async (_id: any) => {
+    //     return deletePlaylistItemAction(_id);
+    // };
 
     /**
      * Shows confirmation message for playlist to be deleted
@@ -123,7 +133,9 @@ const PlaylistDetails = () => {
             okText: "Confirm",
             cancelText: "Cancel",
             onOk() {
-                return handleDeletePlaylist(deletePlaylistId)
+                // return handleDeletePlaylist(deletePlaylistId)
+                dispatch(deletePlaylistItemAction({ _id: deletePlaylistId }))
+                    .unwrap()
                     .then(() => navigate(-1))
                     .catch((e) => message.error("Error while deleting playlist:- ", e));
             },
@@ -159,12 +171,9 @@ const PlaylistDetails = () => {
                     <Space size={10}>
                         <SearchBox
                             iconOnly
-                            // onInputChangeCallback={(val) => setOnSearchStringChange(val)}
-                            onInputChangeCallback={(val) => console.log(val)}
-                            onClickCallback={(val) => {
-                                console.log(val);
-                                handleSearchVideos(val);
-                            }}
+                            onInputChangeCallback={searchFn}
+                            // onInputChangeCallback={(val) => console.log(val)}
+                            onClickCallback={(val) => handleSearchVideos(val)}
                         />
                         <Tooltip title="Copy embed code" color={"#fff"} overlayInnerStyle={{ color: "#000" }}>
                             <Button
@@ -203,7 +212,7 @@ const PlaylistDetails = () => {
                     <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
                 ) : (
                     playlistData &&
-                    playlistData?.videos?.map((el, i) => {
+                    playlistData?.videos?.map((el: any, i: any) => {
                         console.log(el);
                         return (
                             <Col
