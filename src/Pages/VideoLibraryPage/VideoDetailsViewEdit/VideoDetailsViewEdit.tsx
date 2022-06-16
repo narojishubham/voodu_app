@@ -636,15 +636,15 @@ export default function VideoDetailsViewEdit() {
      * @param {number} newPosterId
      * @throws Will throw an error when video details modification fails
      */
-    const updateVideoDispatcher = (videoId: number, newCaption: string, newPosterId: number) => {
+    const updateVideoDispatcher = (videoId: number, caption: string, posterId: number) => {
         dispatch(
             updateVideoAction({
                 videoId,
-                newCaption,
-                newDescription,
-                newCTABtnUrl,
-                newCTABtnTitle,
-                newPosterId,
+                caption,
+                description,
+                ctaBtnUrl,
+                ctaBtnTitle,
+                posterId,
                 tags,
                 playlistIds,
             })
