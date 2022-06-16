@@ -3,14 +3,30 @@ import server from "../../../../../api";
 import { axiosErrHandle, axiosResHandle } from "../../../../../api/axiosHandle";
 
 interface VerifyUploadReqProps {
-  uploadReqIdRes?: number;
+  uploadReqIdRes: number;
 }
-
-const verifyUploadReqService = (id?:number) => {
-  return server
-    .post(
-      `/resources/${id}/verify`,{},
-    )
+export type VerifyUploadReqResponseType={
+  id: number
+  accountId: number
+  userId: number
+  width: any
+  height: any
+  size: any
+  duration: any
+  filename: string
+  key: string
+  processed: any
+  valid: boolean
+  verificationError: string
+  variations: any
+  createdAt: string
+  updatedAt: string
+  urls: {
+    original: string
+  }
+}
+const verifyUploadReqService = (id:number) => {
+  return (server.post<VerifyUploadReqResponseType>( `/resources/${id}/verify` ))
 };
 export const verifyUploadReqAction = createAsyncThunk('video/verifyUploadReq', async (props: VerifyUploadReqProps, thunkAPI) => {
   const { uploadReqIdRes } = props;
