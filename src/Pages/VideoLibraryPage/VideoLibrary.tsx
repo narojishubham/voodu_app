@@ -32,6 +32,7 @@ import { searchVideosService } from "../../Shared/Redux/Actions/feed/searchVideo
 import getPlaylistListAction from "../../Shared/Redux/Actions/playlist/getPlaylistList.action";
 import getVideoByIdAction from "../../Shared/Redux/Actions/playlist/getVideoById.action";
 import getVideosAction from "../../Shared/Redux/Actions/feed/getVideo.action";
+import deleteVideoAction from "../../Shared/Redux/Actions/feed/deleteVideo.action";
 
 export interface NavigateFunction {
     (to: string, options?: { replace?: boolean; state?: any }): void;
@@ -183,7 +184,7 @@ export default function VideoLibrary() {
         dispatch(getPlaylistListAction({ page }))
             .unwrap()
             .then((res) => {
-                // setList(res);
+                if (res) setList(res);
                 // console.log("resp getPlaylistListAction", res);
                 setLoading(false);
             })
@@ -208,7 +209,7 @@ export default function VideoLibrary() {
             okText: "Yes",
             cancelText: "No",
             onOk: () => {
-                dispatch(getVideoByIdAction({ id }))
+                dispatch(deleteVideoAction({ id }))
                     .unwrap()
                     .then((response: any) => {
                         //console.log({ response });
