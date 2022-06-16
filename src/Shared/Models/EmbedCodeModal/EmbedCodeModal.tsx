@@ -9,6 +9,10 @@ import { PlaylistLayoutType } from "../enums/playlist";
 import { playlistLayoutsEmbedCode } from "../enums/helpers/PlaylistLayoutsEmbedCode";
 import Button from "../../../Components/Partials/Button";
 import { copyToClipboard } from "../enums/helpers";
+import Carousel from "../../../Assets/PlaylistLayouts/carousel.png";
+import FloatingPlayer from "../../../Assets/PlaylistLayouts/floating_player.png";
+import Grid from "../../../Assets/PlaylistLayouts/grid.png";
+import StoryBlock from "../../../Assets/PlaylistLayouts/story_block.png";
 
 interface EmbedCodeModalPropType {
     modalOpenState: boolean;
@@ -18,9 +22,11 @@ interface EmbedCodeModalPropType {
 
 const EmbedCodeModal = ({ modalOpenState, closeModalFn, playlistData }: EmbedCodeModalPropType) => {
     const [playlistLayout, setPlaylistLayout] = useState<PlaylistLayoutType>(PlaylistLayoutType.carousel);
-
+    const imagesList = [Carousel, FloatingPlayer, Grid, StoryBlock];
     const SelectLayout = () => {
-        const layoutArray = Object.keys(PlaylistLayoutType);
+        const layoutArray = Object.keys(PlaylistLayoutType).map((e, i) => {
+            return { element: e, image: imagesList[i] };
+        });
         return (
             <>
                 {console.log("playlistData", playlistData.integrationType)}
@@ -35,11 +41,12 @@ const EmbedCodeModal = ({ modalOpenState, closeModalFn, playlistData }: EmbedCod
                                     {/* {console.log("el", el)} */}
                                     <Card
                                         bordered
-                                        hoverable={el === playlistData.integrationType}
+                                        hoverable={el.element === playlistData.integrationType}
                                         cover={
                                             <img
                                                 alt={el}
-                                                src={require(`../../Assets/PlaylistLayouts/${el}.png`)}
+                                                // src={require(`../../Assets/PlaylistLayouts/${el}.png`)}
+                                                src={el.image}
                                                 style={{
                                                     aspectRatio: "3/2.2",
                                                     objectFit: "cover",
@@ -55,9 +62,9 @@ const EmbedCodeModal = ({ modalOpenState, closeModalFn, playlistData }: EmbedCod
                                         // }}
                                         style={{
                                             width: 120,
-                                            opacity: el === playlistData.integrationType ? 1 : 0.5,
+                                            opacity: el.element === playlistData.integrationType ? 1 : 0.5,
                                             border:
-                                                el === playlistData.integrationType
+                                                el.element === playlistData.integrationType
                                                     ? "0.3rem double #F2994A"
                                                     : "0.3rem double #ececec",
                                         }}
@@ -67,7 +74,7 @@ const EmbedCodeModal = ({ modalOpenState, closeModalFn, playlistData }: EmbedCod
                                         }}
                                     >
                                         <Card.Meta
-                                            title={el.split("_").join(" ")}
+                                            title={el.element.split("_").join(" ")}
                                             style={{ textTransform: "capitalize" }}
                                         />
                                     </Card>
