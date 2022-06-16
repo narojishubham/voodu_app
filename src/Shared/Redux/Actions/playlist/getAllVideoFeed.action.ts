@@ -20,7 +20,7 @@ const getAllVideosFeedService = ({
     return (server.get("/videos", { params: { page, itemsPerPage, q, orientation }, }))
 
 };
-const getAllVideosFeedAction = createAsyncThunk("auth/login", async (params: GetAllVideosFeed, { rejectWithValue }) => {
+const getAllVideosFeedAction = createAsyncThunk("createplaylist/getvideo", async (params: GetAllVideosFeed, { rejectWithValue }) => {
     try {
         const res = await getAllVideosFeedService(params);
         return axiosResHandle(res);
