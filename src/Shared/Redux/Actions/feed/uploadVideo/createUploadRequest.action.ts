@@ -12,8 +12,8 @@ interface CreateUploadRequestResponse {
     userId?: number;
     filename?: string;
     key?: string;
-    id?: number;
-    uploadUrl?: string;
+    id: number;
+    uploadUrl: string;
     urls?: {
       original?: string;
     };
