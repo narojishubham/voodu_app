@@ -19,7 +19,7 @@ import "./CreatePlaylistPage.css";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { debounce, get } from "lodash";
 import { PlaylistLayoutType, PlaylistOrientation } from "../../../Shared/Models/enums/playlist";
-import { VideoEntityType } from "../../../Shared/Models/Playlist/playlist.type";
+import { CreatePlaylistResponse, VideoEntityType } from "../../../Shared/Models/Playlist/playlist.type";
 import { RouterPaths } from "../../../api/RouterPaths";
 import { useAppDispatch } from "../../../Shared/Redux/store";
 import SearchBox from "../../../Components/Partials/SearchBox";
@@ -29,15 +29,23 @@ import getAllVideosFeedAction from "../../../Shared/Redux/Actions/playlist/getAl
 import getPlaylistItemAction from "../../../Shared/Redux/Actions/playlist/getPlaylistItem.action";
 import updatePlaylistAction from "../../../Shared/Redux/Actions/playlist/updatePlayList.action";
 import createPlaylistAction from "../../../Shared/Redux/Actions/playlist/createPlaylist.action";
+import Carousel from "../../../Assets/PlaylistLayouts/carousel.png";
+import FloatingPlayer from "../../../Assets/PlaylistLayouts/floating_player.png";
+import Grid from "../../../Assets/PlaylistLayouts/grid.png";
+import StoryBlock from "../../../Assets/PlaylistLayouts/story_block.png";
 
 export default function CreatePlaylistPage() {
+    const imagesList = [Carousel, FloatingPlayer, Grid, StoryBlock];
     const [q, setQ] = useState("");
 
     const { playlistId } = useParams();
     let location = useLocation();
     const [title, setTitle] = useState("");
     const [playlistLayout, setPlaylistLayout] = useState<PlaylistLayoutType>(PlaylistLayoutType.carousel);
-    const layoutArray = Object.keys(PlaylistLayoutType);
+
+    const layoutArray = Object.keys(PlaylistLayoutType).map((e, i) => {
+        return { name: e, image: imagesList[i] };
+    });
 
     const [videosSelected, setVideosSelected] = useState<VideoEntityType[]>([]);
     const [videosDefaultList, setVideosDefaultList] = useState<VideoEntityType[]>([]);
@@ -125,7 +133,7 @@ export default function CreatePlaylistPage() {
         setCardLoading(true);
         const res = await dispatch(getAllVideosFeedAction({ page, q, orientation })).unwrap();
         try {
-            console.log({ getVideos: res });
+            // console.log({ getVideos: res });
             setVideosDefaultList(get(res, "data", []));
             setCurrentPage(get(res, "page", 1));
             setGetVideosLength(get(res, "total", 0));
@@ -147,11 +155,14 @@ export default function CreatePlaylistPage() {
     const [integration, setIntegration] = useState(PlaylistLayoutType);
 
     useEffect(() => {
-        console.log({ integration });
-    }, [integration]);
+        console.log({ editMode });
+    }, [editMode]);
 
     useEffect(() => {
-        if (playlistId && location.pathname.split("/").reverse()[0] === RouterPaths.editPage) {
+        const checkLocation = location.pathname.split("/").reverse()[1];
+        const routerLocation = RouterPaths.editPage.split("/")[0];
+
+        if (playlistId && checkLocation === routerLocation) {
             setEditMode(true);
             setEditModeLoading(true);
             let id = parseInt(playlistId);
@@ -161,17 +172,18 @@ export default function CreatePlaylistPage() {
                 .then((res) => {
                     const data = res?.data;
                     if (data && data.integrationType) {
-                        console.log({ playlistService: data.integrationType });
+                        // console.log({ playlistService: data.integrationType });
                         setPlaylistLayout(data.integrationType);
                     }
 
                     setOrientation(data?.orientation);
                     if (data?.title) setTitle(data?.title);
-                    setVideosSelected([
-                        // ...data.videos.map((e) => {
-                        //     return { ...e, value: e.caption, key: e.id };
-                        // }),
-                    ]);
+                    if (data)
+                        setVideosSelected([
+                            ...data.videos.map((e) => {
+                                return { ...e, value: e.caption, key: e.id };
+                            }),
+                        ]);
                     setEditModeLoading(false);
                 })
                 .catch((error) => {
@@ -214,18 +226,18 @@ export default function CreatePlaylistPage() {
                 integrationType: playlistLayout,
                 orientation: orientation,
             };
-            dispatch(updatePlaylistAction({ ...data }))
-                .unwrap()
-                .then((res) => {
-                    msg.success("Playlist has been updated", 2);
-                    setLoading(false);
-                    navigateBack();
-                    navigate(`/${RouterPaths.playlists}/${res.data.data.id}`);
-                })
-                .catch((error: any) => {
-                    msg.error(`Error - ${error}`, 10);
-                    setLoading(false);
-                });
+            // dispatch(updatePlaylistAction({ ...data }))
+            //     .unwrap()
+            //     .then((res) => {
+            //         msg.success("Playlist has been updated", 2);
+            //         setLoading(false);
+            //         navigateBack();
+            //         navigate(`/${RouterPaths.playlists}/${res.data.data.id}`);
+            //     })
+            //     .catch((error: any) => {
+            //         msg.error(`Error - ${error}`, 10);
+            //         setLoading(false);
+            //     });
         } else {
             const data = {
                 title,
@@ -237,10 +249,11 @@ export default function CreatePlaylistPage() {
             dispatch(createPlaylistAction(data))
                 .unwrap()
                 .then((res) => {
-                    console.log({ res });
+                    if (res && res && res.id) console.log("res.id", res?.id);
+                    // console.log("res test test", res);
                     msg.success("New Playlist has been created", 2);
                     setLoading(false);
-                    navigate(`/${RouterPaths.playlists}/${res?.id}`);
+                    navigate(`/${RouterPaths.playlists}/${res.id}`);
                 })
                 .catch((error) => {
                     console.log({ error });
@@ -380,19 +393,18 @@ export default function CreatePlaylistPage() {
                                     style={{ borderRadius: "0.5rem", margin: 0 }}
                                 >
                                     <Row gutter={16} justify="center">
-                                        {layoutArray.map((el: any, i) => (
+                                        {layoutArray.map((el: { name: string; image: any }, i) => (
                                             <Col key={i}>
                                                 <Card
                                                     bordered
                                                     hoverable={
-                                                        el === PlaylistLayoutType.carousel ||
-                                                        el === PlaylistLayoutType.grid
+                                                        el.name === PlaylistLayoutType.carousel ||
+                                                        el.name === PlaylistLayoutType.grid
                                                     }
                                                     cover={
                                                         <img
-                                                            alt={el}
-                                                            src={`${el}.png`}
-                                                            // src={require(`../../Assets/PlaylistLayouts/${el}.png`)}
+                                                            alt={el.name}
+                                                            src={el.image}
                                                             style={{
                                                                 aspectRatio: "3/2.2",
                                                                 objectFit: "cover",
@@ -403,27 +415,27 @@ export default function CreatePlaylistPage() {
                                                     }
                                                     onClick={() => {
                                                         if (
-                                                            el === PlaylistLayoutType.carousel ||
-                                                            el === PlaylistLayoutType.grid
+                                                            el.name === PlaylistLayoutType.carousel ||
+                                                            el.name === PlaylistLayoutType.grid
                                                         )
-                                                            setPlaylistLayout(el);
+                                                            setPlaylistLayout(el.name);
                                                     }}
                                                     style={{
                                                         width: 200,
                                                         opacity:
-                                                            el === PlaylistLayoutType.carousel ||
-                                                            el === PlaylistLayoutType.grid
+                                                            el.name === PlaylistLayoutType.carousel ||
+                                                            el.name === PlaylistLayoutType.grid
                                                                 ? 1
                                                                 : 0.5,
                                                         border:
-                                                            el === playlistLayout
+                                                            el.name === playlistLayout
                                                                 ? "0.3rem double #F2994A"
                                                                 : "0.3rem double #ececec",
                                                     }}
                                                     bodyStyle={{ textAlign: "center", padding: "1rem" }}
                                                 >
                                                     <Card.Meta
-                                                        title={el.split("_").join(" ")}
+                                                        title={el.name.split("_").join(" ")}
                                                         style={{ textTransform: "capitalize" }}
                                                     />
                                                 </Card>
