@@ -31,7 +31,7 @@ import { useAppDispatch } from "../../Shared/Redux/store";
 import getPlaylistListAction from "../../Shared/Redux/Actions/playlist/getPlaylistList.action";
 import deletePlaylistItemAction from "../../Shared/Redux/Actions/playlist/deletePlaylistItem.action";
 import { unwrapResult } from "@reduxjs/toolkit";
-import { searchPlaylistListService } from "../../Shared/Redux/Actions/playlist/searchVideoFormPlaylist.service";
+import { searchPlaylistListService } from "../../Shared/Redux/Actions/playlist/searchPlaylistList.action";
 
 const Playlist = () => {
     const navigate = useNavigate();
@@ -198,7 +198,7 @@ const Playlist = () => {
                     </Space>
                 ) : (
                     list.data.map((el, i) => {
-                        console.log({ el });
+                        // console.log({ el });
                         return (
                             <Col
                                 key={i}
