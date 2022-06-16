@@ -33,8 +33,14 @@ import listPlaylistAction from "../../../Shared/Redux/Actions/playlist/listPlayl
 import getBrandTagsAction from "../../../Shared/Redux/Actions/feed/getBrandsTags.action";
 import createUploadRequestAction from "../../../Shared/Redux/Actions/feed/uploadVideo/createUploadRequest.action";
 import { uploadFileUsingUploadReqIdAction } from "../../../Shared/Redux/Actions/feed/uploadVideo/uploadFileUsingUploadReqId.action";
-import { verifyUploadReqAction } from "../../../Shared/Redux/Actions/feed/uploadVideo/verifyUplodReqId.action";
-import { getVideoThumbnailAction } from "../../../Shared/Redux/Actions/feed/uploadVideo/getVideoThumbnail.action";
+import {
+    verifyUploadReqAction,
+    VerifyUploadReqResponseType,
+} from "../../../Shared/Redux/Actions/feed/uploadVideo/verifyUplodReqId.action";
+import {
+    getVideoThumbnailAction,
+    GetVideoThumbnailResponse,
+} from "../../../Shared/Redux/Actions/feed/uploadVideo/getVideoThumbnail.action";
 import { createVideoFeedService } from "../../../Shared/Redux/Actions/feed/uploadVideo/createVideoFeed.service";
 import ReactVideoPlayer from "../../../Components/VideoPlayer/ReactVideoPlayer";
 import VideoPlayer from "../../../Components/VideoPlayer/VideoPlayer";
@@ -272,6 +278,7 @@ export default function UploadVideo() {
  * @param {string} type - File type Video/Thumbnail
  * @throws Will throw an error File upload fails
  */
+
     const customRequest = (e: any, type: string) => {
         if (type === "video") {
             setTimeout(() => setCurrentStep(20), 1000);
@@ -279,9 +286,9 @@ export default function UploadVideo() {
         let uploadReqIdRes: number;
         dispatch(createUploadRequestAction({ filename: e.file.name }))
             .unwrap()
-            .then(async (response: any) => {
+            .then(async (response) => {
                 const { uploadUrl, id } = response.data;
-                "/playlists";
+                e.onSuccess();
                 if (type === "video") {
                     setTimeout(() => setCurrentStep(40), 1000);
                     setUploadReqIdResVideo(id);
@@ -294,61 +301,64 @@ export default function UploadVideo() {
                         .then(() => {
                             setTimeout(() => setCurrentStep(60), 1000);
                             console.log("2nd 2nd 2nd upload request");
-
                             dispatch(verifyUploadReqAction({ uploadReqIdRes }))
                                 .unwrap()
-                                .then((response: any) => {
-                                    console.log("3rd 3rd 3rd upload request");
+                                .then((response) => {
+                                    console.log("3rd 3rd 3rd upload request", response);
                                     setTimeout(() => setCurrentStep(80), 1000);
-                                    setVideoURL(response.urls.original);
-                                    let file = response.urls.original;
+                                    // setVideoURL(response.urls.original);
+                                    // let file = response.urls.original;
 
-                                    dispatch(getVideoThumbnailAction({ file }))
-                                        .unwrap()
-                                        .then((response: any) => {
-                                            console.log("4th 4th 4th ");
-                                            setVideoThumbnailId(response.id);
-                                            setVideoThumbnailURL(response.urls.original);
-                                            //setOrientation(response.orientation);
-                                            setLoading(false);
-                                        })
-                                        .catch((error: any) => {
-                                            console.log({ error });
-                                            e.onError();
-                                        });
-                                    setTimeout(() => setCurrentStep(100), 1000); //Set Progress to 101%
-                                    setTimeout(() => setCurrentStep(101), 2000); //Set Progress to 102%
+                                    //                     dispatch(getVideoThumbnailAction({ file }))
+                                    //                         .unwrap()
+                                    //                         .then((response: GetVideoThumbnailResponse) => {
+                                    //                             console.log("4th 4th 4th ");
+                                    //                             setVideoThumbnailId(response.id);
+                                    //                             setVideoThumbnailURL(response.urls.original);
+                                    //                             //setOrientation(response.orientation);
+                                    //                             // setLoading(false);
+                                    //                         })
+                                    //                         .catch((error: any) => {
+                                    //                             console.log({ error });
+                                    //                             e.onError();
+                                    //                         });
+                                    //                     setTimeout(() => setCurrentStep(100), 1000); //Set Progress to 101%
+                                    //                     setTimeout(() => setCurrentStep(101), 2000); //Set Progress to 102%
                                 })
                                 .catch((error: any) => {
                                     setUploadVideoErr(true);
+                                    console.log({ "error verifyUploadReqAction error": error });
                                     e.onError();
                                 });
                         })
                         .catch((error: any) => {
+                            console.log({ "uploadFileUsingUploadReqIdAction error": error });
                             setUploadVideoErr(true);
                             e.onError();
                         });
-                } else {
-                    // Upload file using upload request id for poster file
-                    setUploadReqIdResPoster(id);
-                    const data = {
-                        uploadUrl: uploadUrl,
-                        file: e.file,
-                    };
-                    await dispatch(uploadFileUsingUploadReqIdAction(data)).then(() => {
-                        dispatch(verifyUploadReqAction({ uploadReqIdRes: id }))
-                            .unwrap()
-                            .then((response: any) => {
-                                setThumbnailId(response.id);
-                                setThumbnailURL(response.urls.original);
-                                //setOrientation(response.orientation);
-                                setLoading(false);
-                            })
-                            .catch((e: any) => msg.error(e.message));
-                    });
+                    // } else {
+                    //     // Upload file using upload request id for poster file
+                    //     setUploadReqIdResPoster(id);
+                    //     const data = {
+                    //         uploadUrl: uploadUrl,
+                    //         file: e.file,
+                    //     };
+                    //     await dispatch(uploadFileUsingUploadReqIdAction(data)).then(() => {
+                    //         dispatch(verifyUploadReqAction({ uploadReqIdRes: id }))
+                    //             .unwrap()
+                    //             .then((response: any) => {
+                    //                 setThumbnailId(response.id);
+                    //                 setThumbnailURL(response.urls.original);
+                    //                 //setOrientation(response.orientation);
+                    //                 setLoading(false);
+                    //             })
+                    //             .catch((e: any) => msg.error(e.message));
+                    //     });
                 }
             })
             .catch((error: any) => {
+                console.log({ "CreTE upload req error": error });
+
                 setUploadVideoErr(true);
                 e.onError();
             });
