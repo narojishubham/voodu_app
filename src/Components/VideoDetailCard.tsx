@@ -66,7 +66,7 @@ const VideoDetailCard = ({
         >
             <Row justify="center" align="middle">
                 <div className="video-edit-container outer-max-width" id="video-container">
-                    {/* <VideoPlayer
+                    <VideoPlayer
                         url={editVideo.resource ? editVideo.resource.urls.original : ""}
                         title={""}
                         cta={ctaBtn === true ? "" : ctaBtnTitle ? ctaBtnTitle : editVideo.ctaBtnTitle}
@@ -74,7 +74,7 @@ const VideoDetailCard = ({
                         id={editVideo.id}
                         shareEnabled={true}
                         videoOrientation={editVideo.orientation}
-                    /> */}
+                    />
                 </div>
             </Row>
             {ctaBtn === true ? (
