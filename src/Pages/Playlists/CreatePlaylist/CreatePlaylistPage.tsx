@@ -220,24 +220,23 @@ export default function CreatePlaylistPage() {
             let id = -1;
             if (playlistId) id = parseInt(playlistId);
             const data = {
-                id,
                 title,
                 videos: videosSelected,
                 integrationType: playlistLayout,
                 orientation: orientation,
             };
-            // dispatch(updatePlaylistAction({ ...data }))
-            //     .unwrap()
-            //     .then((res) => {
-            //         msg.success("Playlist has been updated", 2);
-            //         setLoading(false);
-            //         navigateBack();
-            //         navigate(`/${RouterPaths.playlists}/${res.data.data.id}`);
-            //     })
-            //     .catch((error: any) => {
-            //         msg.error(`Error - ${error}`, 10);
-            //         setLoading(false);
-            //     });
+            dispatch(updatePlaylistAction({ id, data }))
+                .unwrap()
+                .then((res) => {
+                    msg.success("Playlist has been updated", 2);
+                    setLoading(false);
+                    navigateBack();
+                    navigate(`/${RouterPaths.playlists}/${res.data.data.id}`);
+                })
+                .catch((error: any) => {
+                    msg.error(`Error - ${error}`, 10);
+                    setLoading(false);
+                });
         } else {
             const data = {
                 title,
