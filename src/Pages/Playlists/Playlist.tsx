@@ -110,7 +110,6 @@ const Playlist = () => {
      */
     const searchFn = useCallback(
         _.debounce((e: any) => {
-            // console.log("hello test", e);
             handleSearchPlaylist(e);
         }, 500),
         []
@@ -126,9 +125,9 @@ const Playlist = () => {
      * @param {number} id - Playlist Id
      * @return {Promise}
      */
-    const handleDeletePlaylist = (deletePlaylistId: deletePlaylistItemTypes) => {
-        return deletePlaylistItemAction(deletePlaylistId);
-    };
+    // const handleDeletePlaylist = (deletePlaylistId: deletePlaylistItemTypes) => {
+    //     return dispatch(deletePlaylistItemAction(id:deletePlaylistId)).unwrap();
+    // };
 
     /**
      * Shows confirmation message for playlist to be deleted
@@ -137,19 +136,22 @@ const Playlist = () => {
      * @return {Promise}
      * @throws When there is a error playlist deletion
      */
+
     function confirmModalDeletePlaylist(deletePlaylistId: number) {
+        console.log("deletePlaylistId", deletePlaylistId);
         Modal.confirm({
             title: "Confirm",
             icon: <ExclamationCircleOutlined />,
             content: "Are you sure you want to delete this playlist?",
             okText: "Confirm",
             cancelText: "Cancel",
-            // onOk() {
-            //     return handleDeletePlaylist(deletePlaylistId);
-            //     .then(() => handleGetList())
-            //     .catch((e:any) => message.error('Error while deleting playlist:- ', e))
-            // },
-            // onCancel() {},
+            onOk() {
+                dispatch(deletePlaylistItemAction({ _id: deletePlaylistId }))
+                    .unwrap()
+                    .then(() => handleGetList())
+                    .catch((e: any) => message.error("Error while deleting playlist:- ", e));
+            },
+            onCancel() {},
         });
     }
 
@@ -198,7 +200,7 @@ const Playlist = () => {
                     </Space>
                 ) : (
                     list.data.map((el, i) => {
-                        // console.log({ el });
+                        console.log({ el });
                         return (
                             <Col
                                 key={i}
