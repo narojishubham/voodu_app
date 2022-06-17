@@ -53,7 +53,7 @@ const PlaylistDetails = () => {
 
     const handleGetData = (id: number) => {
         setLoading(true);
-        console.log("idd dd d d d d d ", id);
+        // console.log("idd dd d d d d d ", id);
         dispatch(getPlaylistAction({ playlistId: id }))
             .unwrap()
             .then((res: any) => {
@@ -89,16 +89,15 @@ const PlaylistDetails = () => {
         let playlistID = playlistId ? parseInt(playlistId) : -1;
         searchVideosFromPlaylistDetailService({ playlistID, searchQuery })
             .then((res: any) => {
-                console.log({ searchPlaylist: res });
+                // console.log({ searchPlaylist: res });
                 setPlaylistData(res.data);
                 setLoading(false);
-                console.log("searchVideosFromPlaylistDetailService");
+                // console.log("searchVideosFromPlaylistDetailService");
             })
             .catch(() => setLoading(false));
     };
     const searchFn = useCallback(
         _.debounce((e: any) => {
-            // console.log("hello test", e);
             handleSearchVideos(e);
         }, 500),
         []
@@ -114,9 +113,6 @@ const PlaylistDetails = () => {
      * @param {number} id - Playlist Id
      * @return {Promise}
      */
-    // const handleDeletePlaylist = async (_id: any) => {
-    //     return deletePlaylistItemAction(_id);
-    // };
 
     /**
      * Shows confirmation message for playlist to be deleted
@@ -133,7 +129,6 @@ const PlaylistDetails = () => {
             okText: "Confirm",
             cancelText: "Cancel",
             onOk() {
-                // return handleDeletePlaylist(deletePlaylistId)
                 dispatch(deletePlaylistItemAction({ _id: deletePlaylistId }))
                     .unwrap()
                     .then(() => navigate(-1))
