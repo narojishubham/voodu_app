@@ -12,7 +12,6 @@ import {
     Modal,
     Empty,
     Tooltip,
-    Button,
     message,
 } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -32,6 +31,7 @@ import getPlaylistListAction from "../../Shared/Redux/Actions/playlist/getPlayli
 import deletePlaylistItemAction from "../../Shared/Redux/Actions/playlist/deletePlaylistItem.action";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { searchPlaylistListService } from "../../Shared/Redux/Actions/playlist/searchPlaylistList.action";
+import Button from "../../Components/Partials/Button";
 
 const Playlist = () => {
     const navigate = useNavigate();
