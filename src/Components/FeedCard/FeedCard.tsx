@@ -2,10 +2,11 @@ import React, { ReactNode, useState } from "react";
 import { Card, Typography } from "antd";
 import "./FeedCard.css";
 import ReactVideoPlayer from "../VideoPlayer/ReactVideoPlayer";
+import VideoPlayer from "../VideoPlayer/VideoPlayer";
 
 interface CardDataProps {
     coverImage: string;
-    title?: string;
+    title: string;
     noOfVideos?: number;
     videoURL?: string;
     ctaBtnTitle?: string;
@@ -36,13 +37,13 @@ const FeedCard = ({
             className={"FeedCardContainer"}
             cover={
                 data.mode === 1 ? (
-                    <ReactVideoPlayer
+                    <VideoPlayer
                         url={data.videoURL}
-                        // title={data.title}
-                        // cta={data.ctaBtnTitle ? data.ctaBtnTitle : ""}
-                        // ctaURL={data.ctaBtnUrl ? data.ctaBtnUrl : ""}
-                        // id={data.id}
-                        // shareEnabled={data.shareEnabled}
+                        title={data.title}
+                        cta={data.ctaBtnTitle ? data.ctaBtnTitle : ""}
+                        ctaURL={data.ctaBtnUrl ? data.ctaBtnUrl : ""}
+                        id={data.id}
+                        shareEnabled={data.shareEnabled}
                     />
                 ) : data.mode === 2 ? (
                     <img
@@ -56,13 +57,21 @@ const FeedCard = ({
                         }}
                     />
                 ) : data.mode === 3 && toggle ? (
-                    <ReactVideoPlayer
-                        url={data?.videoURL}
-                        // title={data.title}
-                        // cta={data.ctaBtnTitle ? data.ctaBtnTitle : ""}
-                        // ctaURL={data.ctaBtnUrl ? data.ctaBtnUrl : ""}
-                        // id={data.id}
-                        // shareEnabled={data.shareEnabled}
+                    // <ReactVideoPlayer
+                    //     url={data?.videoURL}
+                    //     title={data?.title}
+                    //     cta={data.ctaBtnTitle ? data.ctaBtnTitle : ""}
+                    //     ctaURL={data.ctaBtnUrl ? data.ctaBtnUrl : ""}
+                    //     id={data.id}
+                    //     shareEnabled={data.shareEnabled}
+                    // />
+                    <VideoPlayer
+                        url={data.videoURL}
+                        title={data.title}
+                        cta={data.ctaBtnTitle ? data.ctaBtnTitle : ""}
+                        ctaURL={data.ctaBtnUrl ? data.ctaBtnUrl : ""}
+                        id={data.id}
+                        shareEnabled={data.shareEnabled}
                     />
                 ) : (
                     <img
@@ -70,9 +79,7 @@ const FeedCard = ({
                         src={data.coverImage}
                         style={{
                             borderRadius: "0.8rem 0.8rem 0 0",
-
                             objectFit: "cover",
-
                             height: "100%",
                         }}
                     />
