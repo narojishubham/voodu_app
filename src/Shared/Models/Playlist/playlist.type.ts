@@ -34,14 +34,7 @@ export type CreatePlaylistPropsType = {
     orientation: PlaylistOrientation;
 };
 export type CreatePlaylistResponse = {
-    //  title?: string;
-    //   accountId?: number;
-    //   state?: string;
-    //   videos?: string[];
-    //   id?: number;
-    //   createdAt?: string;
-    //   updatedAt?: string;
-    //   integrationId?: string;
+data:{
     title: string;
     integrationType: string;
     accountId: number;
@@ -56,6 +49,7 @@ export type CreatePlaylistResponse = {
     updatedAt: string;
     integrationId: string;
     embedCode: any;
+}
 };
 export type deletePlaylistItemTypes = {
     _id: number;

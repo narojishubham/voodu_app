@@ -6,18 +6,21 @@ import { PlaylistLayoutType, PlaylistOrientation } from "../../../Models/enums/p
 import { PlaylistListEachResType, UpdatePlaylistProps, VideoEntityType } from "../../../Models/Playlist/playlist.type";
 
 type updatePlaylistTypes = {
-data:{
+
   title: string,
   videos: VideoEntityType[],
   integrationType: PlaylistLayoutType,
   orientation: PlaylistOrientation,
+  id:number
+// data:any,
+// id:number
 }
-id:number
-}
-// const updatePlaylistService = ({id,tittle,video,integrationType,orientation}:updatePlaylistTypes) => {
 
-const updatePlaylistService = (params: updatePlaylistTypes) => {
-  return (server.post<PlaylistListEachResType>(`/playlists/${params.id}`, params.data))
+
+const updatePlaylistService = (data: updatePlaylistTypes) => {
+const arr = Object.entries(data).filter(([key,val]) => key !== "id");
+const obj  = Object.fromEntries(arr)
+  return (server.patch<PlaylistListEachResType>(`/playlists/${data.id}`, obj))
 };
 const updatePlaylistAction = createAsyncThunk('playlist/update', async (props: updatePlaylistTypes, thunkAPI) => {
   try {

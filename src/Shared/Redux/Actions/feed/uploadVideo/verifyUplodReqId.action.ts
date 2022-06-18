@@ -25,13 +25,13 @@ export type VerifyUploadReqResponseType={
     original: string
   }
 }
-const verifyUploadReqService = (id:number) => {
-  return (server.post<VerifyUploadReqResponseType>( `/resources/${id}/verify` ))
+const verifyUploadReqService = (id:VerifyUploadReqProps) => {
+  return (server.post( `/resources/${id}/verify` ))
 };
 export const verifyUploadReqAction = createAsyncThunk('video/verifyUploadReq', async (props: VerifyUploadReqProps, thunkAPI) => {
-  const { uploadReqIdRes } = props;
+  // const { uploadReqIdRes } = props;
   try {
-    const response = await verifyUploadReqService(uploadReqIdRes);
+    const response = await verifyUploadReqService(props);
              console.log('3333 verifyUploadReqAction',response)
 return axiosResHandle(response)
   } catch (error: any) {

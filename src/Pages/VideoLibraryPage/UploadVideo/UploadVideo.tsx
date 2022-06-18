@@ -301,29 +301,30 @@ export default function UploadVideo() {
                         .then(() => {
                             setTimeout(() => setCurrentStep(60), 1000);
                             console.log("2nd 2nd 2nd upload request");
-                            dispatch(verifyUploadReqAction({ uploadReqIdRes }))
+                            dispatch(verifyUploadReqAction(uploadReqIdRes))
                                 .unwrap()
                                 .then((response) => {
                                     console.log("3rd 3rd 3rd upload request", response);
-                                    setTimeout(() => setCurrentStep(80), 1000);
-                                    // setVideoURL(response.urls.original);
-                                    // let file = response.urls.original;
 
-                                    //                     dispatch(getVideoThumbnailAction({ file }))
-                                    //                         .unwrap()
-                                    //                         .then((response: GetVideoThumbnailResponse) => {
-                                    //                             console.log("4th 4th 4th ");
-                                    //                             setVideoThumbnailId(response.id);
-                                    //                             setVideoThumbnailURL(response.urls.original);
-                                    //                             //setOrientation(response.orientation);
-                                    //                             // setLoading(false);
-                                    //                         })
-                                    //                         .catch((error: any) => {
-                                    //                             console.log({ error });
-                                    //                             e.onError();
-                                    //                         });
-                                    //                     setTimeout(() => setCurrentStep(100), 1000); //Set Progress to 101%
-                                    //                     setTimeout(() => setCurrentStep(101), 2000); //Set Progress to 102%
+                                    console.log("response.urls.original)", response.data.urls.original);
+
+                                    setTimeout(() => setCurrentStep(80), 1000);
+                                    setVideoURL(response.data.urls.original);
+                                    let file = response.data.urls.original;
+
+                                    dispatch(getVideoThumbnailAction({ file }))
+                                        .unwrap()
+                                        .then((response: GetVideoThumbnailResponse) => {
+                                            console.log("4th 4th 4th ");
+                                            setVideoThumbnailId(response.id);
+                                            setVideoThumbnailURL(response.urls.original);
+                                        })
+                                        .catch((error: any) => {
+                                            console.log({ error });
+                                            e.onError();
+                                        });
+                                    setTimeout(() => setCurrentStep(100), 1000); //Set Progress to 101%
+                                    setTimeout(() => setCurrentStep(101), 2000); //Set Progress to 102%
                                 })
                                 .catch((error: any) => {
                                     setUploadVideoErr(true);
@@ -336,24 +337,23 @@ export default function UploadVideo() {
                             setUploadVideoErr(true);
                             e.onError();
                         });
-                    // } else {
-                    //     // Upload file using upload request id for poster file
-                    //     setUploadReqIdResPoster(id);
-                    //     const data = {
-                    //         uploadUrl: uploadUrl,
-                    //         file: e.file,
-                    //     };
-                    //     await dispatch(uploadFileUsingUploadReqIdAction(data)).then(() => {
-                    //         dispatch(verifyUploadReqAction({ uploadReqIdRes: id }))
-                    //             .unwrap()
-                    //             .then((response: any) => {
-                    //                 setThumbnailId(response.id);
-                    //                 setThumbnailURL(response.urls.original);
-                    //                 //setOrientation(response.orientation);
-                    //                 setLoading(false);
-                    //             })
-                    //             .catch((e: any) => msg.error(e.message));
-                    //     });
+                } else {
+                    // Upload file using upload request id for poster file
+                    setUploadReqIdResPoster(id);
+                    const data = {
+                        uploadUrl: uploadUrl,
+                        file: e.file,
+                    };
+                    await dispatch(uploadFileUsingUploadReqIdAction(data)).then(() => {
+                        dispatch(verifyUploadReqAction({ uploadReqIdRes: id }))
+                            .unwrap()
+                            .then((response: any) => {
+                                setThumbnailId(response.id);
+                                setThumbnailURL(response.urls.original);
+                                setLoading(false);
+                            })
+                            .catch((e: any) => msg.error(e.message));
+                    });
                 }
             })
             .catch((error: any) => {
@@ -415,25 +415,6 @@ export default function UploadVideo() {
             msg.success("Video uploaded successfully", 2);
             //setResetModal(true);
             setYouTubeLink(res.data.youtubelink);
-            //setIsCreateVideoVisible(false);
-            // setCaption("");
-            // setDescription("");
-            // setCtaBtnUrl("");
-            // setCtaBtnTitle("");
-            // setVideoURL("");
-            // //setUrl('');
-            // setYouTubeLink("");
-            // setVideoThumbnailURL("");
-            // setVideoThumbnailId(-1);
-            // setUploadReqIdResPoster(-1);
-            // setThumbnailId(-1);
-            // setThumbnailURL("");
-            // setUploadReqIdResVideo(-1);
-            // form3.resetFields();
-            // setCurrentStep(0);
-            // setUploadVideoErr(false);
-            // setLoading(false);
-            //setOrientation('');
             navigate("/" + RouterPaths.videoLibrary);
         } catch (error) {
             setLoading(false);
@@ -511,26 +492,6 @@ export default function UploadVideo() {
                                 )}
                                 <Row justify="center">
                                     <Col flex="auto">
-                                        {/*<Form name="youTubeLink" form={form1}>
-                      <Form.Item name="youtubeUrl" style={{ width: 'auto' }}>
-                        <Input
-                          allowClear
-                          value={youTubeLink}
-                          addonBefore={'Youtube Link'}
-                          placeholder={'Add Youtube Link'}
-                          size="large"
-                          onChange={(e) => {
-                            const youtubeThumbnail1 = e.target.value
-                              .split('v=')[1]
-                              .substring(0, 11);
-                            const youtubeImage = `https://img.youtube.com/vi/${youtubeThumbnail1}/hqdefault.jpg`;
-                            setVideoThumbnailURL(youtubeImage);
-                            setYouTubeLink(e.target.value);
-                            setShowDialog(true);
-                          }}
-                        />
-                      </Form.Item>
-                    </Form>*/}
                                         <YouTubeLinkForm
                                             form1={form1}
                                             youTubeLink={youTubeLink}
@@ -549,7 +510,7 @@ export default function UploadVideo() {
                                     margin: orientation === "landscape" ? "10vw auto auto auto" : "auto",
                                 }}
                             >
-                                {/* <VideoPlayer
+                                <VideoPlayer
                                     url={videoURL}
                                     title={""}
                                     cta={ctaBtnTitle ? ctaBtnTitle : ""}
@@ -557,7 +518,7 @@ export default function UploadVideo() {
                                     id={0}
                                     shareEnabled={false}
                                     videoOrientation={orientation}
-                                /> */}
+                                />
                             </div>
                         ) : (
                             <div style={{ padding: "6vh 4.5vw", marginTop: "6vw" }}>

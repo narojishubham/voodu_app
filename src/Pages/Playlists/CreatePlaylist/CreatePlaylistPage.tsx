@@ -224,8 +224,9 @@ export default function CreatePlaylistPage() {
                 videos: videosSelected,
                 integrationType: playlistLayout,
                 orientation: orientation,
+                id,
             };
-            dispatch(updatePlaylistAction({ id, data }))
+            dispatch(updatePlaylistAction(data))
                 .unwrap()
                 .then((res) => {
                     msg.success("Playlist has been updated", 2);
@@ -248,11 +249,13 @@ export default function CreatePlaylistPage() {
             dispatch(createPlaylistAction(data))
                 .unwrap()
                 .then((res) => {
-                    if (res && res && res.id) console.log("res.id", res?.id);
-                    // console.log("res test test", res);
+                    // if (res && res && res.id) {
+                    console.log("res test test", res);
+                    console.log("res.id", res.data);
                     msg.success("New Playlist has been created", 2);
                     setLoading(false);
-                    navigate(`/${RouterPaths.playlists}/${res.id}`);
+                    navigate(`/${RouterPaths.playlists}${res.data.id}`);
+                    // }
                 })
                 .catch((error) => {
                     console.log({ error });

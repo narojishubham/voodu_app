@@ -16,7 +16,6 @@ import {
     Empty,
     Tooltip,
     notification,
-    Button,
 } from "antd";
 import _ from "lodash";
 import "./VideoLibrary.css";
@@ -33,6 +32,7 @@ import getPlaylistListAction from "../../Shared/Redux/Actions/playlist/getPlayli
 import getVideoByIdAction from "../../Shared/Redux/Actions/playlist/getVideoById.action";
 import getVideosAction from "../../Shared/Redux/Actions/feed/getVideo.action";
 import deleteVideoAction from "../../Shared/Redux/Actions/feed/deleteVideo.action";
+import Button from "../../Components/Partials/Button";
 
 export interface NavigateFunction {
     (to: string, options?: { replace?: boolean; state?: any }): void;
@@ -99,7 +99,6 @@ export default function VideoLibrary() {
     useEffect(() => {
         if (onSearchStringChange === "") {
             if (isEditVideoDetailsVisible === false) {
-                // if (token) {
                 dispatch(getVideosAction({ currentPage, order: sortBy }))
                     .unwrap()
                     .then((response) => {
@@ -107,9 +106,6 @@ export default function VideoLibrary() {
                         if (response?.page) setCurrentPage(response?.page);
                         if (response?.total) setGetVideosLength(response?.total);
                     });
-                // } else {
-                //     window.location.reload();
-                // }
             }
         } else {
             // dispatch(
@@ -240,7 +236,6 @@ export default function VideoLibrary() {
                                 onInputChangeCallback={(val) => setOnSearchStringChange(val)}
                                 onClickCallback={(val) => querySearchVideos(val)}
                             />
-
                             <Button
                                 onClick={() => {
                                     navigate(RouterPaths.root + RouterPaths.videoLibrary + RouterPaths.addPage);

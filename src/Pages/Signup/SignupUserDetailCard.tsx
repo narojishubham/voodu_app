@@ -39,16 +39,17 @@ function SignupUserDetailCard({ form }: any) {
     const [options, setOptions] = useState([]);
     const onFinish = () => {
         setLoading(true);
-        console.log(
-            firstName,
-            lastName,
-            emailId,
-            password,
-            //   category,
-            //   designation,
-            phone
-        );
+        // console.log(
+        //     firstName,
+        //     lastName,
+        //     emailId,
+        //     password,
+        //     //   category,
+        //     //   designation,
+        //     phone
+        // );
     };
+
     const onFinishFailed = (errorInfo: any) => {
         console.log("Failed:", errorInfo);
     };
@@ -311,35 +312,36 @@ function SignupUserDetailCard({ form }: any) {
                         ]}
                         hasFeedback
                         validateTrigger={["onChange"]}
-                        // validateStatus={
-                        //   phone
-                        //     ? phoneLoading && !phoneErr
-                        //       ? "validating"
-                        //       : (phoneErr === true &&
-                        //           validPhoneErr &&
-                        //           phoneExist === true) ||
-                        //         (phoneErr === true &&
-                        //           validPhoneErr &&
-                        //           phoneExist === false) ||
-                        //         (phoneErr === true &&
-                        //           !validPhoneErr &&
-                        //           phoneExist === true) ||
-                        //         (phoneErr === true &&
-                        //           !validPhoneErr &&
-                        //           phoneExist === false) ||
-                        //         (phoneErr === false &&
-                        //           validPhoneErr &&
-                        //           phoneExist === true) ||
-                        //         (phoneErr === false &&
-                        //           !validPhoneErr &&
-                        //           phoneExist === true) ||
-                        //         (phoneErr === false &&
-                        //           !validPhoneErr &&
-                        //           phoneExist === false)
-                        //       ? "error"
-                        //       : "success"
-                        //     : ""
-                        // }
+                        validateStatus={
+                            phone
+                                ? phoneLoading && !phoneErr
+                                    ? "validating"
+                                    : phoneErr === true && validPhoneErr === true
+                                    ? //           phoneExist === true) ||
+                                      //         (phoneErr === true &&
+                                      //           validPhoneErr  === false) //
+                                      // //           phoneExist === false) ||
+                                      //         (phoneErr === true &&
+                                      //           !validPhoneErr === true)
+                                      //         //   phoneExist === true) ||
+                                      //         (phoneErr === true &&
+                                      //           !validPhoneErr=== false)
+                                      // //           phoneExist === false) ||
+                                      //         (phoneErr === false &&
+                                      //           validPhoneErr === true)
+                                      // //           phoneExist === true) ||
+                                      //         (phoneErr === false &&
+                                      //           !validPhoneErr === true)
+                                      // //           phoneExist === true) ||
+                                      //         (phoneErr === false &&
+                                      //           !validPhoneErr === false)
+                                      //           phoneExist === false)
+                                      //   "error"
+                                      // : "success"
+                                      "success"
+                                    : "error"
+                                : ""
+                        }
                     >
                         <Row className="phoneNumberCustomField">
                             <PhoneInputWithCountry
