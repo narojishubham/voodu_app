@@ -19,9 +19,6 @@ const resetPasswordAction = createAsyncThunk(
             const res = await resetPasswordService(params);
             return axiosResHandle(res);
         } catch (err) {
-            // const message =
-            //     (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
-            // thunkAPI.dispatch(setMessage(message));
             return rejectWithValue(axiosErrHandle(err));
         }
     }

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "./NewPasswordPage.css";
 import Logo_dark from "../../Assets/Logo/boom-logo.png";
 import { useAppDispatch } from "../../Shared/Redux/store";
+import resetPasswordAction from "../../Shared/Redux/Actions/auth/resetPassword.action";
 
 interface NavigateFunction {
     (to: string, options?: { replace?: boolean; state?: any }): void;
@@ -22,20 +23,26 @@ export default function NewPasswordPage(): JSX.Element {
      * @param {string} email - Email id
      * @throws When password request fails
      */
-    const onFinish = ({ email }: any) => {
-        // setLoading(true);
-        // console.log(email);
-        // dispatch(forgot({ email }))
-        //     .unwrap()
-        //     .then(() => {
-        //         msg.success("Password reset request sent successfully, Please check your email verify", 5);
-        //         navigate("/");
-        //         // window.location.reload();
-        //     })
-        //     .catch((error) => {
-        //         setLoading(false);
-        //         msg.error(`error while submitting: ${error}`, 2);
-        //     });
+    const search = window.location.search;
+    const params = new URLSearchParams(search);
+    const data = {
+        token: params.get("token"),
+    };
+    const token = data?.token;
+    const onFinish = ({ password, confirmPassword }: any) => {
+        setLoading(true);
+        // console.log(password);
+        if (token)
+            dispatch(resetPasswordAction({ token, password, confirmPassword }))
+                .unwrap()
+                .then(() => {
+                    msg.success("Password reset successfully");
+                    navigate("/");
+                })
+                .catch((error: any) => {
+                    setLoading(false);
+                    msg.error(`error while submitting: ${error}`, 2);
+                });
     };
 
     //const onFinishFailed = () => {};
@@ -64,63 +71,44 @@ export default function NewPasswordPage(): JSX.Element {
                     style={{ margin: "3rem 0 1rem", textAlign: "left" }}
                 >
                     <Form.Item
-                        label={
-                            <Text strong type="secondary">
-                                PASSWORD
-                            </Text>
-                        }
                         name="password"
+                        label="Password"
                         rules={[
                             {
                                 required: true,
-                                message: "Field required!",
-                                validateTrigger: "onBlur",
-                            },
-                            {
-                                min: 8,
-                                message: "Password must be minimum 8 characters.",
+                                message: "Please input your password!",
                             },
                         ]}
-                        validateTrigger={["onBlur"]}
+                        hasFeedback
                     >
-                        <Input.Password
-                            size="large"
-                            placeholder="Password"
-                            value={password}
-                            onChange={(e) => {
-                                setPassword(e.target.value);
-                            }}
-                        />
+                        <Input.Password />
                     </Form.Item>
+
                     <Form.Item
-                        label={
-                            <Text strong type="secondary">
-                                RETYPE PASSWORD
-                            </Text>
-                        }
-                        name="retypPassword"
+                        name="confirmPassword"
+                        label="Confirm Password"
+                        dependencies={["password"]}
+                        hasFeedback
                         rules={[
                             {
                                 required: true,
-                                message: "Field required!",
-                                validateTrigger: "onBlur",
+                                message: "Please confirm your password!",
                             },
-                            {
-                                min: 8,
-                                message: "Password must be minimum 8 characters.",
-                            },
+                            ({ getFieldValue }) => ({
+                                validator(_, value) {
+                                    if (!value || getFieldValue("password") === value) {
+                                        return Promise.resolve();
+                                    }
+                                    return Promise.reject(
+                                        new Error("The two passwords that you entered do not match!")
+                                    );
+                                },
+                            }),
                         ]}
-                        validateTrigger={["onBlur"]}
                     >
-                        <Input.Password
-                            size="large"
-                            placeholder="Retype Password"
-                            value={retypePassword}
-                            onChange={(e) => {
-                                setRetypePassword(e.target.value);
-                            }}
-                        />
+                        <Input.Password />
                     </Form.Item>
+
                     <Form.Item>
                         <Button htmlType="submit" loading={loading} size="large">
                             Submit
