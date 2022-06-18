@@ -14,7 +14,7 @@ const LoginPage = () => {
 
     const onFinish = async ({ email, password }: LoginParamsType) => {
         setLoading(true);
-        console.log(email, password);
+        // console.log(email, password);
         const response = await dispatch(loginAction({ email, password })).unwrap();
         // .then((response) => {
         try {
@@ -29,13 +29,7 @@ const LoginPage = () => {
             // });
         }
     };
-    const onFinishFailed = (errorInfo: any) => {
-        console.log("Failed:", errorInfo);
-        // message.error(`Error while logging: ${errorInfo}`, 2);
-    };
-    //  const clearMsg = () => {
-    //     dispatch(clearMessage())
-    //   }
+    const onFinishFailed = (errorInfo: any) => {};
 
     return (
         <Card
@@ -86,11 +80,6 @@ const LoginPage = () => {
                         <Typography.Text type={"secondary"}>Forgot password?</Typography.Text>
                     </Link>
                 </Row>
-                {/* {message && (
-            <Row style={{ margin: '0px  auto 15px' }}>
-              <Typography.Text type="danger">{message}</Typography.Text>
-            </Row>
-          )} */}
                 <Form.Item style={{ margin: "3rem 0 1rem" }}>
                     <Button
                         style={{ width: "100%", borderRadius: "0.5rem" }}
