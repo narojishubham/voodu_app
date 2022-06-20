@@ -49,6 +49,7 @@ import VideoOverlayOptModal from "../../../Shared/Models/VideoCardOverlay/VideoO
 import VideoOverlayModal from "../../../Shared/Models/VideoCardOverlay/VideoOverlayModal";
 import CreateVideoForm from "../../../Components/Forms/CreateVideoForm";
 import YouTubeLinkForm from "../../../Components/Forms/YouTubeLinkForm";
+import { uploadFile } from "../../ProfilePage/ProfileImage";
 
 export default function UploadVideo() {
     const { Dragger } = Upload;
@@ -279,91 +280,35 @@ export default function UploadVideo() {
  * @throws Will throw an error File upload fails
  */
 
-    const customRequest = (e: any, type: string) => {
-        if (type === "video") {
-            setTimeout(() => setCurrentStep(20), 1000);
-        }
-        let uploadReqIdRes: number;
-        dispatch(createUploadRequestAction({ filename: e.file.name }))
-            .unwrap()
-            .then(async (response) => {
-                const { uploadUrl, id } = response.data;
-                e.onSuccess();
+    const customRequest = async (e: any, type: string, generateSnapShot: boolean = false) => {
+        // console.log({ type, generateSnapShot });
+        if (!e.file) return;
+        try {
+            const { original, id } = await uploadFile(e.file, (progress) => {
+                // console.log("progress======>>>>", progress);
                 if (type === "video") {
-                    setTimeout(() => setCurrentStep(40), 1000);
-                    setUploadReqIdResVideo(id);
-                    uploadReqIdRes = id;
-                    const data = {
-                        uploadUrl: uploadUrl,
-                        file: e.file,
-                    };
-                    await dispatch(uploadFileUsingUploadReqIdAction(data))
-                        .then(() => {
-                            setTimeout(() => setCurrentStep(60), 1000);
-                            console.log("2nd 2nd 2nd upload request");
-                            dispatch(verifyUploadReqAction(uploadReqIdRes))
-                                .unwrap()
-                                .then((response) => {
-                                    console.log("3rd 3rd 3rd upload request", response);
-
-                                    console.log("response.urls.original)", response.data.urls.original);
-
-                                    setTimeout(() => setCurrentStep(80), 1000);
-                                    setVideoURL(response.data.urls.original);
-                                    let file = response.data.urls.original;
-
-                                    dispatch(getVideoThumbnailAction({ file }))
-                                        .unwrap()
-                                        .then((response: GetVideoThumbnailResponse) => {
-                                            console.log("4th 4th 4th ");
-                                            setVideoThumbnailId(response.id);
-                                            setVideoThumbnailURL(response.urls.original);
-                                        })
-                                        .catch((error: any) => {
-                                            console.log({ error });
-                                            e.onError();
-                                        });
-                                    setTimeout(() => setCurrentStep(100), 1000); //Set Progress to 101%
-                                    setTimeout(() => setCurrentStep(101), 2000); //Set Progress to 102%
-                                })
-                                .catch((error: any) => {
-                                    setUploadVideoErr(true);
-                                    console.log({ "error verifyUploadReqAction error": error });
-                                    e.onError();
-                                });
-                        })
-                        .catch((error: any) => {
-                            console.log({ "uploadFileUsingUploadReqIdAction error": error });
-                            setUploadVideoErr(true);
-                            e.onError();
-                        });
-                } else {
-                    // Upload file using upload request id for poster file
-                    setUploadReqIdResPoster(id);
-                    const data = {
-                        uploadUrl: uploadUrl,
-                        file: e.file,
-                    };
-                    await dispatch(uploadFileUsingUploadReqIdAction(data)).then(() => {
-                        dispatch(verifyUploadReqAction({ uploadReqIdRes: id }))
-                            .unwrap()
-                            .then((response: any) => {
-                                setThumbnailId(response.id);
-                                setThumbnailURL(response.urls.original);
-                                setLoading(false);
-                            })
-                            .catch((e: any) => msg.error(e.message));
-                    });
+                    setTimeout(() => setCurrentStep(progress * 20), 1000);
                 }
-            })
-            .catch((error: any) => {
-                console.log({ "CreTE upload req error": error });
-
-                setUploadVideoErr(true);
-                e.onError();
             });
+            // console.log("HELLO", { original, id });
+            setUploadReqIdResVideo(id);
+            setVideoURL(original);
+            if (generateSnapShot) {
+                const { data }: { data: GetVideoThumbnailResponse } = await dispatch(
+                    getVideoThumbnailAction({ file: original })
+                ).unwrap();
+                setVideoThumbnailId(data.id);
+                setVideoThumbnailURL(data.urls.original);
+                setShowDialog(true);
+            } else {
+                setVideoThumbnailId(id);
+                setVideoThumbnailURL(original);
+            }
+        } catch (error) {
+            console.error("File upload failed");
+        }
     };
-
+    // console.log("videoURL", videoURL);
     /**
      * Function called to save details about a new Video
      * @function handleCreateVideo
@@ -461,7 +406,7 @@ export default function UploadVideo() {
                                                 <Dragger
                                                     {...props}
                                                     customRequest={(e) => {
-                                                        customRequest(e, "video");
+                                                        customRequest(e, "video", true);
                                                         setCurrentStep(0);
                                                         setUploadVideoErr(false);
                                                         setUploadCancel(false);
