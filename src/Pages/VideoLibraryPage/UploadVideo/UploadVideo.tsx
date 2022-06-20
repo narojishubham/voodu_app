@@ -290,9 +290,11 @@ export default function UploadVideo() {
                     setTimeout(() => setCurrentStep(progress * 20), 1000);
                 }
             });
-            // console.log("HELLO", { original, id });
-            setUploadReqIdResVideo(id);
-            setVideoURL(original);
+            if (type === "video") {
+                // console.log("HELLO", { original, id });
+                setUploadReqIdResVideo(id);
+                setVideoURL(original);
+            }
             if (generateSnapShot) {
                 const { data }: { data: GetVideoThumbnailResponse } = await dispatch(
                     getVideoThumbnailAction({ file: original })
@@ -301,14 +303,29 @@ export default function UploadVideo() {
                 setVideoThumbnailURL(data.urls.original);
                 setShowDialog(true);
             } else {
-                setVideoThumbnailId(id);
-                setVideoThumbnailURL(original);
+                setThumbnailId(id);
+                setThumbnailURL(original);
             }
         } catch (error) {
             console.error("File upload failed");
         }
     };
-    // console.log("videoURL", videoURL);
+    const customRequest1 = async (e: any) => {
+        console.log("in customRequest1");
+
+        // console.log({ type, generateSnapShot });
+        if (!e.file) return;
+        try {
+            console.log("in customRequest1");
+            const { original, id } = await uploadFile(e.file);
+            console.log("in customRequest1", { original, id });
+            setThumbnailId(id);
+            setThumbnailURL(original);
+        } catch (error) {
+            console.error("File upload failed");
+        }
+    };
+
     /**
      * Function called to save details about a new Video
      * @function handleCreateVideo
@@ -447,7 +464,7 @@ export default function UploadVideo() {
                                     </Col>
                                 </Row>
                             </>
-                        ) : currentStep === 101 && !uploadCancel ? (
+                        ) : currentStep === 2000 && !uploadCancel ? (
                             <div
                                 className="video-container1 outer-max-width"
                                 id="video-container"
@@ -625,7 +642,8 @@ export default function UploadVideo() {
                             hashtags={hashtags}
                             selectOrientation={selectOrientation}
                             posterProps={posterProps}
-                            customRequest={customRequest}
+                            // customRequest={customRequest}
+                            customRequest={customRequest1}
                             setThumbnailId={setThumbnailId}
                             setThumbnailURL={setThumbnailURL}
                             uploadReqIdResPoster={uploadReqIdResPoster}
