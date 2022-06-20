@@ -127,7 +127,6 @@ function ProfileImage({ imageUrl, edit = false, onUploadFinish = () => {} }: IPr
                         imageUrl ||
                         "https://media.istockphoto.com/vectors/image-preview-icon-picture-placeholder-for-website-or-uiux-design-vector-id1222357475?k=20&m=1222357475&s=170667a&w=0&h=YGycIDbBRAWkZaSvdyUFvotdGfnKhkutJhMOZtIoUKY="
                     }
-                    //   style={{ objectFit: "none" }}
                     size={{
                         xs: 130,
                         sm: 200,
@@ -150,21 +149,25 @@ export default ProfileImage;
  * @function uploadFile
  * @param {object} file - File 
  * @throws Will throw an error File upload fails
+ * 
  */
-async function uploadFile(file: any) {
+export async function uploadFile(file: any, getProgress?: (progress: number) => void,) {
     const { name } = file;
     try {
         const {
             data: { uploadUrl, id },
         } = await createVideoService.createUploadRequestService(name);
-
+        getProgress && getProgress(3);
         await createVideoService.uploadFileUsingUploadReqIdService(uploadUrl, file);
+        getProgress && getProgress(7);
 
         const {
             data: {
                 urls: { original },
             },
         } = await createVideoService.verifyUploadReqService(id);
+        
+        getProgress && getProgress(100);
         return { original, id };
     } catch (error) {
         throw error;
