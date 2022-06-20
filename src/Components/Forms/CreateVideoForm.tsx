@@ -1,7 +1,8 @@
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import { Form, FormInstance, Input, Typography, Select, Radio, Space, Row, Col, Upload, Image, Collapse } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import Button from "../Partials/Button";
+import { uploadFile } from "../../Pages/ProfilePage/ProfileImage";
 
 interface CreateVideoFormPropType {
     form3: FormInstance<any>;
@@ -17,6 +18,7 @@ interface CreateVideoFormPropType {
     selectOrientation: (e: any) => void;
     posterProps: Object;
     customRequest: (e: any, type: string) => void;
+    // customRequest1: (e: any, type: string) => void;
     setUploadReqIdResPoster: React.Dispatch<React.SetStateAction<number>>;
     setThumbnailId: React.Dispatch<React.SetStateAction<number>>;
     setThumbnailURL: React.Dispatch<React.SetStateAction<string>>;
@@ -45,6 +47,7 @@ const CreateVideoForm = ({
     selectOrientation,
     posterProps,
     customRequest,
+    // customRequest1,
     setThumbnailId,
     setThumbnailURL,
     uploadReqIdResPoster,
@@ -59,6 +62,10 @@ const CreateVideoForm = ({
     const { Text } = Typography;
     const { Option } = Select;
     const { Panel } = Collapse;
+    const [remove, setRemove] = useState(false);
+    useEffect(() => {
+        console.log("ThumbnailURL", thumbnailURL);
+    }, []);
     return (
         <Form
             name="createVideo"
@@ -176,16 +183,24 @@ const CreateVideoForm = ({
                 </Text>
             </Row>
             <Row justify="start" align="middle">
+                {/* {remove === false ? ( */}
                 <Col span={14}>
                     <Upload
                         {...posterProps}
                         listType="picture"
                         className="upload-list-inline"
                         customRequest={(e) => {
+                            console.log("customRequest", { e });
                             customRequest(e, "poster");
                             setShowDialog(true);
+                            setRemove(true);
+                        }}
+                        onChange={(info) => {
+                            const { event } = info;
+                            console.log("onChange", { statue: info.file.status });
                         }}
                         onRemove={() => {
+                            // console.log("onRemove");
                             setUploadReqIdResPoster(-1);
                             setThumbnailId(-1);
                             setThumbnailURL("");
@@ -197,6 +212,7 @@ const CreateVideoForm = ({
                         </Col>
                     </Upload>
                 </Col>
+                {/* ) : ( */}
                 <Col span={6}>
                     <Image
                         width={"75%"}
@@ -209,7 +225,20 @@ const CreateVideoForm = ({
                         }
                         preview={false}
                     />
+                    <div
+                        className="remove_button"
+                        onClick={() => {
+                            console.log("onRemove");
+                            setUploadReqIdResPoster(-1);
+                            setThumbnailId(-1);
+                            setThumbnailURL("");
+                            setShowDialog(true);
+                        }}
+                    >
+                        test
+                    </div>
                 </Col>
+                {/* )} */}
             </Row>
             {playlists.total > 0 ? (
                 <Collapse bordered={false} defaultActiveKey={["1"]} ghost>
