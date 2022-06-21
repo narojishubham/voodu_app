@@ -232,7 +232,7 @@ export default function CreatePlaylistPage() {
                     msg.success("Playlist has been updated", 2);
                     setLoading(false);
                     navigateBack();
-                    navigate(`/${RouterPaths.playlists}/${res.data.data.id}`);
+                    navigate(`/${RouterPaths.playlists}${res.data.data.id}`);
                 })
                 .catch((error: any) => {
                     msg.error(`Error - ${error}`, 10);
