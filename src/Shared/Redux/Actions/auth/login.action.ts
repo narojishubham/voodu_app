@@ -8,7 +8,7 @@ export interface LoginParamsType {
     password: string;
 }
 
-const loginService = (data: LoginParamsType) => {
+export const loginService = (data: LoginParamsType) => {
     return (server.post<LoginResTypes>("/session/login", data))
 };
 const loginAction = createAsyncThunk("auth/login", async (params: LoginParamsType, { rejectWithValue }) => {
@@ -16,6 +16,7 @@ const loginAction = createAsyncThunk("auth/login", async (params: LoginParamsTyp
         const res = await loginService(params);
         return axiosResHandle(res);
     } catch (err) {
+
         return rejectWithValue(axiosErrHandle(err));
     }
 });

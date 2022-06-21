@@ -7,23 +7,20 @@ import {
     PlayCircleOutlined,
     TeamOutlined,
 } from "@ant-design/icons";
-// import { RoutePaths } from "../../api";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-// import { logout } from "../../features/authSlice/authSlice";
-// import { useAppDispatch } from "../../app/store";
 import Button from "../Partials/Button";
 import Logo_light from "../../Assets/Logo/boom-logo-white.png";
-import { useAppDispatch } from "../../Shared/Redux/store";
+import { RootState, useAppDispatch } from "../../Shared/Redux/store";
 import { RouterPaths } from "../../api/RouterPaths";
 import { logoutAction } from "../../Shared/Redux/Actions/auth/logout.action";
-// import profileService from "../../services/profileService";
+import { useSelector } from "react-redux";
+import getProfileDataAction from "../../Shared/Redux/Actions/profile/getProfile.action";
 
 export let ProfileContext: any;
 const AppLayout: React.FC<{
     children: React.ReactNode;
 }> = ({ children }) => {
     const dispatch = useAppDispatch();
-    const { pathname } = useLocation();
     const [collapsed, setCollapsed] = useState(false);
     const switchCollapsed = () => setCollapsed(!collapsed);
     const navigate = useNavigate();
@@ -32,15 +29,8 @@ const AppLayout: React.FC<{
     const [brandName, setBrandName] = useState("");
     const [reload, setReload] = useState({});
     ProfileContext = createContext(setReload);
-    // useEffect(() => {
-    //     profileService.getProfile().then((resp: any) => {
-    //         if (resp?.data?.account?.poster != null) {
-    //             setProfilePic(resp?.data?.account?.poster?.urls?.original);
-    //         }
-    //         setBrandName(resp.data.account.name);
-    //         console.log({ resp });
-    //     });
-    // }, [reload]);
+    let poster = useSelector((state: RootState) => state);
+    // console.log("accountId", poster);
     const onLogout = () => {
         Modal.confirm({
             title: "Confirm",
@@ -56,8 +46,21 @@ const AppLayout: React.FC<{
         });
     };
 
+    const [profileImage, setProfileImage] = useState("");
+    const getProfileData = async () => {
+        const resp = await dispatch(getProfileDataAction()).unwrap();
+        // .then((resp: any) => {
+        try {
+            setProfileImage(resp.data.account.poster.urls.original);
+        } catch (error) {}
+    };
+    useEffect(() => {
+        getProfileData();
+    }, []);
+    const { pathname } = useLocation();
     const location = useLocation();
     const pageNavPath = location.pathname.split("/")[1];
+    console.log("pathname", pageNavPath);
     return (
         <Layout style={{ minHeight: "100vh" }}>
             <Layout.Sider
@@ -81,8 +84,9 @@ const AppLayout: React.FC<{
                 </Row>
                 <Menu
                     theme="dark"
+                    selectedKeys={[`${pathname}`]}
                     // defaultSelectedKeys={[RoutePaths.videoLibrary]}
-                    defaultSelectedKeys={[pathname]}
+                    // defaultSelectedKeys={[pathname]}
                     // defaultOpenKeys={[pathname]}
                     // onClick={onClickMenuHandler}
                     mode="inline"
@@ -132,7 +136,7 @@ const AppLayout: React.FC<{
                                     <Typography.Text>{/*<strong>{brandName}</strong>*/}</Typography.Text>
                                 </Col>
                                 <Col flex={1} style={{ padding: 0 }}>
-                                    <Avatar style={{ width: "32px", height: "32px" }} src={profilePic} />
+                                    <Avatar style={{ width: "32px", height: "32px" }} src={profileImage} />
                                 </Col>
                                 <Col flex={1} style={{ padding: 0, marginRight: "0.5vw" }}>
                                     <Button loading={loading} onClick={onLogout}>

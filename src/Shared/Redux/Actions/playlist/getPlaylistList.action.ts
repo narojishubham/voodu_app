@@ -14,7 +14,7 @@ import { PlaylistListResType } from "../../../Models/Playlist/playlist.type";
 
     const getPlaylistListAction = createAsyncThunk('playlists/page', async (props: any, thunkAPI) => {
         try {
-          console.log("getPlaylistAction, ", {props});
+          // console.log("getPlaylistAction, ", {props});
           return await getPlaylistListService(props);
         } catch (err) {
           return thunkAPI.rejectWithValue(axiosErrHandle(err));

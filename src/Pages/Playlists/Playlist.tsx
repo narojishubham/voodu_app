@@ -56,7 +56,7 @@ const Playlist = () => {
         dispatch(getPlaylistListAction(page))
             .unwrap()
             .then((res: any) => {
-                console.log({ getPlaylistList: res });
+                // console.log({ getPlaylistList: res });
                 setList(res);
                 setLoading(false);
             })
@@ -70,7 +70,7 @@ const Playlist = () => {
      * @param {number} size
      */
     const handlePaginationChange: PaginationProps["onChange"] = (page, size) => {
-        console.log(page, size);
+        // console.log(page, size);
         handleGetList(page);
     };
 
@@ -83,7 +83,7 @@ const Playlist = () => {
      * @throws Will throw an error when search for playlist fails
      */
     const handleSearchPlaylist = (q: any) => {
-        console.log({ q });
+        // console.log({ q });
         setLoading(true);
         searchPlaylistListService({ q })
             .then((res: any) => {
@@ -138,7 +138,7 @@ const Playlist = () => {
      */
 
     function confirmModalDeletePlaylist(deletePlaylistId: number) {
-        console.log("deletePlaylistId", deletePlaylistId);
+        // console.log("deletePlaylistId", deletePlaylistId);
         Modal.confirm({
             title: "Confirm",
             icon: <ExclamationCircleOutlined />,
@@ -200,7 +200,7 @@ const Playlist = () => {
                     </Space>
                 ) : (
                     list.data.map((el, i) => {
-                        console.log({ el });
+                        // console.log({ el });
                         return (
                             <Col
                                 key={i}
