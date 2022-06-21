@@ -225,7 +225,7 @@ const CreateVideoForm = ({
                         }
                         preview={false}
                     />
-                    <div
+                    {/* <div
                         className="remove_button"
                         onClick={() => {
                             console.log("onRemove");
@@ -236,7 +236,7 @@ const CreateVideoForm = ({
                         }}
                     >
                         test
-                    </div>
+                    </div> */}
                 </Col>
                 {/* )} */}
             </Row>
