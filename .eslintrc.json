@@ -1,47 +1,55 @@
 // src = https://dev.to/saurabhggc/add-eslint-prettier-and-airbnb-to-your-project-3mo8
 {
-    "env": {
-      "browser": true,
-      "es2021": true
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": ["plugin:react/recommended", "airbnb", "plugin:react/jsx-runtime", "prettier"],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
     },
-    "extends": ["plugin:react/recommended", "airbnb", "plugin:react/jsx-runtime", "prettier"],
-    "parser": "@typescript-eslint/parser",
-    "parserOptions": {
-      "ecmaFeatures": {
-        "jsx": true
-      },
-      "ecmaVersion": "latest",
-      "sourceType": "module"
-    },
-    "plugins": ["@typescript-eslint", "prettier", "prefer-arrow"],
-    "rules": {
-      "prettier/prettier": "error",
-      "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
-      "prefer-arrow/prefer-arrow-functions": [
-        "error",
-        {
-          "disallowPrototype": true,
-          "singleReturnOnly": false,
-          "classPropertiesAllowed": false
-        }
-      ],
-      "prefer-arrow-callback": ["error", { "allowNamedFunctions": true }],
-      "func-style": ["error", "expression", { "allowArrowFunctions": true }],
-      "react/function-component-definition": [
-        2,
-        {
-          "namedComponents": "arrow-function",
-          "unnamedComponents": "arrow-function"
-        }
-      ],
-      "arrow-body-style": "off",
-      "max-lines": ["error", { "max": 500 }],
-      "import/no-extraneous-dependencies": [
-        "error",
-        {
-          "devDependencies": true
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "plugins": ["@typescript-eslint", "prettier", "prefer-arrow"],
+  "rules": {
+    "prettier/prettier": "error",
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
+    "prefer-arrow/prefer-arrow-functions": [
+      "error",
+      {
+        "disallowPrototype": true,
+        "singleReturnOnly": false,
+        "classPropertiesAllowed": false
+      }
+    ],
+    "prefer-arrow-callback": ["error", { "allowNamedFunctions": true }],
+    "func-style": ["error", "expression", { "allowArrowFunctions": true }],
+    "react/function-component-definition": [
+      2,
+      {
+        "namedComponents": "arrow-function",
+        "unnamedComponents": "arrow-function"
+      }
+    ],
+    "arrow-body-style": "off",
+    "max-lines": ["error", { "max": 500 }],
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": true
+      }
+    ],
+    "import/extensions": ["error", "ignorePackages"],
+    "react/jsx-pascal-case": [
+      "error", 
+      { 
+        "allowAllCaps": false, 
+        "allowNamespace": false, 
+        "allowLeadingUnderscore": false, 
         }
       ]
-    }
   }
-  
+}

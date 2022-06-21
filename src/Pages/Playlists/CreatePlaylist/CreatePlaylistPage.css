@@ -1,0 +1,46 @@
+.site-layout .site-layout-background {
+  background: #fff;
+}
+
+.upload-list-inline .ant-upload-list-item {
+  float: left;
+  width: 200px;
+  margin-right: 8px;
+}
+
+.upload-list-inline [class*='-upload-list-rtl'] .ant-upload-list-item {
+  float: right;
+}
+
+.gutter-box {
+  padding: 8px 0;
+  background: #00a0e9;
+}
+
+.site-card-wrapper {
+  padding: 30px;
+  background: #ececec;
+  margin: 15px 0px;
+}
+
+.ant-input-search-button {
+  background: #f2994a;
+}
+
+.ant-input-search-button:hover {
+  background: #f2994a;
+  font-weight: 'bold';
+}
+.outline{
+position: absolute;
+top: 1%;
+left: 2%;
+z-index: 1111111111111;
+}
+.landscapeAspectRatio{
+  aspect-ratio: 16/9
+  
+}
+.PotraitAspectRatio{
+  aspect-ratio: 2/2.5
+}

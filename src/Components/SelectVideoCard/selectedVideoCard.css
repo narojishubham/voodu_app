@@ -1,0 +1,60 @@
+.dataCard .ant-card-body {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  height: 134px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ClickBorderClass {
+  border: 1px solid #f2994a;
+}
+.ClickTextColor {
+  color: #f2994a !important;
+}
+.textColor {
+  color: " #9FA2B4";
+}
+.rightContainer .ant-card.ant-card-bordered.ant-card-hoverable {
+  margin-top: 0rem !important;
+  border-bottom-left-radius: 0 !important;
+  border-top-left-radius: 0 !important;
+}
+.rightContainer .ant-card-hoverable:hover {
+  border-color: none;
+  box-shadow: none;
+}
+.dataCardContainer {
+  margin-top: 3rem;
+}
+/* .dataCardContainer :first-child {
+  margin-top: 1rem;
+  background: orange;
+} */
+/* .dataCardContainer:nth-child(1) {
+  background: red;
+} */
+
+/*  */
+/* Graph Class */
+/*  */
+/* @media only screen and (max-width: 1100px) { */
+.graphParentClass canvas {
+  width: 100% !important;
+}
+.OverviewHoverClass {
+  box-shadow: rgb(0 0 0 / 10%) 0px 20px 25px, rgb(0 0 0 / 4%) 0px 10px 10px;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+.OverviewHoverClass:hover {
+  box-shadow: rgb(0 0 0 / 10%) 0px 20px 25px, rgb(0 0 0 / 35%) 0px 10px 10px;
+}
+
+.overview_data_cards {
+  min-width: 230px !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}

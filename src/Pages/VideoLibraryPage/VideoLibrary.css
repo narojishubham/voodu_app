@@ -1,0 +1,79 @@
+.site-layout .site-layout-background {
+  background: #fff;
+}
+
+.upload-list-inline .ant-upload-list-item {
+  float: left;
+  width: 200px;
+  margin-right: 8px;
+}
+
+.upload-list-inline [class*='-upload-list-rtl'] .ant-upload-list-item {
+  float: right;
+}
+
+.gutter-box {
+  padding: 8px 0;
+  background: #00a0e9;
+}
+
+.site-card-wrapper {
+  padding: 30px;
+  background: #ececec;
+  margin: 15px 0px;
+}
+
+.ant-input-search-button {
+  background: #f2994a;
+}
+
+.ant-input-search-button:hover {
+  background: #f2994a;
+  font-weight: 'bold';
+}
+
+/*-----------------------------------Video CSS------------------------------------------*/
+
+.video-container {
+  position: relative;
+  height: 24vw;
+  width: 25%;
+  margin: auto;
+  min-width: 17vw;
+  border-radius: 20px;
+  background-color: white;
+  /* overflow: scroll; */
+  scroll-snap-type: y mandatory;
+  scrollbar-width: none;
+}
+
+/* for chrome and opera */
+.video-container::-webkit-scrollbar {
+  display: none;
+}
+
+.ant-modal-footer > .ant-btn {
+  background: rgb(242, 153, 74);
+  color: rgb(255, 255, 255);
+  border: none;
+  font-weight: bold;
+  border-radius: 0.5rem;
+  border: none;
+}
+
+.ant-modal-footer > .ant-btn:hover {
+  filter: contrast(0.85);
+}
+.ant-modal-footer > .ant-btn[disabled] {
+  opacity: 0.3;
+}
+
+.ant-modal-footer > .ant-btn[disabled]:hover {
+  background: rgb(242, 153, 74);
+  color: rgb(255, 255, 255);
+  border: none;
+  font-weight: bold;
+  border-radius: 0.5rem;
+  border: none;
+  opacity: 0.3;
+}
