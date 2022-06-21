@@ -1,17 +1,16 @@
 import React, { ReactNode, useState } from "react";
 import { Card, Typography } from "antd";
 import "./FeedCard.css";
-import ReactVideoPlayer from "../VideoPlayer/ReactVideoPlayer";
 import VideoPlayer from "../VideoPlayer/VideoPlayer";
 
 interface CardDataProps {
     coverImage: string;
     title: string;
     noOfVideos?: number;
-    videoURL?: string;
+    videoURL?: string | "";
     ctaBtnTitle?: string;
     ctaBtnUrl?: string;
-    id?: number;
+    id?: number | null;
     shareEnabled?: boolean;
     mode?: number; // Mode 1: Video, Mode 2: Thumbnail, Mode 3: Hybrid
 }
@@ -38,11 +37,11 @@ const FeedCard = ({
             cover={
                 data.mode === 1 ? (
                     <VideoPlayer
-                        url={data.videoURL}
+                        url={data.videoURL || ""}
                         title={data.title}
                         cta={data.ctaBtnTitle ? data.ctaBtnTitle : ""}
                         ctaURL={data.ctaBtnUrl ? data.ctaBtnUrl : ""}
-                        id={data.id}
+                        id={data.id || -1}
                         shareEnabled={data.shareEnabled}
                     />
                 ) : data.mode === 2 ? (
@@ -66,11 +65,11 @@ const FeedCard = ({
                     //     shareEnabled={data.shareEnabled}
                     // />
                     <VideoPlayer
-                        url={data.videoURL}
+                        url={data.videoURL || ""}
                         title={data.title}
                         cta={data.ctaBtnTitle ? data.ctaBtnTitle : ""}
                         ctaURL={data.ctaBtnUrl ? data.ctaBtnUrl : ""}
-                        id={data.id}
+                        id={data.id || -1}
                         shareEnabled={data.shareEnabled}
                     />
                 ) : (

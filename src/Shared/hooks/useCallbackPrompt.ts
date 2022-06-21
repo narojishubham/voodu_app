@@ -21,7 +21,7 @@ export function useCallbackPrompt(when: boolean): (boolean | (() => void))[] {
  * @return {boolean} - returns true when navigation is confirmed & old location and new location are not same else false
  */
   const handleBlockedNavigation = useCallback(
-    (nextLocation) => {
+    (nextLocation:any) => {
       // in if condition we are checking next location and current location are equals or not
       if (
         !confirmedNavigation &&

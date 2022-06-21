@@ -3,23 +3,20 @@ import {
     IoVolumeMuteOutline,
     IoVolumeHighOutline,
     IoReloadOutline,
-    IoPlayOutline,
-    IoPauseOutline,
     IoShareSocialOutline,
     IoScanOutline,
 } from "react-icons/io5";
 import { RWebShare } from "react-web-share";
 import "./VideoPlayer.css";
-import { Link } from "react-router-dom";
 
 type VideoPlayerTypes = {
-    url: string;
+    url: string | "";
     title: string;
     cta: any;
-    id: number;
+    id: number | null;
     shareEnabled: any;
     ctaURL: any;
-    videoOrientation: string | "";
+    videoOrientation?: string | "";
 };
 
 export default function VideoPlayer({
@@ -36,7 +33,7 @@ export default function VideoPlayer({
     const [progress, setProgress] = useState(10);
     const [showProgress, setShowProgress] = useState(false);
     const [showTitle, setShowTitle] = useState(true);
-    const vidRef = useRef(null);
+    const vidRef = useRef<any>(null);
 
     const [isVideoEnded, setIsVideoEnded] = useState(false);
     const startVideo = () => {
@@ -45,7 +42,7 @@ export default function VideoPlayer({
             setIsVideoEnded(false);
         }
         // @ts-ingore
-        if (vidRef) vidRef?.current?.play();
+        if (vidRef) vidRef.current.play();
         setShowProgress(true);
         setIsVideoPlaying(true);
         setShowTitle(false);
@@ -96,8 +93,7 @@ export default function VideoPlayer({
         setIsVideoPlaying(true);
         setShowTitle(false);
     };
-
-    const showCurrentTime = ({ current: videoDom }) => {
+    const showCurrentTime = ({ current: videoDom }: any) => {
         const border = document.querySelector(".progress-bar-" + id);
         if ((videoDom.currentTime / videoDom.duration) * 100 > 10) {
             setProgress((videoDom.currentTime / videoDom.duration) * 100);
