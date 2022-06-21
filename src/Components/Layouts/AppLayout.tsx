@@ -84,11 +84,7 @@ const AppLayout: React.FC<{
                 </Row>
                 <Menu
                     theme="dark"
-                    selectedKeys={[`${pathname}`]}
-                    // defaultSelectedKeys={[RoutePaths.videoLibrary]}
-                    // defaultSelectedKeys={[pathname]}
-                    // defaultOpenKeys={[pathname]}
-                    // onClick={onClickMenuHandler}
+                    selectedKeys={[`${pageNavPath}/`]}
                     mode="inline"
                 >
                     <Menu.Item key={RouterPaths.overview} icon={<PieChartOutlined />}>
