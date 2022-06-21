@@ -5,7 +5,7 @@ import { axiosErrHandle, axiosResHandle } from "../../../../../api/axiosHandle";
 type createUploadRequest = {
     uploadUrl: string, file: any
 }
-const uploadFileUsingUploadReqIdService = ({ uploadUrl, file }: createUploadRequest) => {
+export const uploadFileUsingUploadReqIdService = ({ uploadUrl, file }: createUploadRequest) => {
     console.log({'uploadUrl':uploadUrl})
      console.log({'file':file})
     return server

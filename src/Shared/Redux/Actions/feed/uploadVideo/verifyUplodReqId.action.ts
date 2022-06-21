@@ -25,7 +25,7 @@ export type VerifyUploadReqResponseType={
     original: string
   }
 }
-const verifyUploadReqService = (id:VerifyUploadReqProps) => {
+export const verifyUploadReqService = (id:VerifyUploadReqProps) => {
   return (server.post( `/resources/${id}/verify` ))
 };
 export const verifyUploadReqAction = createAsyncThunk('video/verifyUploadReq', async (props: VerifyUploadReqProps, thunkAPI) => {
