@@ -4,7 +4,6 @@ import "react-phone-number-input/style.css";
 import _, { get, toString } from "lodash";
 import "./SignUpPage.css";
 import Logo_dark from "../../Assets/Logo/boom-logo.png";
-// import Button from "../../components/Partials/Button";
 import BrandDetailcard from "./SignupBrandDetailCard";
 import SignupUserDetailCard from "./SignupUserDetailCard";
 import PricingPlanPage from "./PricingPlanPage";
@@ -21,7 +20,6 @@ export default function SignUpPage(): JSX.Element {
     const { Step } = Steps;
     const [success, setSuccess] = useState(false);
     const [currentStep, setCurrentStep] = useState(1);
-    // const [finalData, setFinalData] = useState({});
     const [BrandDetailCardForm] = Form.useForm();
     const [UserDetailCardForm] = Form.useForm();
     const [PricingPlanPageForm] = Form.useForm();
