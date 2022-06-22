@@ -25,8 +25,6 @@ const AppLayout: React.FC<{
     const switchCollapsed = () => setCollapsed(!collapsed);
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
-    const [profilePic, setProfilePic] = useState("");
-    const [brandName, setBrandName] = useState("");
     const [reload, setReload] = useState({});
     ProfileContext = createContext(setReload);
     let poster = useSelector((state: RootState) => state);
@@ -48,16 +46,15 @@ const AppLayout: React.FC<{
 
     const [profileImage, setProfileImage] = useState("");
     const getProfileData = async () => {
-        const resp = await dispatch(getProfileDataAction()).unwrap();
-        // .then((resp: any) => {
         try {
+            const resp = await dispatch(getProfileDataAction()).unwrap();
             setProfileImage(resp.data.account.poster.urls.original);
         } catch (error) {}
     };
     useEffect(() => {
         getProfileData();
     }, []);
-    const { pathname } = useLocation();
+
     const location = useLocation();
     const pageNavPath = location.pathname.split("/")[1];
     console.log("pathname", pageNavPath);
@@ -82,11 +79,7 @@ const AppLayout: React.FC<{
                         src={Logo_light}
                     />
                 </Row>
-                <Menu
-                    theme="dark"
-                    selectedKeys={[`${pageNavPath}/`]}
-                    mode="inline"
-                >
+                <Menu theme="dark" selectedKeys={[`${pageNavPath}/`]} mode="inline">
                     <Menu.Item key={RouterPaths.overview} icon={<PieChartOutlined />}>
                         <Link to={RouterPaths.overview}>Overview</Link>
                     </Menu.Item>
