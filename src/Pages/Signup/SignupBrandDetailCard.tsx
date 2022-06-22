@@ -1,9 +1,7 @@
 import { Card, Form, Input, notification, Typography } from "antd";
 import React, { useCallback, useEffect, useState } from "react";
 import { NavigateFunction, useNavigate } from "react-router-dom";
-// import _ from "lodash";
-import { useSelector } from "react-redux";
-import { useAppDispatch } from "../../Shared/Redux/store";
+import { RootState, useAppDispatch } from "../../Shared/Redux/store";
 import brandDataValidationService from "../../Shared/Redux/Actions/brand/brandDataValidation.service";
 import CustomSelectAndSearchField from "../../Components/CustomSelectAndSearchField";
 import addCategoriesAction from "../../Shared/Redux/Actions/brand/category/addCategory.action";
@@ -11,6 +9,7 @@ import getCategoriesAction, {
     GetCategoriesResponseType,
 } from "../../Shared/Redux/Actions/brand/category/getCategory.action";
 import _ from "lodash";
+import { useSelector } from "react-redux";
 
 function BrandDetailcard({ form }: any) {
     const { Text } = Typography;
@@ -33,21 +32,34 @@ function BrandDetailcard({ form }: any) {
 
         setWeblinkErr(form.getFieldsError().some(({ errors }: any) => errors.length));
     };
+    const [brandNameExist, setBrandNameExist] = useState(false);
     const checkBrandName = (brandName: string) => {
         if (brandName !== "") {
             brandDataValidationService
                 .brandNameValidatorService(brandName)
                 .then((response: any) => {
                     setBrandLoading(false);
+                    console.log(response);
+                    if ("Brand Name already exists" === response) {
+                        // setBrandNameExist(true);
+                        notification["error"]({
+                            message: response,
+                            description:
+                                "The Brand Name entered has already been used. Please select a different Brand Name",
+                        });
+                    }
                 })
                 .catch((error: any) => {
-                    console.log({ error });
+                    console.log(error);
+                    // setBrandNameExist(true);
                     setBrandLoading(false);
-                    notification["error"]({
-                        message: error.message,
-                        description:
-                            "The Brand Name entered has already been used. Please select a different Brand Name",
-                    });
+                    if ("Brand Name already exists" === error) {
+                        notification["error"]({
+                            message: error,
+                            description:
+                                "The Brand Name entered has already been used. Please select a different Brand Name",
+                        });
+                    }
                 });
         }
     };
@@ -117,10 +129,9 @@ function BrandDetailcard({ form }: any) {
                                 : brandName !== ""
                                 ? brandNameErr === true
                                     ? "error"
-                                    : ""
-                                : //   : brandNameExist === true
-                                  //   ? "error"
-                                  //   : "success"
+                                    : "" // : brandNameExist === false
+                                : // ? "error"
+                                  // : "success"
                                   ""
                         }
                         hasFeedback

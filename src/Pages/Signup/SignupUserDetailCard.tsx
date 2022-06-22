@@ -72,29 +72,28 @@ function SignupUserDetailCard({ form }: any) {
     const clearMsg = () => {
         // dispatch(clearMessage());
     };
+    const [emailExist, setEmailExist] = useState(false);
     const checkEmail = (emailId: string) => {
         if (emailId !== "") {
             brandDataValidationService
                 .emailValidatorService(emailId)
                 .then((response: any) => {
                     setEmailLoading(false);
-                    console.log("response 12", response);
-                    if (response.message === "Email already exists")
+                    // console.log("response 12", response);
+                    if (response.message === "Email already exists") {
+                        // setEmailExist(true);
                         notification["error"]({
                             message: response.message,
                             description:
                                 "The Email Id entered has already been used. Please select a different Email Id",
                         });
+                    }
                 })
                 .catch((error: any) => {
-                    console.log("error 12", error.message);
+                    // console.log("error 12", error.message);
                     setEmailLoading(false);
+                    setEmailExist(true);
                     if (error.message === "Email already exists")
-                        // notification["error"]({
-                        //     message: error.message,
-                        //     description:
-                        //         "The Email Id entered has already been used. Please select a different Email Id",
-                        // });
                         notification.open({
                             message: "Notification Title",
                             description:
@@ -274,13 +273,12 @@ function SignupUserDetailCard({ form }: any) {
                             emailLoading && !emailErr
                                 ? "validating"
                                 : emailId !== ""
-                                ? emailErr === true
+                                ? !emailErr === true
                                     ? "error"
-                                    : ""
-                                : //   emailExist === true
-                                  //   ? "error"
-                                  //   : "success"
-                                  ""
+                                    : emailExist === true
+                                    ? "error"
+                                    : "success"
+                                : ""
                         }
                     >
                         <Input
@@ -356,8 +354,7 @@ function SignupUserDetailCard({ form }: any) {
                                 //value={phone}
                                 // delayedQueryPhone(value)
                                 onChange={(value: any) => {
-                                    console.log({ value });
-                                    // clearMsg();
+                                    console.log(value.length);
                                     delayedQueryPhone(value);
                                 }}
                             />

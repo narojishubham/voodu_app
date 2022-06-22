@@ -29,8 +29,8 @@ const phoneValidatorService = async (phone: string) => {
             phone,
         });
         return axiosResHandle(response);
-    } catch (err) {
-        return axiosErrHandle(err);
+    } catch (err:any) {
+       return(err.response.data.message)
     }
 };
 
@@ -40,8 +40,9 @@ const brandNameValidatorService = async (businessName: string) => {
             businessName,
         });
         return axiosResHandle(response);
-    } catch (err) {
-        return axiosErrHandle(err);
+    } catch (err:any) {
+        // return (err);
+        return(err.response.data.message)
     }
 };
 
