@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Steps, Form, Row, Typography, Card, Image, Col } from "antd";
 import "react-phone-number-input/style.css";
-import _, { get, toString } from "lodash";
+import _, { get, isEmpty, toString } from "lodash";
 import "./SignUpPage.css";
 import Logo_dark from "../../Assets/Logo/boom-logo.png";
+// import Button from "../../components/Partials/Button";
 import BrandDetailcard from "./SignupBrandDetailCard";
 import SignupUserDetailCard from "./SignupUserDetailCard";
 import PricingPlanPage from "./PricingPlanPage";
@@ -20,6 +21,7 @@ export default function SignUpPage(): JSX.Element {
     const { Step } = Steps;
     const [success, setSuccess] = useState(false);
     const [currentStep, setCurrentStep] = useState(1);
+    // const [finalData, setFinalData] = useState({});
     const [BrandDetailCardForm] = Form.useForm();
     const [UserDetailCardForm] = Form.useForm();
     const [PricingPlanPageForm] = Form.useForm();
@@ -45,6 +47,7 @@ export default function SignUpPage(): JSX.Element {
         },
     };
     const dispatch = useAppDispatch();
+
     const NextButton = () => {
         const isLastStep = Object.keys(steps).length === currentStep;
         const onNextClick = async () => {
@@ -60,6 +63,8 @@ export default function SignUpPage(): JSX.Element {
             // } catch (error) {
             //   console.log("Validtion Error", error);
             // }
+
+            // console.log("test", !isEmpty(BrandDetailCardForm.getFieldsError()));
 
             if (currentStep === 1) {
                 try {
@@ -145,6 +150,7 @@ export default function SignUpPage(): JSX.Element {
                         />
                     ))}
                 </Steps>
+
                 {success ? (
                     <SuccessMessage
                         Usertitle={"Registration Successful. Proceed to Verify."}
@@ -160,6 +166,7 @@ export default function SignUpPage(): JSX.Element {
                                     form: get(steps, `${currentStep}.form`),
                                 })}
                             </Col>
+
                             <Col className="steps-action">
                                 <PreviousButton />
                                 <NextButton />

@@ -1,15 +1,16 @@
 import { Card, Form, Input, notification, Typography } from "antd";
 import React, { useCallback, useEffect, useState } from "react";
 import { NavigateFunction, useNavigate } from "react-router-dom";
-import { RootState, useAppDispatch } from "../../Shared/Redux/store";
+// import _ from "lodash";
+import { useSelector } from "react-redux";
+import { useAppDispatch } from "../../Shared/Redux/store";
 import brandDataValidationService from "../../Shared/Redux/Actions/brand/brandDataValidation.service";
 import CustomSelectAndSearchField from "../../Components/CustomSelectAndSearchField";
 import addCategoriesAction from "../../Shared/Redux/Actions/brand/category/addCategory.action";
 import getCategoriesAction, {
     GetCategoriesResponseType,
 } from "../../Shared/Redux/Actions/brand/category/getCategory.action";
-import _ from "lodash";
-import { useSelector } from "react-redux";
+import _, { get } from "lodash";
 
 function BrandDetailcard({ form }: any) {
     const { Text } = Typography;
@@ -32,34 +33,21 @@ function BrandDetailcard({ form }: any) {
 
         setWeblinkErr(form.getFieldsError().some(({ errors }: any) => errors.length));
     };
-    const [brandNameExist, setBrandNameExist] = useState(false);
     const checkBrandName = (brandName: string) => {
         if (brandName !== "") {
             brandDataValidationService
                 .brandNameValidatorService(brandName)
                 .then((response: any) => {
                     setBrandLoading(false);
-                    console.log(response);
-                    if ("Brand Name already exists" === response) {
-                        // setBrandNameExist(true);
-                        notification["error"]({
-                            message: response,
-                            description:
-                                "The Brand Name entered has already been used. Please select a different Brand Name",
-                        });
-                    }
                 })
                 .catch((error: any) => {
-                    console.log(error);
-                    // setBrandNameExist(true);
                     setBrandLoading(false);
-                    if ("Brand Name already exists" === error) {
-                        notification["error"]({
-                            message: error,
-                            description:
-                                "The Brand Name entered has already been used. Please select a different Brand Name",
-                        });
-                    }
+                    notification["error"]({
+                        message: get(error, "response.data.message"),
+                        description:
+                            "The Brand Name entered has already been used. Please select a different Brand Name",
+                    });
+                    throw error;
                 });
         }
     };
@@ -68,6 +56,16 @@ function BrandDetailcard({ form }: any) {
         _.debounce((q: string) => checkBrandName(q), 300),
         []
     );
+
+    const brandNameValidator = async (_: any, brandName: any) => {
+        try {
+            await brandDataValidationService.brandNameValidatorService(brandName);
+            return Promise.resolve();
+        } catch (error) {
+            return Promise.reject(get(error, "response.data.message"));
+        }
+    };
+
     const [data, setData] = useState<GetCategoriesResponseType[] | any>([]);
     const categories = () => {
         dispatch(getCategoriesAction())
@@ -121,19 +119,21 @@ function BrandDetailcard({ form }: any) {
                                 max: 50,
                                 message: "Brand Name need to be between 3 to 50 characters in length.",
                             },
+                            { validator: brandNameValidator },
                         ]}
                         validateTrigger={["onChange"]}
-                        validateStatus={
-                            brandLoading && !brandNameErr
-                                ? "validating"
-                                : brandName !== ""
-                                ? brandNameErr === true
-                                    ? "error"
-                                    : "" // : brandNameExist === false
-                                : // ? "error"
-                                  // : "success"
-                                  ""
-                        }
+                        // validateStatus={
+                        //     brandLoading && !brandNameErr
+                        //         ? "validating"
+                        //         : brandName !== ""
+                        //         ? brandNameErr === true
+                        //             ? "error"
+                        //             : ""
+                        //         : //   : brandNameExist === true
+                        //           //   ? "error"
+                        //           //   : "success"
+                        //           ""
+                        // }
                         hasFeedback
                     >
                         <Input

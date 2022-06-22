@@ -8,7 +8,7 @@ import getDesignationsAction, {
     GetDesignationResponseType,
 } from "../../Shared/Redux/Actions/brand/designation/getDesignation.action";
 import brandDataValidationService from "../../Shared/Redux/Actions/brand/brandDataValidation.service";
-import _ from "lodash";
+import _, { get } from "lodash";
 import { SmileOutlined } from "@ant-design/icons";
 
 function SignupUserDetailCard({ form }: any) {
@@ -31,9 +31,7 @@ function SignupUserDetailCard({ form }: any) {
     const { Text } = Typography;
     const { Step } = Steps;
     const [form1] = Form.useForm();
-    //   const { brandNameExist, emailExist, phoneExist } = useSelector(
-    //     (state: RootStateOrAny) => state.check
-    //   );
+
     const [success, setSuccess] = useState(false);
     const [confirmPassErr, setConfirmPassErr] = useState(false);
     const [options, setOptions] = useState([]);
@@ -72,35 +70,30 @@ function SignupUserDetailCard({ form }: any) {
     const clearMsg = () => {
         // dispatch(clearMessage());
     };
-    const [emailExist, setEmailExist] = useState(false);
     const checkEmail = (emailId: string) => {
         if (emailId !== "") {
             brandDataValidationService
                 .emailValidatorService(emailId)
                 .then((response: any) => {
                     setEmailLoading(false);
-                    // console.log("response 12", response);
-                    if (response.message === "Email already exists") {
-                        // setEmailExist(true);
-                        notification["error"]({
-                            message: response.message,
-                            description:
-                                "The Email Id entered has already been used. Please select a different Email Id",
-                        });
-                    }
                 })
                 .catch((error: any) => {
                     // console.log("error 12", error.message);
                     setEmailLoading(false);
-                    setEmailExist(true);
-                    if (error.message === "Email already exists")
-                        notification.open({
-                            message: "Notification Title",
-                            description:
-                                "This is the content of the notification. This is the content of the notification. This is the content of the notification.",
-                            icon: <SmileOutlined style={{ color: "#108ee9" }} />,
-                        });
+                    // if (error.message === "Email already exists")
+                    notification["error"]({
+                        message: get(error, "response.data.message"),
+                        description: "The Email Id entered has already been used. Please select a different Email Id",
+                    });
                 });
+        }
+    };
+    const brandEmailValidator = async (_: any, emailId: any) => {
+        try {
+            await brandDataValidationService.emailValidatorService(emailId);
+            return Promise.resolve();
+        } catch (error) {
+            return Promise.reject(get(error, "response.data.message"));
         }
     };
     const checkPhone = (phone: string) => {
@@ -266,20 +259,22 @@ function SignupUserDetailCard({ form }: any) {
                                 pattern: /^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+\.[a-z]{2,3}$/gm,
                                 message: "Please enter email id in this valid format (abcd@mail.com)",
                             },
+                            { validator: brandEmailValidator },
                         ]}
                         hasFeedback
                         validateTrigger={["onChange"]}
-                        validateStatus={
-                            emailLoading && !emailErr
-                                ? "validating"
-                                : emailId !== ""
-                                ? !emailErr === true
-                                    ? "error"
-                                    : emailExist === true
-                                    ? "error"
-                                    : "success"
-                                : ""
-                        }
+                        // validateStatus={
+                        //     emailLoading && !emailErr
+                        //         ? "validating"
+                        //         : emailId !== ""
+                        //         ? !emailErr === true
+                        //             ? "error"
+                        //             : ""
+                        //         : // : emailExist === true
+                        //           // ? "error"
+                        //           // : "success"
+                        //           ""
+                        // }
                     >
                         <Input
                             size="large"
