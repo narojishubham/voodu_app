@@ -18,8 +18,8 @@ const resetPasswordAction = createAsyncThunk(
         try {
             const res = await resetPasswordService(params);
             return axiosResHandle(res);
-        } catch (err) {
-            return rejectWithValue(axiosErrHandle(err));
+        } catch (err:any) {
+            return rejectWithValue(err.response.data.message);
         }
     }
 );

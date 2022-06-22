@@ -6,8 +6,8 @@ type createUploadRequest = {
     uploadUrl: string, file: any
 }
 export const uploadFileUsingUploadReqIdService = ({ uploadUrl, file }: createUploadRequest) => {
-    console.log({'uploadUrl':uploadUrl})
-     console.log({'file':file})
+    // console.log({'uploadUrl':uploadUrl})
+    //  console.log({'file':file})
     return server
         .put(file, uploadUrl)
 };
@@ -17,7 +17,7 @@ export const uploadFileUsingUploadReqIdAction = createAsyncThunk(
         const { uploadUrl, file } = props;
         try {
             const response = await uploadFileUsingUploadReqIdService({ uploadUrl, file });
-            console.log('2222 uploadFileUsingUploadReqIdAction', response)
+            // console.log('2222 uploadFileUsingUploadReqIdAction', response)
             return axiosResHandle(response)
         } catch (error: any) {
             return axiosErrHandle(error);

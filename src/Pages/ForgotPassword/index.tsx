@@ -25,8 +25,8 @@ export default function ForgotPasswordPage(): JSX.Element {
      */
     const onFinish = async ({ email }: any) => {
         setLoading(true);
-        const response = await dispatch(forgotPasswordAction({ email })).unwrap();
         try {
+            const response = await dispatch(forgotPasswordAction({ email })).unwrap();
             msg.success("Password reset request sent successfully, Please check your email verify", 5);
             // navigate("/new-password");
             setLoading(false);
