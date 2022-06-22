@@ -77,7 +77,8 @@ const VideoDetailCard = ({
                     />
                 </div>
             </Row>
-            {ctaBtn === true ? (
+            {/* {ctaBtn === true ? ( */}
+            {editVideo.ctaBtnTitle === "" ? (
                 <Row justify="center" align="top">
                     <Button
                         type="primary"
