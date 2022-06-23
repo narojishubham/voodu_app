@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Card, Row } from "antd";
 import { AppstoreAddOutlined, EditOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
@@ -52,6 +52,9 @@ const VideoDetailCard = ({
 }) => {
     const navigate = useNavigate();
 
+    useEffect(() => {
+        console.log("useEffect editVideo.ctaBtnTitle useEffect ", editVideo.ctaBtnTitle);
+    }, []);
     return (
         <Card
             className={"global_box_shadow"}
@@ -77,8 +80,9 @@ const VideoDetailCard = ({
                     />
                 </div>
             </Row>
-            {/* {ctaBtn === true ? ( */}
-            {editVideo.ctaBtnTitle === "" ? (
+            <>{console.log("editVideo.ctaBtnTitle ", editVideo.ctaBtnTitle)}</>
+            {ctaBtn === true ? (
+                // {editVideo.ctaBtnTitle === "" ? (
                 <Row justify="center" align="top">
                     <Button
                         type="primary"
