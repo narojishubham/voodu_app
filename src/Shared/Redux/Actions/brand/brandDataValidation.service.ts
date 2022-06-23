@@ -19,7 +19,8 @@ const emailValidatorService = async (email: string) => {
         });
         return axiosResHandle(response);
     } catch (err:any) {
-        return (err.response.data);
+        // return (err.response.data);
+         throw err
     }
 };
 
@@ -29,8 +30,9 @@ const phoneValidatorService = async (phone: string) => {
             phone,
         });
         return axiosResHandle(response);
-    } catch (err:any) {
-       return(err.response.data.message)
+    } catch (err) {
+        // return axiosErrHandle(err);
+         throw err
     }
 };
 
@@ -40,9 +42,9 @@ const brandNameValidatorService = async (businessName: string) => {
             businessName,
         });
         return axiosResHandle(response);
-    } catch (err:any) {
-        // return (err);
-        return(err.response.data.message)
+    } catch (err) {
+        throw err
+        // return axiosErrHandle(err);
     }
 };
 
