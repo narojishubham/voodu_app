@@ -113,6 +113,15 @@ function SignupUserDetailCard({ form }: any) {
                 });
         }
     };
+    const brandPhoneNumberValidator = async (_: any, phone: any) => {
+        try {
+            await brandDataValidationService.phoneValidatorService(phone);
+            return Promise.resolve();
+        } catch (error) {
+            return Promise.reject(get(error, "response.data.message"));
+        }
+    };
+
     const delayedQueryPhone = useCallback(
         _.debounce((q: string) => checkPhone(q), 300),
         []
@@ -302,39 +311,40 @@ function SignupUserDetailCard({ form }: any) {
                                 required: true,
                                 message: "Phone number is required",
                             },
+                            { validator: brandPhoneNumberValidator },
                         ]}
                         hasFeedback
                         validateTrigger={["onChange"]}
-                        validateStatus={
-                            phone
-                                ? phoneLoading && !phoneErr
-                                    ? "validating"
-                                    : phoneErr === true && validPhoneErr === true
-                                    ? //           phoneExist === true) ||
-                                      //         (phoneErr === true &&
-                                      //           validPhoneErr  === false) //
-                                      // //           phoneExist === false) ||
-                                      //         (phoneErr === true &&
-                                      //           !validPhoneErr === true)
-                                      //         //   phoneExist === true) ||
-                                      //         (phoneErr === true &&
-                                      //           !validPhoneErr=== false)
-                                      // //           phoneExist === false) ||
-                                      //         (phoneErr === false &&
-                                      //           validPhoneErr === true)
-                                      // //           phoneExist === true) ||
-                                      //         (phoneErr === false &&
-                                      //           !validPhoneErr === true)
-                                      // //           phoneExist === true) ||
-                                      //         (phoneErr === false &&
-                                      //           !validPhoneErr === false)
-                                      //           phoneExist === false)
-                                      //   "error"
-                                      // : "success"
-                                      "success"
-                                    : "error"
-                                : ""
-                        }
+                        // validateStatus={
+                        //     phone
+                        //         ? phoneLoading && !phoneErr
+                        //             ? "validating"
+                        //             : phoneErr === true && validPhoneErr === true
+                        //             ? //           phoneExist === true) ||
+                        //               //         (phoneErr === true &&
+                        //               //           validPhoneErr  === false) //
+                        //               // //           phoneExist === false) ||
+                        //               //         (phoneErr === true &&
+                        //               //           !validPhoneErr === true)
+                        //               //         //   phoneExist === true) ||
+                        //               //         (phoneErr === true &&
+                        //               //           !validPhoneErr=== false)
+                        //               // //           phoneExist === false) ||
+                        //               //         (phoneErr === false &&
+                        //               //           validPhoneErr === true)
+                        //               // //           phoneExist === true) ||
+                        //               //         (phoneErr === false &&
+                        //               //           !validPhoneErr === true)
+                        //               // //           phoneExist === true) ||
+                        //               //         (phoneErr === false &&
+                        //               //           !validPhoneErr === false)
+                        //               //           phoneExist === false)
+                        //               //   "error"
+                        //               // : "success"
+                        //               "success"
+                        //             : "error"
+                        //         : ""
+                        // }
                     >
                         <Row className="phoneNumberCustomField">
                             <PhoneInputWithCountry
