@@ -31,11 +31,17 @@ import { useNavigate } from "react-router-dom";
 import { useCallbackPrompt } from "../../../Shared/hooks/useCallbackPrompt";
 import listPlaylistAction from "../../../Shared/Redux/Actions/playlist/listPlaylist.action";
 import getBrandTagsAction from "../../../Shared/Redux/Actions/feed/getBrandsTags.action";
-import createUploadRequestAction from "../../../Shared/Redux/Actions/feed/uploadVideo/createUploadRequest.action";
-import { uploadFileUsingUploadReqIdAction } from "../../../Shared/Redux/Actions/feed/uploadVideo/uploadFileUsingUploadReqId.action";
+import createUploadRequestAction, {
+    createUploadRequestService,
+} from "../../../Shared/Redux/Actions/feed/uploadVideo/createUploadRequest.action";
+import {
+    uploadFileUsingUploadReqIdAction,
+    uploadFileUsingUploadReqIdService,
+} from "../../../Shared/Redux/Actions/feed/uploadVideo/uploadFileUsingUploadReqId.action";
 import {
     verifyUploadReqAction,
     VerifyUploadReqResponseType,
+    verifyUploadReqService,
 } from "../../../Shared/Redux/Actions/feed/uploadVideo/verifyUplodReqId.action";
 import {
     getVideoThumbnailAction,
@@ -286,12 +292,12 @@ export default function UploadVideo() {
         try {
             const { original, id } = await uploadFile(e.file, (progress) => {
                 // console.log("progress======>>>>", progress);
+                e.onSuccess();
                 if (type === "video") {
                     setTimeout(() => setCurrentStep(progress * 20), 1000);
                 }
             });
             if (type === "video") {
-                // console.log("HELLO", { original, id });
                 setUploadReqIdResVideo(id);
                 setVideoURL(original);
             }
@@ -303,6 +309,7 @@ export default function UploadVideo() {
                 setVideoThumbnailURL(data.urls.original);
                 setShowDialog(true);
             } else {
+                setUploadReqIdResPoster(id);
                 setThumbnailId(id);
                 setThumbnailURL(original);
             }
@@ -310,22 +317,8 @@ export default function UploadVideo() {
             console.error("File upload failed");
         }
     };
-    const customRequest1 = async (e: any) => {
-        console.log("in customRequest1");
 
-        // console.log({ type, generateSnapShot });
-        if (!e.file) return;
-        try {
-            console.log("in customRequest1");
-            const { original, id } = await uploadFile(e.file);
-            console.log("in customRequest1", { original, id });
-            setThumbnailId(id);
-            setThumbnailURL(original);
-        } catch (error) {
-            console.error("File upload failed");
-        }
-    };
-
+    console.log("thumbnailId", thumbnailId);
     /**
      * Function called to save details about a new Video
      * @function handleCreateVideo
@@ -642,8 +635,8 @@ export default function UploadVideo() {
                             hashtags={hashtags}
                             selectOrientation={selectOrientation}
                             posterProps={posterProps}
-                            // customRequest={customRequest}
-                            customRequest={customRequest1}
+                            customRequest={customRequest}
+                            // customRequest={customRequest22}
                             setThumbnailId={setThumbnailId}
                             setThumbnailURL={setThumbnailURL}
                             uploadReqIdResPoster={uploadReqIdResPoster}
