@@ -821,6 +821,7 @@ export default function VideoDetailsViewEdit() {
                                         style={{
                                             fontWeight: "bold",
                                             backgroundColor: "#F2994A",
+                                            borderRadius: ".5rem",
                                         }}
                                     >
                                         Cancel
@@ -839,6 +840,7 @@ export default function VideoDetailsViewEdit() {
                                         style={{
                                             fontWeight: "bold",
                                             backgroundColor: "#F2994A",
+                                            borderRadius: ".5re",
                                         }}
                                     >
                                         Save & Update

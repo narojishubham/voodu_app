@@ -171,7 +171,9 @@ const Playlist = () => {
                             onClickCallback={(val) => handleSearchPlaylist(val)}
                         />
                         <Link to={RouterPaths.addPage}>
-                            <Button disabled={list.totalFeedVideos === 0}>Create Playlist</Button>
+                            <Button style={{ borderRadius: ".5rem" }} disabled={list.totalFeedVideos === 0}>
+                                Create Playlist
+                            </Button>
                         </Link>
                     </Space>
                 </Col>

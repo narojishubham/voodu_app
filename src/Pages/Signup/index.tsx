@@ -117,7 +117,7 @@ export default function SignUpPage(): JSX.Element {
             }
         };
         return (
-            <Button block={false} style={{ margin: "0 8px" }} onClick={onNextClick}>
+            <Button block={false} style={{ margin: "0 8px", borderRadius: ".5rem" }} onClick={onNextClick}>
                 {isLastStep ? "Done" : "Next"}
             </Button>
         );
@@ -126,7 +126,11 @@ export default function SignUpPage(): JSX.Element {
     const PreviousButton = () => {
         if (currentStep === 1) return null;
         return (
-            <Button block={false} style={{ margin: "0 8px" }} onClick={() => setCurrentStep((s) => s - 1)}>
+            <Button
+                block={false}
+                style={{ margin: "0 8px", borderRadius: ".5rem" }}
+                onClick={() => setCurrentStep((s) => s - 1)}
+            >
                 Previous
             </Button>
         );

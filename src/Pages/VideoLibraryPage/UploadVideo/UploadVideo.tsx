@@ -536,6 +536,7 @@ export default function UploadVideo() {
                                         backgroundColor: "#F2994A",
                                         width: "8rem",
                                         margin: "1rem",
+                                        borderRadius: ".5rem",
                                     }}
                                     onClick={() => {
                                         form1.resetFields(["youtubeUrl"]);
@@ -564,6 +565,7 @@ export default function UploadVideo() {
                                     style={{
                                         fontWeight: "bold",
                                         backgroundColor: "#F2994A",
+                                        borderRadius: ".5rem",
                                     }}
                                     icon={<AppstoreAddOutlined />}
                                     onClick={() => {
@@ -587,6 +589,7 @@ export default function UploadVideo() {
                                             fontWeight: "bold",
                                             backgroundColor: "#F2994A",
                                             marginRight: "5px",
+                                            borderRadius: ".5rem",
                                         }}
                                         onClick={() => {
                                             handleVideoOverlays();
@@ -605,6 +608,7 @@ export default function UploadVideo() {
                                             fontWeight: "bold",
                                             backgroundColor: "#F2994A",
                                             marginLeft: "5px",
+                                            borderRadius: ".5rem",
                                         }}
                                         onClick={() => {
                                             setCtaBtnUrl("");
@@ -660,6 +664,7 @@ export default function UploadVideo() {
                                     fontWeight: "bold",
                                     backgroundColor: "#F2994A",
                                     marginTop: playlists.length === 0 ? "15px" : "",
+                                    borderRadius: ".5rem",
                                 }}
                             >
                                 Cancel
@@ -692,6 +697,7 @@ export default function UploadVideo() {
                                     fontWeight: "bold",
                                     backgroundColor: "#F2994A",
                                     marginTop: playlists.length === 0 ? "15px" : "",
+                                    borderRadius: ".5rem",
                                 }}
                             >
                                 Upload

@@ -95,6 +95,7 @@ const VideoDetailCard = ({
                             fontWeight: "bold",
                             backgroundColor: "#F2994A",
                             marginTop: "10px",
+                            borderRadius: ".5rem",
                         }}
                         icon={<AppstoreAddOutlined />}
                         onClick={() => {
@@ -121,6 +122,7 @@ const VideoDetailCard = ({
                             backgroundColor: "#F2994A",
                             marginTop: "10px",
                             marginRight: "5px",
+                            borderRadius: ".5rem",
                         }}
                         onClick={() => {
                             setIsEditVideoDetailsVisible(false);
@@ -147,6 +149,7 @@ const VideoDetailCard = ({
                             backgroundColor: "#F2994A",
                             marginTop: "10px",
                             marginLeft: "5px",
+                            borderRadius: ".5rem",
                         }}
                         onClick={() => {
                             setCtaBtn(true);
@@ -177,6 +180,7 @@ const VideoDetailCard = ({
                             backgroundColor: "#F2994A",
                             marginTop: "10px",
                             marginRight: "5px",
+                            borderRadius: ".5rem",
                         }}
                         icon={<EditOutlined />}
                         onClick={() => {

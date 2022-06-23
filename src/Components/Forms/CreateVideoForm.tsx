@@ -206,7 +206,9 @@ const CreateVideoForm = ({
                         }}
                     >
                         <Col>
-                            <Button icon={<UploadOutlined />}>Add video thumbnail</Button>
+                            <Button style={{ borderRadius: ".5rem" }} icon={<UploadOutlined />}>
+                                Add video thumbnail
+                            </Button>
                         </Col>
                     </Upload>
                 </Col>

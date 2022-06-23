@@ -237,6 +237,7 @@ export default function VideoLibrary() {
                                 onClickCallback={(val) => querySearchVideos(val)}
                             />
                             <Button
+                                style={{ borderRadius: ".5rem" }}
                                 onClick={() => {
                                     navigate(RouterPaths.root + RouterPaths.videoLibrary + RouterPaths.addPage);
                                 }}

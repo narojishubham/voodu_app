@@ -128,7 +128,7 @@ const AppLayout: React.FC<{
                                     <Avatar style={{ width: "32px", height: "32px" }} src={profileImage} />
                                 </Col>
                                 <Col flex={1} style={{ padding: 0, marginRight: "0.5vw" }}>
-                                    <Button loading={loading} onClick={onLogout}>
+                                    <Button style={{ borderRadius: ".5rem" }} loading={loading} onClick={onLogout}>
                                         Logout
                                     </Button>
                                 </Col>
