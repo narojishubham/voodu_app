@@ -10,7 +10,7 @@ export const searchVideosFromPlaylistDetailService = async ({searchQuery,playlis
   const res =  await(server.get(`/playlists/${playlistID}?q=${searchQuery}`))
   return axiosResHandle(res)
 }
-const searchVideosFromPlaylistAction = createAsyncThunk('playlists/items',async(props:SearchVideoFromPlaylist, thunkAPI)=>{
+const searchVideosFromPlaylistAction = createAsyncThunk('search/video/playlist',async(props:SearchVideoFromPlaylist, thunkAPI)=>{
     try{
         return await searchVideosFromPlaylistDetailService(props)
     }catch(err){

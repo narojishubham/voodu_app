@@ -29,7 +29,7 @@ const createUploadRequestAction = createAsyncThunk(
     async (params: createUploadRequest, { rejectWithValue }) => {
         try {
             const res = await createUploadRequestService(params);
-             console.log(' 111 data test createUploadRequestService',res)
+            //  console.log(' 111 data test createUploadRequestService',res)
             return axiosResHandle(res);
            
         } catch (err) {

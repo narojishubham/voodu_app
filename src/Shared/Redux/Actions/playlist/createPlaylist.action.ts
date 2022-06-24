@@ -13,7 +13,7 @@ import { CreatePlaylistPropsType, CreatePlaylistResponse } from "../../../Models
 
   return(server.post<CreatePlaylistResponse>("/playlists",data))
   }
-  const createPlaylistAction = createAsyncThunk('auth/login', async (props: CreatePlaylistPropsType, thunkAPI) => {
+  const createPlaylistAction = createAsyncThunk('auth/createPlaylist', async (props: CreatePlaylistPropsType, thunkAPI) => {
     // try {
     //   // console.log("in loginAction, ", {params});
     //   return await createPlaylistServices(params);

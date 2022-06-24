@@ -14,7 +14,7 @@ import { axiosErrHandle, axiosResHandle } from "../../../../api/axiosHandle";
     return axiosResHandle(res)
   }
 
-  const getVideoByIdAction = createAsyncThunk('playlists/item', async (props: any, thunkAPI) => {
+  const getVideoByIdAction = createAsyncThunk('getVideo/playlists/item', async (props: any, thunkAPI) => {
     try {
       // console.log("getVideoByIdAction, ", {props});
       return await getVideoByIdService(props);

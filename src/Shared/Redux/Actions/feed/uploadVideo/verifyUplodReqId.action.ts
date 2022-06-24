@@ -32,7 +32,7 @@ export const verifyUploadReqAction = createAsyncThunk('video/verifyUploadReq', a
   // const { uploadReqIdRes } = props;
   try {
     const response = await verifyUploadReqService(props);
-             console.log('3333 verifyUploadReqAction',response)
+            //  console.log('3333 verifyUploadReqAction',response)
 return axiosResHandle(response)
   } catch (error: any) {
     return axiosErrHandle(error);

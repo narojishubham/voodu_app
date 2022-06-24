@@ -17,7 +17,7 @@ type getVideoThumbnail ={
   file: string
 }
 export const getVideoThumbnailService = ({file}:getVideoThumbnail) => {
-  console.log({ file });
+  // console.log({ file });
   return server.post('/resources/snapShot', { file })
 };
 export const getVideoThumbnailAction = createAsyncThunk(
@@ -26,7 +26,7 @@ export const getVideoThumbnailAction = createAsyncThunk(
         const { file } = props;
         try {
             const response = await getVideoThumbnailService({ file });
-             console.log('getVideoThumbnailAction',response)
+            //  console.log('getVideoThumbnailAction',response)
             return axiosResHandle(response)
         } catch (error: any) {
             return axiosErrHandle(error);

@@ -10,7 +10,7 @@ const getPlaylistService =async ({playlistId}:getPlaylist) => {
   // console.log(" getPlaylistService, ", {res});
   return axiosResHandle(res)
 }
-const getPlaylistAction = createAsyncThunk('playlists/item', async (props: getPlaylist, thunkAPI) => {
+const getPlaylistAction = createAsyncThunk('getplaylists/item', async (props: getPlaylist, thunkAPI) => {
   try {
     // console.log("getPlaylistAction, ", { props});
     return await getPlaylistService({playlistId:props.playlistId});
