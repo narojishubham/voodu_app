@@ -11,12 +11,13 @@ const forgotPasswordService = (data: ForgotPasswordParamsType) => {
 
 const forgotPasswordAction = createAsyncThunk(
     "auth/forgot-password",
-    async (params: ForgotPasswordParamsType, thunkAPI) => {
+    async (params: ForgotPasswordParamsType, {rejectWithValue}) => {
         try {
             const res = await forgotPasswordService(params);
             return axiosResHandle(res);
-        } catch (err) {
-            return thunkAPI.rejectWithValue(axiosErrHandle(err));
+        } catch (err:any) {
+            // return thunkAPI.rejectWithValue(axiosErrHandle(err));
+            return rejectWithValue(err.response.data.message)
         }
     }
 );

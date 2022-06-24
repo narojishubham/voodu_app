@@ -1,4 +1,4 @@
-import { Button, Card, Form, Image, Input, notification, Row, Typography } from "antd";
+import { Button, Card, Form, Image, Input, message, notification, Row, Typography } from "antd";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../Shared/Redux/store";
@@ -15,32 +15,26 @@ const LoginPage = () => {
 
     const onFinish = async ({ email, password }: LoginParamsType) => {
         setLoading(true);
-        const response = await dispatch(loginAction({ email, password })).unwrap();
-        // console.log({ response: response });
         try {
+            const response = await dispatch(loginAction({ email, password })).unwrap();
             const { token }: any = response;
             if (token) {
                 localStorage.setItem("token", JSON.stringify(token));
             }
-        } finally {
+        } catch (error) {
             setLoading(false);
+            console.log(error);
+
+            if ("Account is not yet verified" === error) {
+                notification.open({
+                    message: "Account is not yet verified",
+                    description: "Please check your mail to verify your account.",
+                    icon: <SmileOutlined style={{ color: "	rgb(255,0,0)" }} />,
+                });
+            } else {
+                message.error(`error while submitting: ${error}`, 2);
+            }
         }
-        // loginService({ email, password })
-        //     .then((response) => {
-        //         const { token }: any = response;
-        //         if (token) {
-        //             localStorage.setItem("token", JSON.stringify(token));
-        //         }
-        //     })
-        //     .catch((error) => {
-        //         setLoading(false);
-        //         console.log(error.response.message);
-        //         notification.open({
-        //             message: "Account is not yet verified",
-        //             description: "Please check your mail to verify your account.",
-        //             icon: <SmileOutlined style={{ color: "	rgb(255,0,0)" }} />,
-        //         });
-        //     });
     };
 
     const onFinishFailed = (errorInfo: any) => {};

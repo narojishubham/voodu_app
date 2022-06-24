@@ -14,8 +14,7 @@ import {
     Spin,
 } from "antd";
 import _ from "lodash";
-import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
-import { UploadOutlined, AppstoreAddOutlined, EditOutlined } from "@ant-design/icons";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { useAppDispatch } from "../../../Shared/Redux/store";
 import { useCallbackPrompt } from "../../../Shared/hooks/useCallbackPrompt";
 import { RouterPaths } from "../../../api/RouterPaths";
@@ -23,23 +22,21 @@ import Button from "../../../Components/Partials/Button";
 import listPlaylistAction from "../../../Shared/Redux/Actions/playlist/listPlaylist.action";
 import getBrandTagsAction from "../../../Shared/Redux/Actions/feed/getBrandsTags.action";
 import getVideoByIdAction from "../../../Shared/Redux/Actions/playlist/getVideoById.action";
-import createUploadRequestAction from "../../../Shared/Redux/Actions/feed/uploadVideo/createUploadRequest.action";
-import { uploadFileUsingUploadReqIdAction } from "../../../Shared/Redux/Actions/feed/uploadVideo/uploadFileUsingUploadReqId.action";
 import { verifyUploadReqAction } from "../../../Shared/Redux/Actions/feed/uploadVideo/verifyUplodReqId.action";
-import { getVideoThumbnailAction } from "../../../Shared/Redux/Actions/feed/uploadVideo/getVideoThumbnail.action";
+import {
+    getVideoThumbnailAction,
+    GetVideoThumbnailResponse,
+} from "../../../Shared/Redux/Actions/feed/uploadVideo/getVideoThumbnail.action";
 import updateVideoAction from "../../../Shared/Redux/Actions/feed/updateVideo.action";
 import VideoDetailCard from "../../../Components/VideoDetailCard";
 import EditVideoDetailsForm from "../../../Components/Forms/EditVideoDetailsForm";
 import VideoOverlayModal from "../../../Shared/Models/VideoCardOverlay/VideoOverlayModal";
 import VideoOverlayOptModal from "../../../Shared/Models/VideoCardOverlay/VideoOverlayOptModal";
 import DialogBox from "../../../Components/DialogBox";
+import { uploadFile } from "../../ProfilePage/ProfileImage";
 
 export default function VideoDetailsViewEdit() {
-    const { Text, Title } = Typography;
-    const { Option } = Select;
-    const { Panel } = Collapse;
     const navigate = useNavigate();
-    let location = useLocation();
     let { videoId } = useParams();
     const dispatch = useAppDispatch();
     const [caption, setCaption] = useState("");
@@ -51,7 +48,6 @@ export default function VideoDetailsViewEdit() {
     const [videoThumbnailURL, setVideoThumbnailURL] = useState("");
     const [ctaBtnUrl, setCtaBtnUrl] = useState("");
     const [ctaBtnTitle, setCtaBtnTitle] = useState("");
-    const [uploadVideoErr, setUploadVideoErr] = useState(false);
     const [videoThumbnailId, setVideoThumbnailId] = useState(-1);
     const [hashtags, setHashtags] = useState<any | []>([]);
     const [editFlag, setEditFlag] = useState(false);
@@ -189,10 +185,7 @@ export default function VideoDetailsViewEdit() {
                 setPageLoading(false);
                 error.onError();
             });
-
-        //getPlaylist();
     };
-
     useLayoutEffect(() => {
         setPageLoading(true);
         showVideoDetails();
@@ -418,82 +411,69 @@ export default function VideoDetailsViewEdit() {
  * @param {string} type - File type Video/Thumbnail
  * @throws Will throw an error File upload fails
  */
-    const customRequest = (e: any, type: string) => {
-        if (type === "video") {
-            setTimeout(() => setCurrentStep(20), 1000);
-        }
-        let uploadReqIdRes: number;
-        dispatch(createUploadRequestAction({ filename: e.file.name }))
-            .unwrap()
-            .then(async (response: any) => {
-                const { uploadUrl, id } = response.data;
+
+    // const customRequest = (e: any, type: string) => {
+    //     createUploadRequestService({ filename: e.file.name })
+    //         .then((response) => {
+    //             console.log("createUploadRequestService");
+
+    //             e.onSuccess();
+    //             const { uploadUrl, id } = response.data.data;
+    //             setUploadReqIdResPoster(id);
+    //             const data = {
+    //                 uploadUrl: uploadUrl,
+    //                 file: e.file,
+    //             };
+    //             uploadFileUsingUploadReqIdService(data).then(() => {
+    //                 console.log("uploadFileUsingUploadReqIdService");
+
+    //                 verifyUploadReqService({ uploadReqIdRes: id })
+    //                     .then((response: any) => {
+    //                         setThumbnailId(response.id);
+    //                         setThumbnailURL(response.urls.original);
+    //                         setReload({}); // used to counter useState async issue by re rendering
+    //                         console.log("verify");
+    //                     })
+    //                     .catch((e: any) => msg.error(e.message));
+    //             });
+    //         })
+    //         .catch((error: any) => {
+    //             //console.log(1);
+    //             setUploadVideoErr(true);
+    //             e.onError();
+    //         });
+    // };
+    const customRequest = async (e: any, type: string, generateSnapShot: boolean = false) => {
+        // console.log({ type, generateSnapShot });
+        if (!e.file) return;
+        try {
+            const { original, id } = await uploadFile(e.file, (progress) => {
+                // console.log("progress======>>>>", progress);
                 e.onSuccess();
                 if (type === "video") {
-                    setTimeout(() => setCurrentStep(40), 1000);
-                    setUploadReqIdResVideo(id);
-                    uploadReqIdRes = id;
-                    const data = {
-                        uploadUrl: uploadUrl,
-                        file: e.file,
-                    };
-                    await dispatch(uploadFileUsingUploadReqIdAction(data))
-                        .then(() => {
-                            setTimeout(() => setCurrentStep(60), 1000);
-
-                            dispatch(verifyUploadReqAction({ uploadReqIdRes }))
-                                .unwrap()
-                                .then((response: any) => {
-                                    setTimeout(() => setCurrentStep(80), 1000);
-                                    setVideoURL(response.urls.original);
-                                    let file = response.urls.original;
-                                    dispatch(getVideoThumbnailAction({ file }))
-                                        .unwrap()
-                                        .then((response: any) => {
-                                            setVideoThumbnailId(response.id);
-                                            setVideoThumbnailURL(response.urls.original);
-                                        })
-                                        .catch((error: any) => {
-                                            console.log({ error });
-                                            e.onError();
-                                        });
-                                    setTimeout(() => setCurrentStep(100), 1000); //Set Progress to 101%
-                                    setTimeout(() => setCurrentStep(101), 2000); //Set Progress to 102%
-                                })
-                                .catch((error: any) => {
-                                    setUploadVideoErr(true);
-                                    e.onError();
-                                });
-                        })
-                        .catch((error: any) => {
-                            setUploadVideoErr(true);
-                            e.onError();
-                        });
-                } else {
-                    // Upload file using upload request id for poster file
-                    setUploadReqIdResPoster(id);
-                    const data = {
-                        uploadUrl: uploadUrl,
-                        file: e.file,
-                    };
-                    await dispatch(uploadFileUsingUploadReqIdAction(data)).then(() => {
-                        dispatch(verifyUploadReqAction({ uploadReqIdRes: id }))
-                            .unwrap()
-                            .then((response: any) => {
-                                setThumbnailId(response.id);
-                                setThumbnailURL(response.urls.original);
-                                setReload({}); // used to counter useState async issue by re rendering
-                            })
-                            .catch((e: any) => msg.error(e.message));
-                    });
+                    setTimeout(() => setCurrentStep(progress * 20), 1000);
                 }
-            })
-            .catch((error: any) => {
-                //console.log(1);
-                setUploadVideoErr(true);
-                e.onError();
             });
+            if (type === "video") {
+                setUploadReqIdResVideo(id);
+                setVideoURL(original);
+            }
+            if (generateSnapShot) {
+                const { data }: { data: GetVideoThumbnailResponse } = await dispatch(
+                    getVideoThumbnailAction({ file: original })
+                ).unwrap();
+                setVideoThumbnailId(data.id);
+                setVideoThumbnailURL(data.urls.original);
+                setShowDialog(true);
+            } else {
+                setUploadReqIdResPoster(id);
+                setThumbnailId(id);
+                setThumbnailURL(original);
+            }
+        } catch (error) {
+            console.error("File upload failed");
+        }
     };
-
     /**
      * Values of CTA are selected based on condition
      * @function ctaSelection
@@ -841,6 +821,7 @@ export default function VideoDetailsViewEdit() {
                                         style={{
                                             fontWeight: "bold",
                                             backgroundColor: "#F2994A",
+                                            borderRadius: ".5rem",
                                         }}
                                     >
                                         Cancel
@@ -859,6 +840,7 @@ export default function VideoDetailsViewEdit() {
                                         style={{
                                             fontWeight: "bold",
                                             backgroundColor: "#F2994A",
+                                            borderRadius: ".5re",
                                         }}
                                     >
                                         Save & Update
@@ -870,16 +852,16 @@ export default function VideoDetailsViewEdit() {
                 </>
             )}
             <>
-                {/* <VideoOverlayModal
+                <VideoOverlayModal
                     isVideoOverlaysVisible={isVideoOverlaysVisible}
                     setOverlaysOpt={setOverlaysOpt}
                     setIsVideoOverlaysVisible={setIsVideoOverlaysVisible}
                     setIsVideoOverlaysOptVisible={setIsVideoOverlaysOptVisible}
                     setTitleErr={setTitleErr}
                     setLinkErr={setLinkErr}
-                /> */}
+                />
 
-                {/* <VideoOverlayOptModal
+                <VideoOverlayOptModal
                     edit={true}
                     editVideo={editVideo}
                     //setNewCTABtn={setNewCTABtn}
@@ -901,7 +883,7 @@ export default function VideoDetailsViewEdit() {
                     setOverlaysOpt={setOverlaysOpt}
                     setIsVideoOverlaysVisible={setIsVideoOverlaysVisible}
                     setResetCTABtn={setResetCTABtn}
-                /> */}
+                />
 
                 <DialogBox
                     // @ts-ignore

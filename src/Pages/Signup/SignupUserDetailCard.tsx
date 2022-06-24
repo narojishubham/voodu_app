@@ -8,7 +8,7 @@ import getDesignationsAction, {
     GetDesignationResponseType,
 } from "../../Shared/Redux/Actions/brand/designation/getDesignation.action";
 import brandDataValidationService from "../../Shared/Redux/Actions/brand/brandDataValidation.service";
-import _ from "lodash";
+import _, { get } from "lodash";
 import { SmileOutlined } from "@ant-design/icons";
 
 function SignupUserDetailCard({ form }: any) {
@@ -31,9 +31,7 @@ function SignupUserDetailCard({ form }: any) {
     const { Text } = Typography;
     const { Step } = Steps;
     const [form1] = Form.useForm();
-    //   const { brandNameExist, emailExist, phoneExist } = useSelector(
-    //     (state: RootStateOrAny) => state.check
-    //   );
+
     const [success, setSuccess] = useState(false);
     const [confirmPassErr, setConfirmPassErr] = useState(false);
     const [options, setOptions] = useState([]);
@@ -78,30 +76,24 @@ function SignupUserDetailCard({ form }: any) {
                 .emailValidatorService(emailId)
                 .then((response: any) => {
                     setEmailLoading(false);
-                    console.log("response 12", response);
-                    if (response.message === "Email already exists")
-                        notification["error"]({
-                            message: response.message,
-                            description:
-                                "The Email Id entered has already been used. Please select a different Email Id",
-                        });
                 })
                 .catch((error: any) => {
-                    console.log("error 12", error.message);
+                    // console.log("error 12", error.message);
                     setEmailLoading(false);
-                    if (error.message === "Email already exists")
-                        // notification["error"]({
-                        //     message: error.message,
-                        //     description:
-                        //         "The Email Id entered has already been used. Please select a different Email Id",
-                        // });
-                        notification.open({
-                            message: "Notification Title",
-                            description:
-                                "This is the content of the notification. This is the content of the notification. This is the content of the notification.",
-                            icon: <SmileOutlined style={{ color: "#108ee9" }} />,
-                        });
+                    // if (error.message === "Email already exists")
+                    notification["error"]({
+                        message: get(error, "response.data.message"),
+                        description: "The Email Id entered has already been used. Please select a different Email Id",
+                    });
                 });
+        }
+    };
+    const brandEmailValidator = async (_: any, emailId: any) => {
+        try {
+            await brandDataValidationService.emailValidatorService(emailId);
+            return Promise.resolve();
+        } catch (error) {
+            return Promise.reject(get(error, "response.data.message"));
         }
     };
     const checkPhone = (phone: string) => {
@@ -121,6 +113,15 @@ function SignupUserDetailCard({ form }: any) {
                 });
         }
     };
+    const brandPhoneNumberValidator = async (_: any, phone: any) => {
+        try {
+            await brandDataValidationService.phoneValidatorService(phone);
+            return Promise.resolve();
+        } catch (error) {
+            return Promise.reject(get(error, "response.data.message"));
+        }
+    };
+
     const delayedQueryPhone = useCallback(
         _.debounce((q: string) => checkPhone(q), 300),
         []
@@ -267,21 +268,22 @@ function SignupUserDetailCard({ form }: any) {
                                 pattern: /^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+\.[a-z]{2,3}$/gm,
                                 message: "Please enter email id in this valid format (abcd@mail.com)",
                             },
+                            { validator: brandEmailValidator },
                         ]}
                         hasFeedback
                         validateTrigger={["onChange"]}
-                        validateStatus={
-                            emailLoading && !emailErr
-                                ? "validating"
-                                : emailId !== ""
-                                ? emailErr === true
-                                    ? "error"
-                                    : ""
-                                : //   emailExist === true
-                                  //   ? "error"
-                                  //   : "success"
-                                  ""
-                        }
+                        // validateStatus={
+                        //     emailLoading && !emailErr
+                        //         ? "validating"
+                        //         : emailId !== ""
+                        //         ? !emailErr === true
+                        //             ? "error"
+                        //             : ""
+                        //         : // : emailExist === true
+                        //           // ? "error"
+                        //           // : "success"
+                        //           ""
+                        // }
                     >
                         <Input
                             size="large"
@@ -309,39 +311,40 @@ function SignupUserDetailCard({ form }: any) {
                                 required: true,
                                 message: "Phone number is required",
                             },
+                            { validator: brandPhoneNumberValidator },
                         ]}
                         hasFeedback
                         validateTrigger={["onChange"]}
-                        validateStatus={
-                            phone
-                                ? phoneLoading && !phoneErr
-                                    ? "validating"
-                                    : phoneErr === true && validPhoneErr === true
-                                    ? //           phoneExist === true) ||
-                                      //         (phoneErr === true &&
-                                      //           validPhoneErr  === false) //
-                                      // //           phoneExist === false) ||
-                                      //         (phoneErr === true &&
-                                      //           !validPhoneErr === true)
-                                      //         //   phoneExist === true) ||
-                                      //         (phoneErr === true &&
-                                      //           !validPhoneErr=== false)
-                                      // //           phoneExist === false) ||
-                                      //         (phoneErr === false &&
-                                      //           validPhoneErr === true)
-                                      // //           phoneExist === true) ||
-                                      //         (phoneErr === false &&
-                                      //           !validPhoneErr === true)
-                                      // //           phoneExist === true) ||
-                                      //         (phoneErr === false &&
-                                      //           !validPhoneErr === false)
-                                      //           phoneExist === false)
-                                      //   "error"
-                                      // : "success"
-                                      "success"
-                                    : "error"
-                                : ""
-                        }
+                        // validateStatus={
+                        //     phone
+                        //         ? phoneLoading && !phoneErr
+                        //             ? "validating"
+                        //             : phoneErr === true && validPhoneErr === true
+                        //             ? //           phoneExist === true) ||
+                        //               //         (phoneErr === true &&
+                        //               //           validPhoneErr  === false) //
+                        //               // //           phoneExist === false) ||
+                        //               //         (phoneErr === true &&
+                        //               //           !validPhoneErr === true)
+                        //               //         //   phoneExist === true) ||
+                        //               //         (phoneErr === true &&
+                        //               //           !validPhoneErr=== false)
+                        //               // //           phoneExist === false) ||
+                        //               //         (phoneErr === false &&
+                        //               //           validPhoneErr === true)
+                        //               // //           phoneExist === true) ||
+                        //               //         (phoneErr === false &&
+                        //               //           !validPhoneErr === true)
+                        //               // //           phoneExist === true) ||
+                        //               //         (phoneErr === false &&
+                        //               //           !validPhoneErr === false)
+                        //               //           phoneExist === false)
+                        //               //   "error"
+                        //               // : "success"
+                        //               "success"
+                        //             : "error"
+                        //         : ""
+                        // }
                     >
                         <Row className="phoneNumberCustomField">
                             <PhoneInputWithCountry
@@ -356,8 +359,7 @@ function SignupUserDetailCard({ form }: any) {
                                 //value={phone}
                                 // delayedQueryPhone(value)
                                 onChange={(value: any) => {
-                                    console.log({ value });
-                                    // clearMsg();
+                                    console.log(value.length);
                                     delayedQueryPhone(value);
                                 }}
                             />

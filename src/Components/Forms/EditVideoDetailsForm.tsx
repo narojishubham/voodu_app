@@ -203,7 +203,7 @@ const EditVideoDetailsForm = ({
                         }}
                     >
                         <Col>
-                            <Button disabled={formDisable} icon={<UploadOutlined />}>
+                            <Button style={{ borderRadius: ".5rem" }} disabled={formDisable} icon={<UploadOutlined />}>
                                 Replace video thumbnail
                             </Button>
                         </Col>

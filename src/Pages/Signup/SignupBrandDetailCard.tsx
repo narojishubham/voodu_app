@@ -10,7 +10,7 @@ import addCategoriesAction from "../../Shared/Redux/Actions/brand/category/addCa
 import getCategoriesAction, {
     GetCategoriesResponseType,
 } from "../../Shared/Redux/Actions/brand/category/getCategory.action";
-import _ from "lodash";
+import _, { get } from "lodash";
 
 function BrandDetailcard({ form }: any) {
     const { Text } = Typography;
@@ -41,13 +41,13 @@ function BrandDetailcard({ form }: any) {
                     setBrandLoading(false);
                 })
                 .catch((error: any) => {
-                    console.log({ error });
                     setBrandLoading(false);
                     notification["error"]({
-                        message: error.message,
+                        message: get(error, "response.data.message"),
                         description:
                             "The Brand Name entered has already been used. Please select a different Brand Name",
                     });
+                    throw error;
                 });
         }
     };
@@ -56,6 +56,16 @@ function BrandDetailcard({ form }: any) {
         _.debounce((q: string) => checkBrandName(q), 300),
         []
     );
+
+    const brandNameValidator = async (_: any, brandName: any) => {
+        try {
+            await brandDataValidationService.brandNameValidatorService(brandName);
+            return Promise.resolve();
+        } catch (error) {
+            return Promise.reject(get(error, "response.data.message"));
+        }
+    };
+
     const [data, setData] = useState<GetCategoriesResponseType[] | any>([]);
     const categories = () => {
         dispatch(getCategoriesAction())
@@ -109,20 +119,21 @@ function BrandDetailcard({ form }: any) {
                                 max: 50,
                                 message: "Brand Name need to be between 3 to 50 characters in length.",
                             },
+                            { validator: brandNameValidator },
                         ]}
                         validateTrigger={["onChange"]}
-                        validateStatus={
-                            brandLoading && !brandNameErr
-                                ? "validating"
-                                : brandName !== ""
-                                ? brandNameErr === true
-                                    ? "error"
-                                    : ""
-                                : //   : brandNameExist === true
-                                  //   ? "error"
-                                  //   : "success"
-                                  ""
-                        }
+                        // validateStatus={
+                        //     brandLoading && !brandNameErr
+                        //         ? "validating"
+                        //         : brandName !== ""
+                        //         ? brandNameErr === true
+                        //             ? "error"
+                        //             : ""
+                        //         : //   : brandNameExist === true
+                        //           //   ? "error"
+                        //           //   : "success"
+                        //           ""
+                        // }
                         hasFeedback
                     >
                         <Input

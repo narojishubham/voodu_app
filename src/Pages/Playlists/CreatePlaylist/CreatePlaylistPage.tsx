@@ -714,7 +714,11 @@ export default function CreatePlaylistPage() {
                     </Row>
                     <Row justify="center" gutter={[16, 0]} style={{ padding: "0.5rem 0 2rem" }}>
                         <Col>
-                            <Button type="default" onClick={handleCancel} style={{ width: "10rem" }}>
+                            <Button
+                                type="default"
+                                onClick={handleCancel}
+                                style={{ width: "10rem", borderRadius: ".5rem" }}
+                            >
                                 Cancel
                             </Button>
                         </Col>
@@ -724,7 +728,7 @@ export default function CreatePlaylistPage() {
                                 onClick={handleCreate}
                                 // disabled={playlistErr}
                                 disabled={!title || !orientation || !playlistLayout || videosSelected.length === 0}
-                                style={{ width: "10rem" }}
+                                style={{ width: "10rem", borderRadius: ".5rem" }}
                             >
                                 {editMode ? "Update" : "Create"}
                             </Button>

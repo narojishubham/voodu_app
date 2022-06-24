@@ -63,9 +63,7 @@ const CreateVideoForm = ({
     const { Option } = Select;
     const { Panel } = Collapse;
     const [remove, setRemove] = useState(false);
-    useEffect(() => {
-        console.log("ThumbnailURL", thumbnailURL);
-    }, []);
+
     return (
         <Form
             name="createVideo"
@@ -208,11 +206,12 @@ const CreateVideoForm = ({
                         }}
                     >
                         <Col>
-                            <Button icon={<UploadOutlined />}>Add video thumbnail</Button>
+                            <Button style={{ borderRadius: ".5rem" }} icon={<UploadOutlined />}>
+                                Add video thumbnail
+                            </Button>
                         </Col>
                     </Upload>
                 </Col>
-                {/* ) : ( */}
                 <Col span={6}>
                     <Image
                         width={"75%"}
@@ -225,20 +224,7 @@ const CreateVideoForm = ({
                         }
                         preview={false}
                     />
-                    {/* <div
-                        className="remove_button"
-                        onClick={() => {
-                            console.log("onRemove");
-                            setUploadReqIdResPoster(-1);
-                            setThumbnailId(-1);
-                            setThumbnailURL("");
-                            setShowDialog(true);
-                        }}
-                    >
-                        test
-                    </div> */}
                 </Col>
-                {/* )} */}
             </Row>
             {playlists.total > 0 ? (
                 <Collapse bordered={false} defaultActiveKey={["1"]} ghost>

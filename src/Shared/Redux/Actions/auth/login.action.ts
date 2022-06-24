@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import server from "../../../../api";
-import { axiosResHandle, axiosErrHandle } from "../../../../api/axiosHandle";
+import { axiosResHandle, axiosErrHandle, axiosResErrNoRes } from "../../../../api/axiosHandle";
 import { LoginResTypes } from "../../../Models/Auth/login.types";
 
 export interface LoginParamsType {
@@ -15,9 +15,10 @@ const loginAction = createAsyncThunk("auth/login", async (params: LoginParamsTyp
     try {
         const res = await loginService(params);
         return axiosResHandle(res);
-    } catch (err) {
+    } catch (err:any) {
 
-        return rejectWithValue(axiosErrHandle(err));
+        // return rejectWithValue(axiosResErrNoRes(err));
+        return rejectWithValue(err.response.data.message)
     }
 });
 export default loginAction;

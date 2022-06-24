@@ -16,7 +16,7 @@ export type GetVideoThumbnailResponse = {
 type getVideoThumbnail ={
   file: string
 }
-const getVideoThumbnailService = ({file}:getVideoThumbnail) => {
+export const getVideoThumbnailService = ({file}:getVideoThumbnail) => {
   console.log({ file });
   return server.post('/resources/snapShot', { file })
 };

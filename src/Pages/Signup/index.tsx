@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Steps, Form, Row, Typography, Card, Image, Col } from "antd";
 import "react-phone-number-input/style.css";
-import _, { get, toString } from "lodash";
+import _, { get, isEmpty, toString } from "lodash";
 import "./SignUpPage.css";
 import Logo_dark from "../../Assets/Logo/boom-logo.png";
 // import Button from "../../components/Partials/Button";
@@ -47,6 +47,7 @@ export default function SignUpPage(): JSX.Element {
         },
     };
     const dispatch = useAppDispatch();
+
     const NextButton = () => {
         const isLastStep = Object.keys(steps).length === currentStep;
         const onNextClick = async () => {
@@ -62,6 +63,8 @@ export default function SignUpPage(): JSX.Element {
             // } catch (error) {
             //   console.log("Validtion Error", error);
             // }
+
+            // console.log("test", !isEmpty(BrandDetailCardForm.getFieldsError()));
 
             if (currentStep === 1) {
                 try {
@@ -114,7 +117,7 @@ export default function SignUpPage(): JSX.Element {
             }
         };
         return (
-            <Button block={false} style={{ margin: "0 8px" }} onClick={onNextClick}>
+            <Button block={false} style={{ margin: "0 8px", borderRadius: ".5rem" }} onClick={onNextClick}>
                 {isLastStep ? "Done" : "Next"}
             </Button>
         );
@@ -123,7 +126,11 @@ export default function SignUpPage(): JSX.Element {
     const PreviousButton = () => {
         if (currentStep === 1) return null;
         return (
-            <Button block={false} style={{ margin: "0 8px" }} onClick={() => setCurrentStep((s) => s - 1)}>
+            <Button
+                block={false}
+                style={{ margin: "0 8px", borderRadius: ".5rem" }}
+                onClick={() => setCurrentStep((s) => s - 1)}
+            >
                 Previous
             </Button>
         );
@@ -147,6 +154,7 @@ export default function SignUpPage(): JSX.Element {
                         />
                     ))}
                 </Steps>
+
                 {success ? (
                     <SuccessMessage
                         Usertitle={"Registration Successful. Proceed to Verify."}
@@ -162,6 +170,7 @@ export default function SignUpPage(): JSX.Element {
                                     form: get(steps, `${currentStep}.form`),
                                 })}
                             </Col>
+
                             <Col className="steps-action">
                                 <PreviousButton />
                                 <NextButton />

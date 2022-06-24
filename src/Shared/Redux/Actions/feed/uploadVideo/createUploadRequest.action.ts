@@ -19,7 +19,7 @@ interface CreateUploadRequestResponse {
     };
   };
 }
-const createUploadRequestService = ({filename}: createUploadRequest) => {
+export const createUploadRequestService = ({filename}: createUploadRequest) => {
   return server
     .post<CreateUploadRequestResponse>(
       '/resources/request',{filename})

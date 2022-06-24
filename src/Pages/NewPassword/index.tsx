@@ -13,8 +13,6 @@ interface NavigateFunction {
 export default function NewPasswordPage(): JSX.Element {
     const [loading, setLoading] = useState(false);
     const navigate: NavigateFunction = useNavigate();
-    const [password, setPassword] = useState("");
-    const [retypePassword, setRetypePassword] = useState("");
     const dispatch = useAppDispatch();
     const { Text } = Typography;
     /**
@@ -31,18 +29,15 @@ export default function NewPasswordPage(): JSX.Element {
     const token = data?.token;
     const onFinish = ({ password, confirmPassword }: any) => {
         setLoading(true);
-        // console.log(password);
-        if (token)
-            dispatch(resetPasswordAction({ token, password, confirmPassword }))
-                .unwrap()
-                .then(() => {
-                    msg.success("Password reset successfully");
-                    navigate("/");
-                })
-                .catch((error: any) => {
-                    setLoading(false);
-                    msg.error(`error while submitting: ${error}`, 2);
-                });
+        try {
+            if (token) dispatch(resetPasswordAction({ token, password, confirmPassword })).unwrap();
+            msg.success("Password reset successfully");
+            navigate("/");
+            // })
+        } catch (error) {
+            setLoading(false);
+            msg.error(`error while submitting: ${error}`, 2);
+        }
     };
 
     //const onFinishFailed = () => {};
