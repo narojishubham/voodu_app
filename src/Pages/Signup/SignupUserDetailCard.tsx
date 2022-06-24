@@ -352,11 +352,11 @@ function SignupUserDetailCard({ form }: any) {
                                     width: "100%",
                                 }}
                                 limitMaxLength={true}
-                                reset
+                                // reset
                                 international
                                 placeholder={phone ? "" : "Phone Number"}
                                 defaultCountry={"IN"}
-                                //value={phone}
+                                value={phone}
                                 // delayedQueryPhone(value)
                                 onChange={(value: any) => {
                                     console.log(value.length);

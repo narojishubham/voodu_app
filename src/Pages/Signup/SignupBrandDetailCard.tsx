@@ -1,4 +1,4 @@
-import { Card, Form, Input, notification, Typography } from "antd";
+import { Card, Form, Input, notification, Select, Typography } from "antd";
 import React, { useCallback, useEffect, useState } from "react";
 import { NavigateFunction, useNavigate } from "react-router-dom";
 // import _ from "lodash";
@@ -73,15 +73,25 @@ function BrandDetailcard({ form }: any) {
             .then((response) => {
                 // console.log("getCategoriesAction resp", data);
                 setData(response);
+                setLoading(true);
             })
             .catch((error) => {
-                // setLoading(false);
+                setLoading(false);
                 console.log("getCategoriesAction error", error);
             });
     };
     useEffect(() => {
         categories();
     }, []);
+
+    const onSearch = () => {};
+    const [selectedData, setSelectedData] = useState("");
+
+    const onChangeHandler = (e: any) => {
+        // onChange && onChange(e);
+        setSelectedData(e);
+    };
+    const [loading, setLoading] = useState(false);
 
     return (
         <>
@@ -199,7 +209,26 @@ function BrandDetailcard({ form }: any) {
                         validateTrigger={["onChange"]}
                         hasFeedback
                     >
-                        <CustomSelectAndSearchField getData={data} />
+                        {/* <CustomSelectAndSearchField getData={data} /> */}
+                        <Select
+                            value={selectedData}
+                            loading={loading}
+                            showSearch
+                            placeholder={"Category"}
+                            allowClear={true}
+                            onSearch={onSearch}
+                            labelInValue={false}
+                            onChange={onChangeHandler}
+                            dropdownStyle={{
+                                display: data.length === 0 ? "none" : "",
+                            }}
+                        >
+                            {data?.map((item: any) => (
+                                <Select.Option key={item.id} value={item.id}>
+                                    {item.name}
+                                </Select.Option>
+                            ))}
+                        </Select>
                     </Form.Item>
                 </Form>
             </Card>
