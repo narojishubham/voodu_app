@@ -135,7 +135,7 @@ const OverviewPage = () => {
                                         // onClickData={setActive(i)}
                                         cardWidth={"285px"}
                                         cardTitle={"Average Watch Time"}
-                                        analyticReading={`${average_watch_time}s`}
+                                        analyticReading={`${average_watch_time}`}
                                     />
                                 </Col>
                                 <Col span={5}>
@@ -196,7 +196,7 @@ const OverviewPage = () => {
                                         // onClickData={setActive(i)}
                                         cardWidth={"285px"}
                                         cardTitle={"Total Watch Time"}
-                                        analyticReading={`${total_watch_time}s`}
+                                        analyticReading={`${total_watch_time}`}
                                     />
                                 </Col>
                             </Row>
