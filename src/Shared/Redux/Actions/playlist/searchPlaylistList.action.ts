@@ -18,10 +18,10 @@ export const searchPlaylistListService = async ({
 };
 
 const searchPlaylistListAction = createAsyncThunk(
-  "auth/login",
+  "search/playlist",
   async (props: SearchParams, thunkAPI) => {
     try {
-      console.log("in loginAction, ", { props });
+      // console.log("in loginAction, ", { props });
       return await searchPlaylistListService(props);
     } catch (err) {
       return thunkAPI.rejectWithValue(axiosErrHandle(err));
