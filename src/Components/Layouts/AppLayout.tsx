@@ -23,7 +23,6 @@ const AppLayout: React.FC<{
     const dispatch = useAppDispatch();
     const [collapsed, setCollapsed] = useState(false);
     const switchCollapsed = () => setCollapsed(!collapsed);
-    const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [reload, setReload] = useState({});
     ProfileContext = createContext(setReload);
