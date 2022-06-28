@@ -74,7 +74,7 @@ export default function CreatePlaylistPage() {
      * @param {number} pageNumber - Page number
      */
     const onPageChange = (pageNumber: number) => {
-        getVideos();
+        getVideos({ page: pageNumber });
     };
 
     /**
@@ -155,7 +155,7 @@ export default function CreatePlaylistPage() {
     const [integration, setIntegration] = useState(PlaylistLayoutType);
 
     useEffect(() => {
-        console.log({ editMode });
+        // console.log({ editMode });
     }, [editMode]);
 
     useEffect(() => {
@@ -250,15 +250,15 @@ export default function CreatePlaylistPage() {
                 .unwrap()
                 .then((res) => {
                     // if (res && res && res.id) {
-                    console.log("res test test", res);
-                    console.log("res.id", res.data);
+                    // console.log("res test test", res);
+                    // console.log("res.id", res.data);
                     msg.success("New Playlist has been created", 2);
                     setLoading(false);
                     navigate(`/${RouterPaths.playlists}${res.data.id}`);
                     // }
                 })
                 .catch((error) => {
-                    console.log({ error });
+                    // console.log({ error });
                     msg.error(`Error - ${error.response}`, 10);
                     //msg.error(`Error - ${error.response?.data.message}`, 10);
                     setLoading(false);
